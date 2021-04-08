@@ -1,0 +1,16 @@
+{
+    "subtitle": "Mezinárodní vesmírný program",
+    "emailAdress": "Emailová adresa",
+    "password": "Heslo",
+    "repeatPass": "Opakujte heslo",
+    "logInBtn": "Přihlásit",
+    "forgotPass": "Zapomenuté heslo?",
+    "signUpLink": "Registrace",
+    "fName": "Jméno",
+    "lName": "Příjmení",
+    "haveAccount": "Už máte účet? Přihlašte se.",
+
+    "astronauts": {
+        "tableTitle": "REGISTR ASTRONAUTŮ"
+    }
+}

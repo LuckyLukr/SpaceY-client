@@ -1,0 +1,16 @@
+{
+    "subtitle": "International space program",
+    "emailAdress": "Email Address",
+    "password": "Password",
+    "repeatPass": "Repeat password",
+    "logInBtn": "Log in",
+    "forgotPass": "Forgot password?",
+    "signUpLink": "Sign Up",
+    "fName": "First Name",
+    "lName": "Last Name",
+    "haveAccount": "Already have an account? Log in.",
+
+    "astronauts": {
+        "tableTitle": "REGISTER OF ASTRONAUTS"
+    }
+}
