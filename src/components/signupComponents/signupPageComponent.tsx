@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme)=>({
     },
 }))
 
-function SignupPage() {
+function SignupPage( {onAdd}:any ) {
     const classes = useStyles();
     const { i18n } = useTranslation();
     const changeLanguage = (language:string) => i18n.changeLanguage(language);
@@ -53,7 +53,7 @@ function SignupPage() {
                     </ButtonGroup>
                     <Grid className={classes.headerFilter} container direction='column' justify='center' alignItems='center' >
                         
-                        <SignUp />
+                        <SignUp onAdd={onAdd} />
 
                     </Grid>
                 </CardMedia>

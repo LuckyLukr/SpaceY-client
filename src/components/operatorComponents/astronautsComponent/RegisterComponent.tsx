@@ -4,6 +4,7 @@ import {
     Grid,
     makeStyles,
     Typography,
+    Button
 } from '@material-ui/core';
 import Table from './tableComponent';
 import { useTranslation } from 'react-i18next';
@@ -23,9 +24,12 @@ const useStyles = makeStyles(()=>({
         padding: '1%',
         margin: '2%',
     },
+    addBtn: {
+        margin: '10px 0px',
+    }
 }))
 
-function Register( {users}:any ) {
+function Register( {users,onDelete}:any ) {
     const classes = useStyles();
     const { t } = useTranslation();
 
@@ -35,8 +39,13 @@ function Register( {users}:any ) {
                 <Typography align='center' variant='h4' color='textSecondary' >
                     {t("astronauts.tableTitle")}
                 </Typography>
+                <Grid container >
+                    <Button className={classes.addBtn} variant='outlined' color='primary' >
+                        Add
+                    </Button>
+                </Grid>
 
-                <Table users={users} />
+                <Table users={users} onDelete={onDelete} />
             </Card>
         </Grid>
     )

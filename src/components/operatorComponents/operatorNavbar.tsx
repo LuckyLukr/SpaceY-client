@@ -4,7 +4,8 @@ import {
     Grid,
     ButtonGroup,
     Button,
-    Typography
+    Typography,
+    Divider
 } from '@material-ui/core';
 
 const useStyles = makeStyles(()=>({
@@ -23,10 +24,7 @@ export default function OperatorNavbar() {
         <div>
             <Grid container>
                 <Grid container justify='space-between' className={classes.appbar}>
-                    <Typography>
-                        User
-                    </Typography>
-                    <ButtonGroup className={classes.buttonFlex} variant="text" aria-label="text primary button group">
+                    <ButtonGroup className={classes.buttonFlex} variant="text" aria-label="navbar button group">
                         <Button href='/dashboard' >
                             Dashboard
                         </Button>
@@ -39,10 +37,23 @@ export default function OperatorNavbar() {
                         <Button href='missions' >
                             Missions
                         </Button>
-                        <Button href='/' >
-                            Log out
-                        </Button>
                     </ButtonGroup>
+
+                    <Grid container alignItems='center' style={{width: 'fit-content'}} >
+                        <Typography color='textSecondary'>
+                            Username
+                        </Typography>
+                        <Divider orientation='vertical' variant='middle' />
+                        <ButtonGroup className={classes.buttonFlex} variant="text" aria-label="account button group">
+                            <Button >
+                                Account
+                            </Button>
+                            <Button href='/' >
+                                Logout
+                            </Button>
+                        </ButtonGroup>
+                    </Grid>
+                    
                 </Grid>
             </Grid>
         </div>

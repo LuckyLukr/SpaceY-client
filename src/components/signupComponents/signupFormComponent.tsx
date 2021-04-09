@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -38,9 +38,44 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function SignUp() {
+export default function SignUp( {onAdd}:any ) {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
   const classes = useStyles();
   const { t } = useTranslation();
+
+  function handleFirstNameChange(e:any) {
+    setFirstName(e.target.value);
+  }
+
+  function handleLastNameChange(e:any) {
+    setLastName(e.target.value);
+  }
+
+  function handleEmailChange(e:any) {
+    setEmail(e.target.value);
+  }
+
+  function handlePasswordChange(e:any) {
+    setPassword(e.target.value);
+  }
+
+  function handleRepeatPasswordChange(e:any) {
+    setRepeatPassword(e.target.value);
+  }
+
+  function handleSubmit(e:any) {
+      e.preventDefault();
+      onAdd(firstName, lastName, email, password, repeatPassword, 'operator');
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+      setPassword('');
+      setRepeatPassword('');
+    }
 
   return (
     <Container maxWidth={false} className={classes.root}>
@@ -50,10 +85,12 @@ export default function SignUp() {
         <Typography style={{color: '#666666'}} component="h1" variant="h5">
           OPERATOR
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
+                onChange={handleFirstNameChange}
+                value={firstName}
                 autoComplete="fname"
                 name="firstName"
                 variant="outlined"
@@ -66,6 +103,8 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                onChange={handleLastNameChange}
+                value={lastName}
                 variant="outlined"
                 required
                 fullWidth
@@ -77,6 +116,8 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                onChange={handleEmailChange}
+                value={email}
                 variant="outlined"
                 required
                 fullWidth
@@ -88,6 +129,8 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                onChange={handlePasswordChange}
+                value={password}
                 variant="outlined"
                 required
                 fullWidth
@@ -100,14 +143,16 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                onChange={handleRepeatPasswordChange}
+                value={repeatPassword}
                 variant="outlined"
                 required
                 fullWidth
-                name="password"
+                name="repeatPassword"
                 label={t('repeatPass')}
                 type="password"
-                id="password"
-                autoComplete="current-password"
+                id="repeatPassword"
+                autoComplete="repeat-password"
               />
             </Grid>
           </Grid>
