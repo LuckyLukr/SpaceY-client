@@ -12,6 +12,8 @@ import { User } from './types';
 function App() {
   const [ users, setUsers ] = useState<User[]>([]);
   const API = 'http://localhost:5000/users/';
+  const initialState = { id: '', firstName: 'test', lastName: '', email: '', role: '', age: 0, consum: 0, weight: 0, onMission: false };
+  const [ isLoged, setIsLoged] = useState<boolean>(false)
 
   useEffect(()=> {
     const fetchUsers = () => {
@@ -40,7 +42,7 @@ function App() {
         repeatPassword: string,
         role: string
     ) {
-    const newOperator = { firstName, lastName, email, password, repeatPassword, role, age: 60, consum: 150, weight: 90 };
+    const newOperator = { firstName, lastName, email, password, repeatPassword, role, age: 25, consum: 37, weight: 72, onMission: false };
     axios.post(API, newOperator).catch(err => console.log(err));
     setUsers([...users, newOperator]);
 }
@@ -51,9 +53,9 @@ function App() {
 
   return (
     <Router>
-      <Route path='/' exact component={LoginPage} />
+      <Route path='/' exact render={() => <LoginPage initialState={initialState} isLoged={isLoged} />} />
       <Route path='/signup' render={() => <SignupPage onAdd={addUser} />} />
-      <Route path='/dashboard' component={OperatorDashboard} />
+      <Route path='/dashboard' render={() => <OperatorDashboard initialState={initialState} />} />
       <Route path='/astronauts' render={() => <AstronautsTable users={users} onDelete={deleteUser} />} />
       <Route path='/spacecrafts' component={OperatorDashboard} />
     </Router>

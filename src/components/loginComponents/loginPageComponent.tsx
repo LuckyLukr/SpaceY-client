@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme)=>({
     },
 }))
 
-function LoginPage() {
+function LoginPage( { initialState, isLoged }:any ) {
     const classes = useStyles();
     const { i18n } = useTranslation();
     const changeLanguage = (language:string) => i18n.changeLanguage(language);
@@ -53,7 +53,7 @@ function LoginPage() {
                     </ButtonGroup>
                     <Grid className={classes.headerFilter} container direction='column' justify='center' alignItems='center' >
                         
-                        <LogIn />
+                        <LogIn initialState={initialState} isLoged={isLoged} />
 
                     </Grid>
                 </CardMedia>

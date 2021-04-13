@@ -23,8 +23,11 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-export default function OperatorDashboard() {
+export default function OperatorDashboard( {initialState}:any ) {
     const classes = useStyles();
+    const user = initialState;
+
+    console.log(user);
 
     return(
         <div>
@@ -32,7 +35,7 @@ export default function OperatorDashboard() {
             <OperatorNavbar />
             <Grid container direction='column' justify='space-evenly' alignItems='center'>
                 <Typography>
-                    WELCOME {'{username}'}!
+                    WELCOME {user.firstName}!
                 </Typography>
                 <Card className={classes.card}>
                     <Grid container justify='space-between'>

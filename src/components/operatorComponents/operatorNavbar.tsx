@@ -7,6 +7,8 @@ import {
     Typography,
     Divider
 } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../featrues/userSlice';
 
 const useStyles = makeStyles(()=>({
     appbar: {
@@ -19,6 +21,13 @@ const useStyles = makeStyles(()=>({
 
 export default function OperatorNavbar() {
     const classes = useStyles();
+    const dispatch = useDispatch();
+    
+    const handleLogout = (e:any) => {
+        e.preventDefault();
+
+        dispatch(logout());
+    }
 
     return(
         <div>
@@ -48,7 +57,7 @@ export default function OperatorNavbar() {
                             <Button >
                                 Account
                             </Button>
-                            <Button href='/' >
+                            <Button onClick={(e) => handleLogout(e)} >
                                 Logout
                             </Button>
                         </ButtonGroup>
