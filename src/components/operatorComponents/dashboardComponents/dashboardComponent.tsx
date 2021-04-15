@@ -4,12 +4,14 @@ import {
     Grid,
     Card,
     makeStyles,
-    Divider
+    Divider,
+    Button
 } from '@material-ui/core';
 
 import Navbar from '../../navbarComponent';
 import OperatorNavbar from '../operatorNavbar';
 import VerticalTabs from './verticalTabsComponent';
+import AccessDenied from '../../accessDeniedComponent';
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -23,16 +25,18 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-export default function OperatorDashboard( {initialState}:any ) {
+export default function OperatorDashboard( {onLogout}:any ) {
     const classes = useStyles();
-    const user = initialState;
 
-    console.log(user);
+    const user = JSON.parse(localStorage.user);
 
     return(
         <div>
             <Navbar />
-            <OperatorNavbar />
+            { 
+                user ?
+            <>
+            <OperatorNavbar onLogout={onLogout} />
             <Grid container direction='column' justify='space-evenly' alignItems='center'>
                 <Typography>
                     WELCOME {user.firstName}!
@@ -59,6 +63,10 @@ export default function OperatorDashboard( {initialState}:any ) {
                     
                 </Card>
             </Grid>
+            </>
+            :
+            <AccessDenied />
+            }
         </div>
     )
 }

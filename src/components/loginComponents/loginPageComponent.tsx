@@ -9,7 +9,6 @@ import { Grid,
 import { useTranslation } from 'react-i18next';
 
 import LogIn from './loginFormComponent';
-
 import SpaceOrbitImg from '../../images/SpaceOrbit.jpeg';
 
 const useStyles = makeStyles((theme)=>({
@@ -35,7 +34,7 @@ const useStyles = makeStyles((theme)=>({
     },
 }))
 
-function LoginPage( { initialState, isLoged }:any ) {
+function LoginPage( { user, onLogin }:any ) {
     const classes = useStyles();
     const { i18n } = useTranslation();
     const changeLanguage = (language:string) => i18n.changeLanguage(language);
@@ -53,7 +52,7 @@ function LoginPage( { initialState, isLoged }:any ) {
                     </ButtonGroup>
                     <Grid className={classes.headerFilter} container direction='column' justify='center' alignItems='center' >
                         
-                        <LogIn initialState={initialState} isLoged={isLoged} />
+                        <LogIn user={user} onLogin={onLogin} />
 
                     </Grid>
                 </CardMedia>

@@ -47,27 +47,32 @@ export default function SignUp( {onAdd}:any ) {
   const classes = useStyles();
   const { t } = useTranslation();
 
-  function handleFirstNameChange(e:any) {
+  const handleFirstNameChange = (e:any) => {
+    e.preventDefault();
     setFirstName(e.target.value);
   }
 
-  function handleLastNameChange(e:any) {
+  const handleLastNameChange = (e:any) => {
+    e.preventDefault();
     setLastName(e.target.value);
   }
 
-  function handleEmailChange(e:any) {
+  const handleEmailChange = (e:any) => {
+    e.preventDefault();
     setEmail(e.target.value);
   }
 
-  function handlePasswordChange(e:any) {
+  const handlePasswordChange = (e:any) => {
+    e.preventDefault();
     setPassword(e.target.value);
   }
 
-  function handleRepeatPasswordChange(e:any) {
+  const handleRepeatPasswordChange = (e:any) => {
+    e.preventDefault();
     setRepeatPassword(e.target.value);
   }
 
-  function handleSubmit(e:any) {
+  const handleSubmit = (e:any) => {
       e.preventDefault();
       onAdd(firstName, lastName, email, password, repeatPassword, 'operator');
       setFirstName('');

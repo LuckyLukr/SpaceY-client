@@ -7,8 +7,6 @@ import {
     Typography,
     Divider
 } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
-import { logout } from '../../featrues/userSlice';
 
 const useStyles = makeStyles(()=>({
     appbar: {
@@ -19,18 +17,14 @@ const useStyles = makeStyles(()=>({
     }
 }))
 
-export default function OperatorNavbar() {
+export default function OperatorNavbar( {onLogout}:any ) {
     const classes = useStyles();
-    const dispatch = useDispatch();
-    
-    const handleLogout = (e:any) => {
-        e.preventDefault();
 
-        dispatch(logout());
-    }
+    const user = JSON.parse(localStorage.user);
 
     return(
         <div>
+            { user ?
             <Grid container>
                 <Grid container justify='space-between' className={classes.appbar}>
                     <ButtonGroup className={classes.buttonFlex} variant="text" aria-label="navbar button group">
@@ -50,14 +44,14 @@ export default function OperatorNavbar() {
 
                     <Grid container alignItems='center' style={{width: 'fit-content'}} >
                         <Typography color='textSecondary'>
-                            Username
+                            {user.email}
                         </Typography>
                         <Divider orientation='vertical' variant='middle' />
                         <ButtonGroup className={classes.buttonFlex} variant="text" aria-label="account button group">
                             <Button >
                                 Account
                             </Button>
-                            <Button onClick={(e) => handleLogout(e)} >
+                            <Button href='/' onClick={() => onLogout()} >
                                 Logout
                             </Button>
                         </ButtonGroup>
@@ -65,6 +59,12 @@ export default function OperatorNavbar() {
                     
                 </Grid>
             </Grid>
+
+            :
+
+            null
+
+            }
         </div>
     )
 }

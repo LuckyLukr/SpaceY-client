@@ -1,66 +1,31 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import axios from 'axios';
+import React,{ useState } from 'react';
 import {
     Grid,
-    Link,
     TextField,
+    Link,
     Button,
     Typography
 } from '@material-ui/core';
-import sha1 from 'js-sha1';
 
 import { useStyles } from './styles';
 import logo from '../../images/Y_white.png';
 import { useTranslation } from 'react-i18next';
-import { login } from '../../featrues/userSlice';
 
 
-export default function LogIn( {initialState, isLoged}:any ) {
-    const [ formData, setFormData ] = useState(initialState);
+
+export default function LogIn( {onLogin}:any ) {
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
-
-    const API = 'http://localhost:5000/users/';
     const classes = useStyles();
     const { t } = useTranslation();
 
-    const dispatch = useDispatch();
-    const hashedPass = sha1(password);
-
-
-    const getUser = () => {        
-        const login = { email: email, password: hashedPass };
-        return new Promise( resolve => {
-        axios.post(`${API}login`,login)
-            .then( res => {
-            resolve(res.data);
-            })
-            .catch( err => alert('Wrong email or password.' + err) );
-        })
-    };
-    
-    async function logUser() {
-        const result = await getUser() as any;
-        setFormData(result);
-        if(result){
-            window.open(`dashboard`);
-        }
-        dispatch(login({
-            email: result.email,
-            password: result.password,
-            loggedIn: true
-        }))
-        console.log(result);
-        console.log(formData);
-    }
-
-    function handleEmailChange(e:any) {
+    const handleEmailChange = (e:any) => {
         e.preventDefault();
         setEmail(e.target.value);
+        console.log(e.target.value);
     }
-
-    function handlePasswordChange(e:any) {
+  
+    const handlePasswordChange = (e:any) => {
         e.preventDefault();
         setPassword(e.target.value);
     }
@@ -68,7 +33,7 @@ export default function LogIn( {initialState, isLoged}:any ) {
     const handleSubmit = (e:any) => {
         e.preventDefault();
         
-        logUser()
+        onLogin(email, password);
     }
 
     return (
