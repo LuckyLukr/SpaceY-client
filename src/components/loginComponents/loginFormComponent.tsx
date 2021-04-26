@@ -75,7 +75,7 @@ export default function LogIn( {initialState, isLoged}:any ) {
         <div className={classes.root}>
             <Grid container justify='center' alignItems='center' >
                 <Typography variant='h1' className={classes.headerTypo}>SPACE</Typography>
-                <img className={classes.yImg} src={logo} alt='Y' />
+                <img className={classes.yImg} src={logo} alt='Ylogo' />
             </Grid>
             <Typography variant='caption' className={classes.subTypo} >{t('subtitle')}</Typography>
 
