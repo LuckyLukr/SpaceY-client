@@ -6,6 +6,7 @@ import {
     Button,
     Typography
 } from '@material-ui/core';
+import sha1 from 'js-sha1';
 
 import { useStyles } from './styles';
 import logo from '../../images/Y_white.png';
@@ -30,10 +31,9 @@ export default function LogIn( {onLogin}:any ) {
         setPassword(e.target.value);
     }
     
-    const handleSubmit = (e:any) => {
-        e.preventDefault();
-        
-        onLogin(email, password);
+    const handleSubmit = () => {
+        const hasshedPass = sha1(password);
+        onLogin(email, hasshedPass);
     }
 
     return (
@@ -60,17 +60,14 @@ export default function LogIn( {onLogin}:any ) {
                         autoFocus
                     />
                     <TextField
-                        value={password}
                         onChange={handlePasswordChange}
                         size='small'
                         variant="outlined"
                         margin="normal"
-                        required
                         name="password"
                         label={t('password')}
                         type="password"
                         id="password"
-                        autoComplete="current-password"
                     />
                     <Button
                         type="submit"
@@ -80,17 +77,21 @@ export default function LogIn( {onLogin}:any ) {
                     >
                         {t('logInBtn')}
                     </Button>
+
                     <Grid container>
+
                         <Grid item xs>
-                        <Link href="#" variant="body2">
-                        {t('forgotPass')}
-                        </Link>
+                            <Link href="#" variant="body2">
+                                {t('forgotPass')}
+                            </Link>
                         </Grid>
+
                         <Grid item>
-                        <Link href="/signup" variant="body2">
-                            {t('signUpLink')}
-                        </Link>
+                            <Link href="/signup" variant="body2">
+                                {t('signUpLink')}
+                            </Link>
                         </Grid>
+
                     </Grid>
                 </form>
             </div>

@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import axios from 'axios';
-import sha1 from 'js-sha1';
 
 import LoginPage from './components/loginComponents/loginPageComponent';
 import OperatorDashboard from './components/operatorComponents/dashboardComponents/dashboardComponent';
 import SignupPage from './components/signupComponents/signupPageComponent';
 import AstronautsTable from './components/operatorComponents/astronautsComponent/astronautsComponent';
+import SpacecraftsTable from './components/operatorComponents/spacecraftsComponent/spacecraftsComponent';
 
 function App() {
   const [ users, setUsers ] = useState<any>([]);
-  const [ user, setUser ] = useState(null);
 
-  const API ='http://localhost:5000/users/';
+  const API ='http://localhost:5000/';
+  const user = JSON.parse(localStorage.user);
+
+  // GET USERS <---------------------------------------------------------|
 
   useEffect(()=> {
     const fetchUsers = () => {
+      const token = JSON.parse(localStorage.token);
       return new Promise( resolve => {
-        axios.get(API)
+        axios.get(API + 'users',{ headers: {"Authorization" : `Bearer ${token}`} })
           .then( res => {
             resolve(res.data);
           })
@@ -30,34 +33,19 @@ function App() {
       setUsers(result);
     }
 
+    if(!localStorage.user){
+    localStorage.setItem('user', JSON.stringify(''));
+    }
     loadUsers();
-    
-  },[]);
   
+  },[]);
 
-  // REGISTER <-----------------------------------------------------|
+    // LOGIN <---------------------------------------------------------|
 
-  const addUser = (
-        firstName: string,
-        lastName: string,
-        email: string,
-        password: string,
-        repeatPassword: string,
-        role: string
-    ) => {
-    const newOperator = { firstName, lastName, email, password, repeatPassword, role, age: 30, consum: 0, weight: 0, onMission: false };
-    console.log(newOperator);
-    axios.post(API, newOperator).catch(err => console.log(err));
-    setUsers([...users, newOperator]);
-  }
-
-  // LOGIN <---------------------------------------------------------|
-
-  const loginUser = async ( email: string, password: string) => {
-      const hashedPass = sha1(password);    
-      const login = { email: email, password: hashedPass };
+    const loginUser = async ( email: string, password: string) => {
+      const login = { username: email, password: password };
       const result = await new Promise<any>( resolve => {
-        axios.post(`${API}login`,login)
+        axios.post(`${API}auth/login`,login)
             .then( res => {
             resolve(res.data);
             })
@@ -65,25 +53,49 @@ function App() {
         })
 
       if(result){
-        setUser(result);
+        const token = result.access_token;
         localStorage.clear();
         localStorage.setItem('user', JSON.stringify(result));
-        window.location.href = '/dashboard';
+        localStorage.setItem('token', JSON.stringify(token));
       }
       
   };
+  
+  // REGISTER <-----------------------------------------------------|
+
+  const addUser = async (
+        firstName: string,
+        lastName: string,
+        email: string,
+        password: string,
+        repeatPassword: string,
+        role: string,
+        age: number,
+        consum: number,
+        weight: number
+    ) => {
+    const newOperator = { firstName, lastName, email, password, repeatPassword, role, age, consum, weight, onMission: false };
+    const data = await axios.post(API + 'users', newOperator).catch(err => console.log(err));
+    if (data) {
+      const operator = JSON.parse(data.config.data);
+      const operatorWithID = { id: data.data.id, ...operator};
+      setUsers([ ...users, operatorWithID]);
+    }
+    return console.log(data);
+  }
 
   // LOGOUT <--------------------------------------------------------|
 
   const logoutUser = () => {
-    setUser(null);
     localStorage.clear();
-    localStorage.setItem('user', JSON.stringify(null));
+    localStorage.setItem('user', JSON.stringify(''));
+    localStorage.setItem('token', JSON.stringify(''));
   };
 
   // DELETE <--------------------------------------------------------|
+  
   function deleteUser( id:string ) {
-    axios.delete(API + id).catch(err => console.log(err));
+    axios.delete(`${API}users/${id}`).catch(err => console.log(err));
     const copyUsers = [ ...users ];
     const index = copyUsers.findIndex( e => e.id === id);
     copyUsers.splice(index,1);
@@ -93,11 +105,15 @@ function App() {
 
   return ( 
     <Router>
-          <Route path='/' exact render={() => <LoginPage user={user} onLogin={loginUser} />} />
+          <Route path='/' exact render={() => 
+            !user ?
+            <LoginPage user={user} onLogin={loginUser} />
+            :
+            <OperatorDashboard onLogout={logoutUser} />
+            } />
           <Route path='/signup' render={() => <SignupPage onAdd={addUser} />} />
-          <Route path='/dashboard' render={() => <OperatorDashboard onLogout={logoutUser} />} />
-          <Route path='/astronauts' render={() => <AstronautsTable users={users} onDelete={deleteUser} />} />
-          <Route path='/spacecrafts' component={OperatorDashboard} />
+          <Route path='/astronauts' render={() => <AstronautsTable onAdd={addUser} users={users} onLogout={logoutUser} onDelete={deleteUser} />} />
+          <Route path='/spacecrafts' render={() => <SpacecraftsTable onAdd={addUser} users={users} onLogout={logoutUser} onDelete={deleteUser} />} />
     </Router>
   )
 }

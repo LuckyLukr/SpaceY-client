@@ -12,11 +12,14 @@ function Table( {users,onDelete}:any ) {
 
     const columns = [
         { field: 'name', headerName: 'Name', width: 160 },
-        { field: 'email', headerName: 'Email', width: 180 },
-        { field: 'role', headerName: 'Role', width: 160 },
-        { field: 'age', headerName: 'Age', width: 90 },
-        { field: 'consum', headerName: 'Food consumption / hour (g)' , width: 140 },
-        { field: 'weight', headerName: 'Weight (kg)', width: 90 },
+        { field: 'type', headerName: 'Type', width: 160 },
+        { field: 'weight', headerName: 'Weight (t)', width: 160 },
+        { field: 'seats', headerName: 'Number of seats', width: 160 },
+        { field: 'tankCapacity', headerName: 'Fuel tank capacity (l)' , width: 160 },
+        { field: 'tankCondition', headerName: 'Fuel tank condition', width: 160 },
+        { field: 'fridge', headerName: 'Fridge capacity (kg)', width: 160 },
+        { field: 'motorImpulse', headerName: 'Specific motor impulse', width: 160 },
+        { field: 'status', headerName: 'Status', width: 160 },
         {  
             field: '-', 
             headerName: " ",
@@ -41,26 +44,62 @@ function Table( {users,onDelete}:any ) {
         },
     ];
 
-    const user = users.map( (e:any) => { 
-        return({
-            id: e.id,
-            key: e.id,
-            name: `${e.firstName} ${e.lastName}`,
-            email: e.email,
-            role: e.role,
-            age: e.age,
-            consum: e.consum,
-            weight: e.weight
-        })
-     });
-
-     const astronauts = user.filter( (e:any) => e.role === 'astronaut');
+    const spacecrafts = [
+        {
+            id: 0,
+            name: 'Tweak',
+            type: 'Falcon 19',
+            weight: 80,
+            seats: 4,
+            tankCapacity: 12000,
+            tankCondition: `${100}%`,
+            fridge: 300,
+            motorImpulse: 7000,
+            status: 'Out of mission'
+        },
+        {
+            id: 1,
+            name: 'Peak',
+            type: 'Falcon 19',
+            weight: 80,
+            seats: 4,
+            tankCapacity: 12000,
+            tankCondition: `${100}%`,
+            fridge: 300,
+            motorImpulse: 7000,
+            status: 'Out of mission'
+        },
+        {
+            id: 2,
+            name: 'Leak',
+            type: 'Falcon 20',
+            weight: 75,
+            seats: 4,
+            tankCapacity: 10000,
+            tankCondition: `${100}%`,
+            fridge: 350,
+            motorImpulse: 8000,
+            status: 'Out of mission'
+        },
+        {
+            id: 3,
+            name: 'Sneak',
+            type: 'Starlighter',
+            weight: 290,
+            seats: 14,
+            tankCapacity: 280000,
+            tankCondition: `${87}%`,
+            fridge: 10000,
+            motorImpulse: 28000,
+            status: 'Out of mission'
+        }
+    ]
 
 
     return(
         <div>
             <DataGrid 
-                rows={astronauts} 
+                rows={spacecrafts} 
                 columns={columns}
                 pageSize={7}
                 autoHeight

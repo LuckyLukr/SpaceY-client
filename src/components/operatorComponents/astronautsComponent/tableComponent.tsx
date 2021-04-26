@@ -4,7 +4,11 @@ import {
     IconButton,
     Button
 } from '@material-ui/core';
-import { DataGrid, GridToolbar  } from '@material-ui/data-grid';
+import { 
+    DataGrid, 
+    GridToolbar,
+} from '@material-ui/data-grid';
+
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
@@ -13,7 +17,6 @@ function Table( {users,onDelete}:any ) {
     const columns = [
         { field: 'name', headerName: 'Name', width: 160 },
         { field: 'email', headerName: 'Email', width: 180 },
-        { field: 'role', headerName: 'Role', width: 160 },
         { field: 'age', headerName: 'Age', width: 90 },
         { field: 'consum', headerName: 'Food consumption / hour (g)' , width: 140 },
         { field: 'weight', headerName: 'Weight (kg)', width: 90 },

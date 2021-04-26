@@ -52,6 +52,41 @@ export const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
     },
     yImg: {
-        width: '140px'
+        width: '130px',
+        animation: '$rotation 20s infinite linear',
+        cursor: 'none',
+        '&:hover': {
+          animation: '$rotation 0.1s infinite cubic-bezier(0.01, 1.1, 1, 0.09)',
+        }
+    },
+    "@keyframes rotation": {
+      '0%': {
+        transform:'rotate3d(0, 1, 0, 0deg)',
+        opacity: 1,
+      },
+      '25%': {
+        transform:'rotate3d(0, 1, 0, 90deg)',
+        opacity: 0.4,
+      },
+      '26%': {
+        transform:'rotate3d(0, 1, 0, 92deg)',
+        opacity: 1,
+      },
+      '50%': {
+        transform:'rotate3d(0, 1, 0, 180deg)',
+        opacity: 1,
+      },
+      '75%': {
+        transform:'rotate3d(0, 1, 0, 270deg)',
+        opacity: 0.4,
+      },
+      '76%': {
+        transform:'rotate3d(0, 1, 0, 272deg)',
+        opacity: 1,
+      },
+      '100%': {
+        transform:'rotate3d(0, 1, 0, 359deg)',
+        opacity: 1,
+      },
     }
   }));

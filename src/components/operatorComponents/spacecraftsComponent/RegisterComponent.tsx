@@ -7,7 +7,6 @@ import {
     Button
 } from '@material-ui/core';
 import Table from './tableComponent';
-import { useTranslation } from 'react-i18next';
 
 import AccessDenied from '../../accessDeniedComponent';
 
@@ -33,17 +32,17 @@ const useStyles = makeStyles(()=>({
 
 function Register( { users, onDelete}:any ) {
     const classes = useStyles();
-    const { t } = useTranslation();
-    const user = JSON.parse(localStorage.user);
+
+    const token = JSON.parse(localStorage.token);
 
     return(
         <div>
         { 
-        user ?
+        token ?
             <Grid container justify='center'>
                 <Card elevation={10} className={classes.root}>
                     <Typography align='center' variant='h4' color='textSecondary' >
-                        {t("astronauts.tableTitle")}
+                        Spacecrafts
                     </Typography>
                     <Grid container >
                         <Button className={classes.addBtn} variant='outlined' color='primary' >

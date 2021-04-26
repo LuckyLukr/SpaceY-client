@@ -4,12 +4,11 @@ import {
     Grid,
     Card,
     makeStyles,
-    Divider,
-    Button
+    Divider
 } from '@material-ui/core';
 
 import Navbar from '../../navbarComponent';
-import OperatorNavbar from '../operatorNavbar';
+import OperatorNavbar from '../../navbarComponents/operatorNavbar';
 import VerticalTabs from './verticalTabsComponent';
 import AccessDenied from '../../accessDeniedComponent';
 
@@ -29,17 +28,18 @@ export default function OperatorDashboard( {onLogout}:any ) {
     const classes = useStyles();
 
     const user = JSON.parse(localStorage.user);
+    const token = JSON.parse(localStorage.token);
 
     return(
         <div>
             <Navbar />
             { 
-                user ?
+                user.access_token === token ?
             <>
             <OperatorNavbar onLogout={onLogout} />
             <Grid container direction='column' justify='space-evenly' alignItems='center'>
                 <Typography>
-                    WELCOME {user.firstName}!
+                    WELCOME {user.user.firstName}!
                 </Typography>
                 <Card className={classes.card}>
                     <Grid container justify='space-between'>

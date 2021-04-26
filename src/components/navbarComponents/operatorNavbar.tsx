@@ -7,6 +7,7 @@ import {
     Typography,
     Divider
 } from '@material-ui/core';
+import jwt_decode from 'jwt-decode';
 
 const useStyles = makeStyles(()=>({
     appbar: {
@@ -20,15 +21,20 @@ const useStyles = makeStyles(()=>({
 export default function OperatorNavbar( {onLogout}:any ) {
     const classes = useStyles();
 
-    const user = JSON.parse(localStorage.user);
+    const user = JSON.parse(localStorage.user)
+    const token = JSON.parse(localStorage.token);
+    const tokenData = jwt_decode(token);
 
     return(
         <div>
-            { user ?
+            { user.access_token === token ?
             <Grid container>
-                <Grid container justify='space-between' className={classes.appbar}>
+                <Grid container justify={tokenData.role === 'operator' ? 'space-between' : 'flex-end'} className={classes.appbar}>
+
+                    { tokenData.role === 'operator' ?
+
                     <ButtonGroup className={classes.buttonFlex} variant="text" aria-label="navbar button group">
-                        <Button href='/dashboard' >
+                        <Button href='/' >
                             Dashboard
                         </Button>
                         <Button href='/astronauts'>
@@ -42,9 +48,13 @@ export default function OperatorNavbar( {onLogout}:any ) {
                         </Button>
                     </ButtonGroup>
 
-                    <Grid container alignItems='center' style={{width: 'fit-content'}} >
+                    :
+                        null
+                    }
+
+                    <Grid container justify='flex-end' alignItems='center' style={{width: 'fit-content'}} >
                         <Typography color='textSecondary'>
-                            {user.email}
+                            {user.user.email}
                         </Typography>
                         <Divider orientation='vertical' variant='middle' />
                         <ButtonGroup className={classes.buttonFlex} variant="text" aria-label="account button group">
