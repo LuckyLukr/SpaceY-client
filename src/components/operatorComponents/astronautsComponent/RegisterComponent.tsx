@@ -81,7 +81,7 @@ function Register( { users, onDelete, onAdd }:any ) {
                     </Grid>
 
                     { appendForm 
-                    ? 
+                    &&
                     <Grid className={classes.addFormRoot} container justify='center'>   
                         <ClickAwayListener onClickAway={handleClickAway}>        
                             <Card elevation={0} className={classes.addFormCard}>
@@ -99,8 +99,6 @@ function Register( { users, onDelete, onAdd }:any ) {
                             </Card>
                         </ClickAwayListener>  
                     </Grid>  
-                    :
-                        null 
                     }
 
                     <Table users={users} onDelete={onDelete} />

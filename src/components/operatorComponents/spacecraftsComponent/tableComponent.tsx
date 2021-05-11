@@ -2,104 +2,75 @@ import React from 'react';
 import {
     Tooltip,
     IconButton,
-    Button
 } from '@material-ui/core';
 import { DataGrid, GridToolbar  } from '@material-ui/data-grid';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
 
-function Table( {users,onDelete}:any ) {
+import CachedIcon from '@material-ui/icons/Cached';
+import WarningIcon from '@material-ui/icons/Warning';
+
+function Table( {spacecrafts, onDelete, onDestroy}:any ) {
 
     const columns = [
-        { field: 'name', headerName: 'Name', width: 160 },
-        { field: 'type', headerName: 'Type', width: 160 },
-        { field: 'weight', headerName: 'Weight (t)', width: 160 },
-        { field: 'seats', headerName: 'Number of seats', width: 160 },
-        { field: 'tankCapacity', headerName: 'Fuel tank capacity (l)' , width: 160 },
-        { field: 'tankCondition', headerName: 'Fuel tank condition', width: 160 },
-        { field: 'fridge', headerName: 'Fridge capacity (kg)', width: 160 },
-        { field: 'motorImpulse', headerName: 'Specific motor impulse', width: 160 },
-        { field: 'status', headerName: 'Status', width: 160 },
-        {  
-            field: '-', 
-            headerName: " ",
-            renderCell: () => (
-                <Tooltip title='Edit' >
-                    <Button color='primary' > 
-                        <EditIcon />
-                    </Button>
-                </Tooltip>
-            )
-        },
-        {  
-            field: ' ', 
-            headerName: " ",
-            renderCell: (params:any) => (
-                <Tooltip title='Delete' onClick={() => onDelete(params.row.id)} >
-                    <IconButton color='primary' > 
-                        <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
-            )
-        },
+                { field: 'name', headerName: 'Name', width: 160 },
+                { field: 'type', headerName: 'Model', width: 160 },
+                { field: 'weight', headerName: 'Weight', width: 160 },
+                { field: 'seats', headerName: 'Number of seats', width: 160 },
+                { field: 'tankCapacity', headerName: 'Fuel tank capacity' , width: 160 },
+                { field: 'tankCondition', headerName: 'Fuel tank condition', width: 160 },
+                { field: 'fridge', headerName: 'Fridge capacity', width: 160 },
+                { field: 'motorImpulse', headerName: 'Specific motor impulse', width: 160 },
+                { field: 'status', headerName: 'Status', width: 160 },
+                {  
+                    field: 'delete',
+                    headerName: " ",
+                    renderCell: (params:any) => {
+                        return (
+                            <>
+                            {
+                                params.row.status === 'on mission' 
+                                ?
+                                <Tooltip title='DESTROY' onClick={() => onDestroy(params.row.id)} >
+                                    <IconButton > 
+                                        <WarningIcon color='error' />
+                                    </IconButton>
+                                </Tooltip>
+                                :
+                                <Tooltip title='Scrap' onClick={() => onDelete(params.row.id)} >
+                                    <IconButton color='primary' > 
+                                        <CachedIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            }
+                            </>
+                        )
+                    }
+                },
     ];
 
-    const spacecrafts = [
-        {
-            id: 0,
-            name: 'Tweak',
-            type: 'Falcon 19',
-            weight: 80,
-            seats: 4,
-            tankCapacity: 12000,
-            tankCondition: `${100}%`,
-            fridge: 300,
-            motorImpulse: 7000,
-            status: 'Out of mission'
-        },
-        {
-            id: 1,
-            name: 'Peak',
-            type: 'Falcon 19',
-            weight: 80,
-            seats: 4,
-            tankCapacity: 12000,
-            tankCondition: `${100}%`,
-            fridge: 300,
-            motorImpulse: 7000,
-            status: 'Out of mission'
-        },
-        {
-            id: 2,
-            name: 'Leak',
-            type: 'Falcon 20',
-            weight: 75,
-            seats: 4,
-            tankCapacity: 10000,
-            tankCondition: `${100}%`,
-            fridge: 350,
-            motorImpulse: 8000,
-            status: 'Out of mission'
-        },
-        {
-            id: 3,
-            name: 'Sneak',
-            type: 'Starlighter',
-            weight: 290,
-            seats: 14,
-            tankCapacity: 280000,
-            tankCondition: `${87}%`,
-            fridge: 10000,
-            motorImpulse: 28000,
-            status: 'Out of mission'
-        }
-    ]
+    const SCsArray = spacecrafts.map( (e:any) => { 
+
+        const status = e.destroyed ? 'destroyed' : e.onMission ? 'on mission' : 'ready to depart';
+
+        return({
+            id: e.id,
+            key: e.id,
+            weight: `${e.weight} t`,
+            name: e.name,
+            type: e.type,
+            seats: e.seats,
+            tankCapacity: `${e.tankCapacity} l`,
+            tankCondition: `${e.tankCondition} %`,
+            motorImpulse: e.motorImpulse,
+            fridge: `${e.fridge} kg`,
+            status: status
+        })
+     });
 
 
     return(
         <div>
             <DataGrid 
-                rows={spacecrafts} 
+                rows={SCsArray} 
                 columns={columns}
                 pageSize={7}
                 autoHeight

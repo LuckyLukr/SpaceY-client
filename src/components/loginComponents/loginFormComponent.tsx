@@ -64,7 +64,6 @@ export default function LogIn( {onLogin}:any ) {
                         size='small'
                         variant="outlined"
                         margin="normal"
-                        name="password"
                         label={t('password')}
                         type="password"
                         id="password"

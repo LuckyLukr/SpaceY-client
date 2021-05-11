@@ -10,13 +10,14 @@ import SpacecraftsTable from './components/operatorComponents/spacecraftsCompone
 
 function App() {
   const [ users, setUsers ] = useState<any>([]);
+  const [ spacecrafts, setSpacecrafts ] = useState<any>([]);
 
   const API ='http://localhost:5000/';
   const user = JSON.parse(localStorage.user);
 
-  // GET USERS <---------------------------------------------------------|
-
   useEffect(()=> {
+
+      // GET USERS <---------------------------------------------------------|
     const fetchUsers = () => {
       const token = JSON.parse(localStorage.token);
       return new Promise( resolve => {
@@ -24,7 +25,7 @@ function App() {
           .then( res => {
             resolve(res.data);
           })
-          .catch( err => console.log(err) );
+          .catch( err => console.log(err));
       })
     };
 
@@ -33,9 +34,27 @@ function App() {
       setUsers(result);
     }
 
+  // GET SPACECRAFTS <---------------------------------------------------------|
+    const fetchSpacecrafts = () => {
+      return new Promise( resolve => {
+        axios.get(API + 'spacecrafts')
+          .then( res => {
+            resolve(res.data);
+          })
+          .catch( err => console.log(err));
+      })
+    };
+
+    const loadSpacecrafts = async () => {
+      const result = await fetchSpacecrafts() as any;
+      setSpacecrafts(result);
+    }
+
     if(!localStorage.user){
     localStorage.setItem('user', JSON.stringify(''));
     }
+
+    loadSpacecrafts();
     loadUsers();
   
   },[]);
@@ -74,14 +93,52 @@ function App() {
         consum: number,
         weight: number
     ) => {
-    const newOperator = { firstName, lastName, email, password, repeatPassword, role, age, consum, weight, onMission: false };
+    const newOperator = { 
+      firstName, 
+      lastName, 
+      email, 
+      password, 
+      repeatPassword, 
+      role, 
+      age, 
+      consum, 
+      weight, 
+      onMission: false };
     const data = await axios.post(API + 'users', newOperator).catch(err => console.log(err));
     if (data) {
       const operator = JSON.parse(data.config.data);
       const operatorWithID = { id: data.data.id, ...operator};
       setUsers([ ...users, operatorWithID]);
     }
-    return console.log(data);
+  }
+
+  const addSpacecraft = async ( 
+        name: string, 
+        type: string, 
+        weight: number, 
+        seats: number, 
+        tankCapacity: number, 
+        motorImpulse: number, 
+        fridge: number 
+  ) => {
+    const newSpacecraft = { 
+      name,     
+      type,
+      weight,
+      onMission: false,
+      destroyed: false,
+      seats,
+      tankCapacity,
+      tankCondition: 100,
+      motorImpulse,
+      fridge,
+    };
+    const data = await axios.post(API + 'spacecrafts', newSpacecraft).catch(err => console.log(err));
+    if (data) {
+      const spacecraft = JSON.parse(data.config.data);
+      const spacecraftWithID = { id: data.data.id, ...spacecraft};
+      setSpacecrafts([ ...spacecrafts, spacecraftWithID]);
+    }
   }
 
   // LOGOUT <--------------------------------------------------------|
@@ -95,12 +152,37 @@ function App() {
   // DELETE <--------------------------------------------------------|
   
   function deleteUser( id:string ) {
-    axios.delete(`${API}users/${id}`).catch(err => console.log(err));
+    const token = JSON.parse(localStorage.token);
+    axios.delete(`${API}users/${id}`,{ headers: {"Authorization" : `Bearer ${token}`}}).catch(err => console.log(err));
     const copyUsers = [ ...users ];
     const index = copyUsers.findIndex( e => e.id === id);
     copyUsers.splice(index,1);
     setUsers(copyUsers);
     console.log(users);
+  }
+
+  function deleteSpacecraft( id:string ) {
+    axios.delete(`${API}spacecrafts/${id}`).catch(err => console.log(err));
+    const copySpacecrafts = [ ...spacecrafts ];
+    const index = copySpacecrafts.findIndex( e => e.id === id);
+    copySpacecrafts.splice(index,1);
+    setSpacecrafts(copySpacecrafts);
+    console.log(spacecrafts);
+  }
+
+  // UPDATE <--------------------------------------------------------|
+
+  function destroySpacecraft( id:string ) {
+    axios.patch(`${API}spacecrafts/${id}`, {destroyed: true, onMission: false}).catch(err => alert(err));
+
+    const update = [...spacecrafts];
+    update.forEach(e => {
+      if(e.id === id){
+        e.destroyed = true;
+        e.onMission = false;
+      }
+    });
+    setSpacecrafts(update);
   }
 
   return ( 
@@ -112,8 +194,21 @@ function App() {
             <OperatorDashboard onLogout={logoutUser} />
             } />
           <Route path='/signup' render={() => <SignupPage onAdd={addUser} />} />
-          <Route path='/astronauts' render={() => <AstronautsTable onAdd={addUser} users={users} onLogout={logoutUser} onDelete={deleteUser} />} />
-          <Route path='/spacecrafts' render={() => <SpacecraftsTable onAdd={addUser} users={users} onLogout={logoutUser} onDelete={deleteUser} />} />
+          <Route path='/astronauts' render={() => <AstronautsTable 
+                                                      onAdd={addUser} 
+                                                      users={users} 
+                                                      onLogout={logoutUser}
+                                                      onDelete={deleteUser} 
+                                                  />} 
+          />
+          <Route path='/spacecrafts' render={() => <SpacecraftsTable 
+                                                      onAdd={addSpacecraft} 
+                                                      spacecrafts={spacecrafts} 
+                                                      onLogout={logoutUser} 
+                                                      onDelete={deleteSpacecraft}
+                                                      onDestroy={destroySpacecraft}
+                                                    />} 
+          />
     </Router>
   )
 }
