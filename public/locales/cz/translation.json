@@ -9,6 +9,7 @@
     "fName": "Jméno",
     "lName": "Příjmení",
     "haveAccount": "Už máte účet? Přihlašte se.",
+    "birth": "Datum narození",
 
     "astronauts": {
         "tableTitle": "REGISTR ASTRONAUTŮ"

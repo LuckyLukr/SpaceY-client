@@ -6,6 +6,7 @@ import {
     makeStyles,
     Divider
 } from '@material-ui/core';
+//import jwt_decode from 'jwt-decode';
 
 import Navbar from '../../navbarComponent';
 import OperatorNavbar from '../../navbarComponents/operatorNavbar';
@@ -24,19 +25,27 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-export default function OperatorDashboard( {onLogout}:any ) {
+export default function OperatorDashboard( {onLogout, onUpdate, onSucces}:any ) {
     const classes = useStyles();
 
     const user = JSON.parse(localStorage.user);
     const token = JSON.parse(localStorage.token);
-
+    /* let tokenData = {role: ''};
+    if(token){
+        tokenData = jwt_decode(token);
+    }
+    */
     return(
         <div>
             <Navbar />
             { 
                 user.access_token === token ?
             <>
-            <OperatorNavbar onLogout={onLogout} />
+            <OperatorNavbar 
+                onLogout={onLogout} 
+                onUpdate={onUpdate} 
+                onSucces={onSucces} 
+            />
             <Grid container direction='column' justify='space-evenly' alignItems='center'>
                 <Typography>
                     WELCOME {user.user.firstName}!

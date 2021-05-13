@@ -78,14 +78,14 @@ const AddingForm = ({ onAdd, onAppend }:any) => {
         age--;
     }
     return age;
-}
+  }
 
   const handleSubmit = async (e:any) => {
       e.preventDefault();
 
       const age = await getAge(birth)
 
-      onAdd(firstName, lastName, email, password, repeatPassword, 'astronaut', age, consum, weight);
+      onAdd(firstName, lastName, email, password, repeatPassword, 'astronaut', age, birth, consum, weight);
       onAppend();
       
       setFirstName('');
@@ -165,7 +165,7 @@ const AddingForm = ({ onAdd, onAppend }:any) => {
                 id="birth"
                 name="birth"
                 autoComplete="birth"
-                label="Birthday"
+                label="Birth Date"
                 value={birth}
                 onChange={handleBirthChange}
                 InputLabelProps={{

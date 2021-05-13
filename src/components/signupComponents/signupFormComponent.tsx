@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUp( {onAdd}:any ) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [birth, setBirth] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
@@ -55,6 +56,11 @@ export default function SignUp( {onAdd}:any ) {
   const handleLastNameChange = (e:any) => {
     e.preventDefault();
     setLastName(e.target.value);
+  }
+
+  const handleBirthChange = (e:any) => {
+    e.preventDefault();
+    setBirth(e.target.value);
   }
 
   const handleEmailChange = (e:any) => {
@@ -72,21 +78,35 @@ export default function SignUp( {onAdd}:any ) {
     setRepeatPassword(e.target.value);
   }
 
+  const getAge = (dateString:string) => {
+    const today = new Date();
+    const birthDate = new Date(dateString);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+  }
+
   const handleSubmit = (e:any) => {
       e.preventDefault();
-      onAdd(firstName, lastName, email, password, repeatPassword, 'operator', 30, 40, 75);
+      const age = getAge(birth);
+
+      onAdd(firstName, lastName, email, password, repeatPassword, 'operator', age, birth, 40, 75);
       setFirstName('');
       setLastName('');
       setEmail('');
       setPassword('');
       setRepeatPassword('');
+      window.open('/','_self');
     }
 
   return (
     <Container maxWidth={false} className={classes.root}>
       <CssBaseline />
       <div className={classes.paper}>
-            <img style={{width: '80px'}} src={logo} alt='logo' />
+        <img style={{width: '80px'}} src={logo} alt='logo' />
         <Typography style={{color: '#666666'}} component="h1" variant="h5">
           OPERATOR
         </Typography>
@@ -119,7 +139,7 @@ export default function SignUp( {onAdd}:any ) {
                 autoComplete="lname"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 onChange={handleEmailChange}
                 value={email}
@@ -130,6 +150,23 @@ export default function SignUp( {onAdd}:any ) {
                 label={t('emailAdress')}
                 name="email"
                 autoComplete="email"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                type="date"
+                onChange={handleBirthChange}
+                value={birth}
+                variant="outlined"
+                required
+                fullWidth
+                id="birth"
+                label={t('birth')}
+                name="birth"
+                autoComplete="birth"
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             </Grid>
             <Grid item xs={12}>

@@ -1,12 +1,17 @@
-import React from 'react';
 import {
     Tooltip,
     IconButton,
 } from '@material-ui/core';
-import { DataGrid, GridToolbar  } from '@material-ui/data-grid';
+import { 
+    DataGrid, 
+    GridToolbar,
+    GridCellParams  
+} from '@material-ui/data-grid';
 
 import CachedIcon from '@material-ui/icons/Cached';
 import WarningIcon from '@material-ui/icons/Warning';
+
+import { Spacecraft } from '../../../types';
 
 function Table( {spacecrafts, onDelete, onDestroy}:any ) {
 
@@ -23,7 +28,7 @@ function Table( {spacecrafts, onDelete, onDestroy}:any ) {
                 {  
                     field: 'delete',
                     headerName: " ",
-                    renderCell: (params:any) => {
+                    renderCell: (params:GridCellParams) => {
                         return (
                             <>
                             {
@@ -47,7 +52,7 @@ function Table( {spacecrafts, onDelete, onDestroy}:any ) {
                 },
     ];
 
-    const SCsArray = spacecrafts.map( (e:any) => { 
+    const SCsArray = spacecrafts.map( (e:Spacecraft) => { 
 
         const status = e.destroyed ? 'destroyed' : e.onMission ? 'on mission' : 'ready to depart';
 

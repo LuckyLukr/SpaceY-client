@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import axios from 'axios';
+import './App.css';
+
+import { User, UserWithToken, Spacecraft } from './types';
 
 import LoginPage from './components/loginComponents/loginPageComponent';
 import OperatorDashboard from './components/operatorComponents/dashboardComponents/dashboardComponent';
 import SignupPage from './components/signupComponents/signupPageComponent';
 import AstronautsTable from './components/operatorComponents/astronautsComponent/astronautsComponent';
 import SpacecraftsTable from './components/operatorComponents/spacecraftsComponent/spacecraftsComponent';
+import Missions from './components/operatorComponents/missionsComponent/missionsComponent';
+import SuccessBar from './components/confirmationComponents/successBarComponent';
 
 function App() {
-  const [ users, setUsers ] = useState<any>([]);
-  const [ spacecrafts, setSpacecrafts ] = useState<any>([]);
+  const [ users, setUsers ] = useState<User[]>([]);
+  const [ spacecrafts, setSpacecrafts ] = useState<Spacecraft[]>([]);
+  const [ isSuccess, setIsSuccess ] = useState<boolean>(false);
 
   const API ='http://localhost:5000/';
   const user = JSON.parse(localStorage.user);
@@ -21,7 +27,7 @@ function App() {
     const fetchUsers = () => {
       const token = JSON.parse(localStorage.token);
       return new Promise( resolve => {
-        axios.get(API + 'users',{ headers: {"Authorization" : `Bearer ${token}`} })
+        axios.get(API + 'users',{ headers: {"Authorization" : `Bearer ${token}`}})
           .then( res => {
             resolve(res.data);
           })
@@ -30,7 +36,7 @@ function App() {
     };
 
     async function loadUsers() {
-      const result = await fetchUsers() as any;
+      const result = await fetchUsers() as User[];
       setUsers(result);
     }
 
@@ -46,9 +52,10 @@ function App() {
     };
 
     const loadSpacecrafts = async () => {
-      const result = await fetchSpacecrafts() as any;
+      const result = await fetchSpacecrafts() as Spacecraft[];
       setSpacecrafts(result);
     }
+    // -------------------------------------------------------------------------|
 
     if(!localStorage.user){
     localStorage.setItem('user', JSON.stringify(''));
@@ -63,7 +70,7 @@ function App() {
 
     const loginUser = async ( email: string, password: string) => {
       const login = { username: email, password: password };
-      const result = await new Promise<any>( resolve => {
+      const result = await new Promise<UserWithToken>( resolve => {
         axios.post(`${API}auth/login`,login)
             .then( res => {
             resolve(res.data);
@@ -80,7 +87,7 @@ function App() {
       
   };
   
-  // REGISTER <-----------------------------------------------------|
+  // REGISTER USER <-----------------------------------------------------|
 
   const addUser = async (
         firstName: string,
@@ -90,6 +97,7 @@ function App() {
         repeatPassword: string,
         role: string,
         age: number,
+        birth: string,
         consum: number,
         weight: number
     ) => {
@@ -100,11 +108,14 @@ function App() {
       password, 
       repeatPassword, 
       role, 
-      age, 
+      age,
+      birth,
       consum, 
       weight, 
-      onMission: false };
-    const data = await axios.post(API + 'users', newOperator).catch(err => console.log(err));
+      onMission: false 
+    };
+    const token = JSON.parse(localStorage.token);
+    const data = await axios.post(API + 'users', newOperator,{ headers: {"Authorization" : `Bearer ${token}`}}).catch(err => console.log(err));
     if (data) {
       const operator = JSON.parse(data.config.data);
       const operatorWithID = { id: data.data.id, ...operator};
@@ -112,6 +123,7 @@ function App() {
     }
   }
 
+  // REGISTER SPACECRAFT <-----------------------------------------------------|
   const addSpacecraft = async ( 
         name: string, 
         type: string, 
@@ -147,9 +159,10 @@ function App() {
     localStorage.clear();
     localStorage.setItem('user', JSON.stringify(''));
     localStorage.setItem('token', JSON.stringify(''));
+    window.open('/', '_self');
   };
 
-  // DELETE <--------------------------------------------------------|
+  // DELETE USER <--------------------------------------------------------|
   
   function deleteUser( id:string ) {
     const token = JSON.parse(localStorage.token);
@@ -158,16 +171,15 @@ function App() {
     const index = copyUsers.findIndex( e => e.id === id);
     copyUsers.splice(index,1);
     setUsers(copyUsers);
-    console.log(users);
   }
 
+  // DELETE SPACECRAFT <--------------------------------------------------------|
   function deleteSpacecraft( id:string ) {
     axios.delete(`${API}spacecrafts/${id}`).catch(err => console.log(err));
     const copySpacecrafts = [ ...spacecrafts ];
     const index = copySpacecrafts.findIndex( e => e.id === id);
     copySpacecrafts.splice(index,1);
     setSpacecrafts(copySpacecrafts);
-    console.log(spacecrafts);
   }
 
   // UPDATE <--------------------------------------------------------|
@@ -185,29 +197,78 @@ function App() {
     setSpacecrafts(update);
   }
 
+  function updateUser( id:string, update:User ) {
+    const token = JSON.parse(localStorage.token);
+    axios.patch(`${API}users/${id}`,update,{ headers: {"Authorization" : `Bearer ${token}`}} ).catch(err => alert(err));
+    const copyUsers = [...users];
+    copyUsers.forEach(e => {
+      if(e.id === id){
+        e.firstName = update.firstName;
+        e.lastName = update.lastName;
+        e.age = update.age;
+        e.birth = update.birth;
+        e.consum = update.consum;
+        e.weight = update.weight;
+      }
+    });
+    setUsers(copyUsers);
+  }
+
+    // CONFIRMATION BARS <--------------------------------------------------------|
+    const handleSuccesBar = () => {
+      setIsSuccess(true);
+      setTimeout(()=> { setIsSuccess(false); }, 5000);
+    }
+
   return ( 
     <Router>
+          { isSuccess && <SuccessBar />}
           <Route path='/' exact render={() => 
             !user ?
             <LoginPage user={user} onLogin={loginUser} />
             :
-            <OperatorDashboard onLogout={logoutUser} />
+            <OperatorDashboard 
+              onLogout={logoutUser} 
+              onUpdate={updateUser}
+              onSucces={handleSuccesBar}
+            />
             } />
           <Route path='/signup' render={() => <SignupPage onAdd={addUser} />} />
-          <Route path='/astronauts' render={() => <AstronautsTable 
-                                                      onAdd={addUser} 
-                                                      users={users} 
-                                                      onLogout={logoutUser}
-                                                      onDelete={deleteUser} 
-                                                  />} 
+          <Route path='/astronauts' 
+            render={() => 
+              <AstronautsTable 
+                onAdd={addUser} 
+                users={users}
+                onDelete={deleteUser}
+                onUpdate={updateUser}
+                onSucces={handleSuccesBar}
+                onLogout={logoutUser} 
+              />
+            } 
           />
-          <Route path='/spacecrafts' render={() => <SpacecraftsTable 
-                                                      onAdd={addSpacecraft} 
-                                                      spacecrafts={spacecrafts} 
-                                                      onLogout={logoutUser} 
-                                                      onDelete={deleteSpacecraft}
-                                                      onDestroy={destroySpacecraft}
-                                                    />} 
+          <Route path='/spacecrafts' 
+            render={() => 
+              <SpacecraftsTable 
+                onAdd={addSpacecraft} 
+                spacecrafts={spacecrafts}
+                onDelete={deleteSpacecraft}
+                onDestroy={destroySpacecraft}
+                onUpdate={updateUser}
+                onSucces={handleSuccesBar}
+                onLogout={logoutUser} 
+              />
+            }
+          />
+          <Route path='/makeMission' 
+            render={() => 
+              <Missions 
+                users={users}
+                spacecrafts={spacecrafts}
+                onUpdate={updateUser}
+                onSucces={handleSuccesBar}
+                onLogout={logoutUser} 
+              /> 
+            } 
           />
     </Router>
   )

@@ -1,21 +1,18 @@
-
-    export interface Spacecraft {
-        type: string;
-        weight: number;
-        seats: number;
-        tankCapacity: number;
-        motorImpulse: number;
-        fridge: number;
-    }
+import { Spacecraft } from '../../../types';
 
     export const SCsArray: Spacecraft[] = [
-        {
+        {   
             type: 'Falcon 21',
             weight: 21,
             seats: 4,
             tankCapacity: 6000,
             motorImpulse: 7000,
             fridge: 100,
+            onMission: false,
+            destroyed: false,
+            id: '0',
+            name: 'unnamed',
+            tankCondition: 100
         },
         {
             type: 'Falcon 20',
@@ -24,6 +21,11 @@
             tankCapacity: 6500,
             motorImpulse: 6000,
             fridge: 120,
+            onMission: false,
+            destroyed: false,
+            id: '1',
+            name: 'unnamed',
+            tankCondition: 100
         },
         {
             type: 'Dinasty 1',
@@ -32,6 +34,11 @@
             tankCapacity: 120000,
             motorImpulse: 42000,
             fridge: 1200,
+            onMission: false,
+            destroyed: false,
+            id: '2',
+            name: 'unnamed',
+            tankCondition: 100
         },
         {
             type: 'Fastreq 212',
@@ -40,5 +47,10 @@
             tankCapacity: 200,
             motorImpulse: 5000,
             fridge: 10,
+            onMission: false,
+            destroyed: false,
+            id: '3',
+            name: 'unnamed',
+            tankCondition: 100
         },
     ];

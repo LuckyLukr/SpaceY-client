@@ -2,15 +2,16 @@ import jwt_decode from 'jwt-decode';
 
 import Navbar from '../../navbarComponent';
 import OperatorNavbar from '../../navbarComponents/operatorNavbar';
-import Register from './RegisterComponent';
+import MissionMaker from './missionMaker';
 import AccessDenied from '../../accessDeniedComponent';
 
-export default function SpacecraftTable( {onAdd, spacecrafts, onLogout, onDelete, onDestroy, onUpdate, onSucces}:any ) {
+export default function Missions( {users, spacecrafts, onUpdate, onSucces, onLogout}:any ) {
     const token = JSON.parse(localStorage.token);
     let tokenData = {role: ''};
     if(token){
         tokenData = jwt_decode(token);
     }
+
 
     return(
         <div>
@@ -20,15 +21,13 @@ export default function SpacecraftTable( {onAdd, spacecrafts, onLogout, onDelete
             ?
         <>
             <OperatorNavbar 
-                onLogout={onLogout} 
-                onUpdate={onUpdate}
+                onUpdate={onUpdate} 
                 onSucces={onSucces} 
+                onLogout={onLogout} 
             />
-            <Register 
-                onAdd={onAdd} 
+            <MissionMaker 
+                users={users} 
                 spacecrafts={spacecrafts} 
-                onDelete={onDelete} 
-                onDestroy={onDestroy} 
             />
         </>
             :

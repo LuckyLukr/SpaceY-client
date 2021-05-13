@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import {
     makeStyles,
     Grid,
@@ -9,6 +9,8 @@ import {
 } from '@material-ui/core';
 import jwt_decode from 'jwt-decode';
 
+import Account from './accountComponent';
+
 const useStyles = makeStyles(()=>({
     appbar: {
         height: '6vh',
@@ -18,8 +20,13 @@ const useStyles = makeStyles(()=>({
     }
 }))
 
-export default function OperatorNavbar( {onLogout}:any ) {
+export default function OperatorNavbar( {onLogout, onUpdate, onSucces}:any ) {
+    const [ appendForm, setAppendForm ] = useState(false);
+
     const classes = useStyles();
+
+    const onAppend = () => setAppendForm(!appendForm);
+    const handleClickAway = () => setAppendForm(false);
 
     const user = JSON.parse(localStorage.user)
     const token = JSON.parse(localStorage.token);
@@ -27,11 +34,11 @@ export default function OperatorNavbar( {onLogout}:any ) {
 
     return(
         <div>
-            { user.access_token === token ?
+            { user.access_token === token &&
             <Grid container>
                 <Grid container justify={tokenData.role === 'operator' ? 'space-between' : 'flex-end'} className={classes.appbar}>
 
-                    { tokenData.role === 'operator' ?
+                    { tokenData.role === 'operator' &&
 
                     <ButtonGroup className={classes.buttonFlex} variant="text" aria-label="navbar button group">
                         <Button href='/' >
@@ -43,13 +50,11 @@ export default function OperatorNavbar( {onLogout}:any ) {
                         <Button href='/spacecrafts' >
                             Spacecrafts
                         </Button>
-                        <Button href='missions' >
+                        <Button href='/makeMission' >
                             Missions
                         </Button>
                     </ButtonGroup>
 
-                    :
-                        null
                     }
 
                     <Grid container justify='flex-end' alignItems='center' style={{width: 'fit-content'}} >
@@ -58,21 +63,24 @@ export default function OperatorNavbar( {onLogout}:any ) {
                         </Typography>
                         <Divider orientation='vertical' variant='middle' />
                         <ButtonGroup className={classes.buttonFlex} variant="text" aria-label="account button group">
-                            <Button >
+                            <Button onClick={() => onAppend()} >
                                 Account
                             </Button>
-                            <Button href='/' onClick={() => onLogout()} >
+                            <Button onClick={() => onLogout()} >
                                 Logout
                             </Button>
                         </ButtonGroup>
                     </Grid>
                     
                 </Grid>
+
+                { appendForm && <Account 
+                                    onClose={handleClickAway} 
+                                    onUpdate={onUpdate}
+                                    onSucces={onSucces}
+                                />}
+
             </Grid>
-
-            :
-
-            null
 
             }
         </div>

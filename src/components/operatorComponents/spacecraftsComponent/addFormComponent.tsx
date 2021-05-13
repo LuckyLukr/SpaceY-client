@@ -6,6 +6,7 @@ import {
     Grid,
 } from '@material-ui/core/';
 
+import { Spacecraft } from '../../../types';
 import {  SCsArray } from './factory';
 
 const useStyles = makeStyles(() => ({
@@ -29,7 +30,7 @@ function AddingForm( {onAdd, onAppend }:any ) {
 
     const classes = useStyles();
 
-    const handleModelChange = (e:any) => {
+    const handleModelChange = (e:Spacecraft) => {
       setModel(e.type);
       setWeight(e.weight);
       setSeats(e.seats);
@@ -57,7 +58,7 @@ function AddingForm( {onAdd, onAppend }:any ) {
           <Grid container spacing={2}>
             <Grid container justify='space-evenly' alignItems='center' style={{margin: '20px 0px'}}>
               {
-                SCsArray.map((e:any) => 
+                SCsArray.map((e:Spacecraft) => 
                   <Button variant='outlined' color='primary' key={e.type} onClick={()=> handleModelChange(e)}>
                     {e.type}
                   </Button>

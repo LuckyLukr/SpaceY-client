@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme)=>({
 }))
 
 
-function Register( { users, onDelete, onAdd }:any ) {
+function Register( { users, onDelete, onAdd, onUpdate, onSucces }:any ) {
     const [ appendForm, setAppendForm ] = useState(false);
     const classes = useStyles();
     const { t } = useTranslation();
@@ -101,7 +101,7 @@ function Register( { users, onDelete, onAdd }:any ) {
                     </Grid>  
                     }
 
-                    <Table users={users} onDelete={onDelete} />
+                    <Table onUpdate={onUpdate} onSucces={onSucces} users={users} onDelete={onDelete} />
 
                 </Card>
             </Grid>

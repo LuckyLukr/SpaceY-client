@@ -9,6 +9,7 @@
     "fName": "First Name",
     "lName": "Last Name",
     "haveAccount": "Already have an account? Log in.",
+    "birth": "Birth Date",
 
     "astronauts": {
         "tableTitle": "REGISTER OF ASTRONAUTS"
