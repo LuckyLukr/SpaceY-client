@@ -34,9 +34,8 @@ export interface UserWithToken {
 
 export interface Destination {
   name: string,
-  coordX: number,
-  coordY: number,
-  coordZ: number,
+  distance: number,
+  image: string,
 }
 
 export interface Mission {

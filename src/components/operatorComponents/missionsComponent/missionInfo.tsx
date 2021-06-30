@@ -73,19 +73,19 @@ function MissionInfo( { target, name, assigned }:any ) {
                 Seats: {target.seats}
             </Typography>
             <Typography>
-                M.I.: {target.motorImpulse}
+                M.I.: {target.motorImpulse} Km / h
             </Typography>
             <Typography>
-                Tank Cpacity: {target.tankCapacity}
+                Tank Capacity: {target.tankCapacity} l
             </Typography>
             <Typography>
-                Tank Cndition: {target.tankCondition}
+                Tank Condition: {target.tankCondition} %
             </Typography>
             <Typography>
-                FRIDGEE: {target.fridge}
+                Fridge: {target.fridge} kg
             </Typography>
             <Typography gutterBottom>
-              weight: {target.weight}
+                weight: {target.weight} t
             </Typography>
 
             <Typography variant='h6'>

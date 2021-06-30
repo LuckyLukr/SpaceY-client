@@ -1,18 +1,21 @@
+import { useState } from 'react';
 import {
     makeStyles,
     Grid,
     Button,
     Card,
     CardMedia,
-    Fab,
+    Chip,
     Theme
 } from '@material-ui/core';
 
-import AddIcon from '@material-ui/icons/Add';
+import DestinationContainer from './destinationComponent';
+import { destinations } from '../../destinationsComponents/destinationsComponent';
+import { Destination } from '../../../types';
+
+import LanguageIcon from '@material-ui/icons/Language';
 import MissionInfo from './missionInfo';
 import solarSystem from '../../../images/solar_system.jpg';
-
-import { destinations } from '../../destinationsComponents/destinationsComponent';
 
 const useStyles = makeStyles((theme: Theme)=>({
     root: {
@@ -80,15 +83,30 @@ const useStyles = makeStyles((theme: Theme)=>({
     extendedIcon: {
       marginRight: theme.spacing(1),
     },
-    fabIcon: {
-        marginTop: '-25px'
+    btnGroup: {
+        width: '100%',
+        height: '100%',
+        marginTop: '18px',
+        gap: '10px',
     }
 }))
 
 
 
 export default function DestinationPicker( {assigned, name, spacecraft, onRemove}:any ) {
+    const [ appendForm, setAppendForm ] = useState<boolean>(false);
+    const [ destination, setDestination ] = useState<Destination>(Object);
+
     const classes = useStyles();
+
+    const handleAppend = () => setAppendForm(!appendForm);
+
+    const handleClickAway = () => setAppendForm(false);
+
+    const handleDestination = (destination:Destination) => {
+        setDestination(destination);
+        handleAppend();
+    }
 
     return(
         <Grid container className={classes.addFormCard}>
@@ -107,25 +125,31 @@ export default function DestinationPicker( {assigned, name, spacecraft, onRemove
                 <Card className={classes.picker} >
                     
                     <CardMedia image={solarSystem} title='' className={classes.cardMedia} >
-                        <Grid container direction='column' >
-
+                        <Grid container direction='row' justify='center' alignItems='flex-end' className={classes.btnGroup} >
+                            {
+                                destinations.map( e => (
+                                    <Chip
+                                        key={e.name}
+                                        label={e.name} 
+                                        variant='default'
+                                        icon={<LanguageIcon />}
+                                        color='primary'
+                                        onClick={()=> handleDestination(e)}
+                                    />
+                                ))
+                            }
                         </Grid>
-                        <Button variant='contained' >
-                            Mars
-                        </Button>
-                        <Button variant='contained' >
-                            Moon
-                        </Button>
+                        { 
+                        appendForm && 
+                            <DestinationContainer 
+                                destination={destination} 
+                                onAppend={handleAppend} 
+                                clickAway={handleClickAway}
+                                assigned={assigned}
+                                spacecraft={spacecraft}
+                            /> 
+                        }
                     </CardMedia>
-
-                    <Fab
-                        variant="extended"
-                        className={classes.fabIcon}
-                    >
-                        <AddIcon className={classes.extendedIcon} />
-                        Pick
-                    </Fab>
-                    
                 </Card>
         </Grid>
     )
