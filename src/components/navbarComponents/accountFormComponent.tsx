@@ -2,17 +2,23 @@ import { useState } from 'react';
 import {
     makeStyles,
     TextField,
-    Button,
+    Fab,
     Grid,
+    Theme
 } from '@material-ui/core/';
 import { useTranslation } from 'react-i18next';
 
-const useStyles = makeStyles(() => ({
+import SaveIcon from '@material-ui/icons/Save';
+
+const useStyles = makeStyles((theme: Theme) => ({
     form: {
       width: '100%',
     },
     button: {
       textAlign: 'center',
+    },
+    extendedIcon: {
+      marginRight: theme.spacing(1),
     },
 }));
 
@@ -105,7 +111,7 @@ const AccountForm = ({ onSucces, onUpdate }:any) => {
 
     return (
         <form onSubmit={handleSubmit} className={classes.form}>
-          <Grid container  spacing={2}>
+          <Grid container spacing={2} justify='center'>
             <Grid item >
             <TextField
                 onChange={handleFirstNameChange}
@@ -145,7 +151,7 @@ const AccountForm = ({ onSucces, onUpdate }:any) => {
                 label="Consumption per hour (g)"
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item>
               <TextField
                 type="text"
                 id="age"
@@ -154,10 +160,10 @@ const AccountForm = ({ onSucces, onUpdate }:any) => {
                 value={age}
                 InputProps={{
                     readOnly: true,
-                  }}
+                }}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={6} sm={4}>
               <TextField
                 type="date"
                 id="birth"
@@ -172,13 +178,14 @@ const AccountForm = ({ onSucces, onUpdate }:any) => {
               />
             </Grid>
             <Grid className={classes.button} item xs={12}>
-              <Button
-                type="submit"
-                variant="outlined"
-                color="primary"
+              <Fab 
+                className={classes.button} 
+                variant="extended" 
+                type='submit' 
               >
+                <SaveIcon className={classes.extendedIcon} />
                 Save
-              </Button>
+              </Fab>
             </Grid>
           </Grid>
         </form>

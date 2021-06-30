@@ -34,7 +34,7 @@ function SuccessBar() {
 
     return (
         <Grid container justify='center' alignItems='center' className={classes.root}>
-           <Typography>✔ SUCCESS</Typography>
+           <Typography>✔ SAVED</Typography>
         </Grid>
     )
 }

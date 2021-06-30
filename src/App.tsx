@@ -261,7 +261,8 @@ function App() {
           />
           <Route path='/makeMission' 
             render={() => 
-              <Missions 
+              <Missions
+                user={user}
                 users={users}
                 spacecrafts={spacecrafts}
                 onUpdate={updateUser}

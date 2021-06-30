@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme)=>({
     root: {
         width: '80vw',
         minHeight: '75vh',
-        margin: '5% 0%',
         padding: '10px',
         transition: '1s',
         textAlign: 'center',
@@ -28,17 +27,16 @@ const useStyles = makeStyles((theme)=>({
         margin: '10px 0px',
     },
     addFormCard: {
-        height: 430,
+        height: '87%',
         [theme.breakpoints.down('xs')]: {
-            height: 650,
+            height: '91%',
         },
-        maxWidth: 600,
-        padding: '2%',
-        marginTop: '100px',
+        maxWidth: '70%',
+        marginTop: '62px',
     },
     addFormRoot: {
         width: '100%',
-        height: '120%',
+        height: '100%',
         position: 'absolute',
         top: 0,
         left: 0,
@@ -49,18 +47,13 @@ const useStyles = makeStyles((theme)=>({
         borderRadius: '50%',
         minWidth: '40px',
         height: '40px',
-        marginTop: '-20px',
-        marginRight: '-20px',
-        [theme.breakpoints.down('xs')]: {
-            marginTop: '-10px',
-            marginRight: '-10px',
-        },
     }
     
 }))
 
 function Register( {onAdd, spacecrafts, onDelete, onDestroy }:any ) {
-    const [ appendForm, setAppendForm ] = useState(false);
+    const [ appendForm, setAppendForm ] = useState<boolean>(false);
+
     const classes = useStyles();
 
     const token = JSON.parse(localStorage.token);
@@ -73,14 +66,15 @@ function Register( {onAdd, spacecrafts, onDelete, onDestroy }:any ) {
         { 
         token ?
             <Grid container justify='center'>
-                <Card elevation={10} className={classes.root}>
-                    <Typography align='center' variant='h4' color='textSecondary' >
-                        Spacecrafts
-                    </Typography>
-                    <Grid container >
+                <Card elevation={0} className={classes.root}>
+                    
+                    <Grid container alignItems='center' justify='space-between' >
                         <Button onClick={() => onAppend()} className={classes.addBtn} variant='outlined' color='primary' >
                             Add
                         </Button>
+                        <Typography align='center' variant='h5' color='textSecondary' >
+                            REGISTER OF SPACECRAFTS
+                        </Typography>
                     </Grid>
 
                     {appendForm && 

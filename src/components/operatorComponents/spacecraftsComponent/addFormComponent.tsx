@@ -4,29 +4,45 @@ import {
     TextField,
     Button,
     Grid,
+    CardMedia,
+    Fab,
+    Theme
 } from '@material-ui/core/';
+
+import AddIcon from '@material-ui/icons/Add';
 
 import { Spacecraft } from '../../../types';
 import {  SCsArray } from './factory';
+import astronautsImg from '../../../images/two_astronauts.jpg';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
     form: {
       width: '100%',
     },
     button: {
-      textAlign: 'center',
+      margin: '-10px 0px 10px 0px',
+    },
+    cardMedia: {
+      width: 'auto',
+      height: '281px',
+      backgroundPositionY: '25%',
+      marginTop: '-33px'
+    },
+    extendedIcon: {
+      marginRight: theme.spacing(1),
     },
   }));
 
 
 function AddingForm( {onAdd, onAppend }:any ) {
-    const [ name, setName ] = useState('');
-    const [ model, setModel ] = useState('');
-    const [ weight, setWeight ] = useState(0);
-    const [ seats, setSeats ] = useState(0);
-    const [ tankCapacity, setTankCapacity ] = useState(0);
-    const [ motorImpulse, setMotorImpulse ] = useState(0);
-    const [ fridge, setFridge ] = useState(0);
+    const [ name, setName ] = useState<string>('');
+    const [ model, setModel ] = useState<string>('');
+    const [ img, setImg ] = useState<string>(astronautsImg);
+    const [ weight, setWeight ] = useState<number>(0);
+    const [ seats, setSeats ] = useState<number>(0);
+    const [ tankCapacity, setTankCapacity ] = useState<number>(0);
+    const [ motorImpulse, setMotorImpulse ] = useState<number>(0);
+    const [ fridge, setFridge ] = useState<number>(0);
 
     const classes = useStyles();
 
@@ -37,6 +53,7 @@ function AddingForm( {onAdd, onAppend }:any ) {
       setTankCapacity(e.tankCapacity);
       setMotorImpulse(e.motorImpulse);
       setFridge(e.fridge);
+      setImg(e.img);
     };
 
     const handleNameChange = (e:any) => {
@@ -55,13 +72,14 @@ function AddingForm( {onAdd, onAppend }:any ) {
     }
     return (
         <form onSubmit={handleSubmit} className={classes.form}>
+
           <Grid container spacing={2}>
             <Grid container justify='space-evenly' alignItems='center' style={{margin: '20px 0px'}}>
               {
-                SCsArray.map((e:Spacecraft) => 
-                  <Button variant='outlined' color='primary' key={e.type} onClick={()=> handleModelChange(e)}>
+                SCsArray.map((e:Spacecraft) =>
+                  <Button variant='contained' color='primary' key={e.type} onClick={()=> handleModelChange(e)}>
                     {e.type}
-                  </Button>
+                  </Button> 
                 )
               }
             </Grid>
@@ -77,7 +95,7 @@ function AddingForm( {onAdd, onAppend }:any ) {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-            <TextField
+              <TextField
                 onChange={handleNameChange}
                 value={name}
                 name="name"
@@ -132,14 +150,17 @@ function AddingForm( {onAdd, onAppend }:any ) {
                 variant="outlined"
               />
             </Grid>
-            <Grid className={classes.button} item xs={12}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
+            <Grid item xs={12}>
+              <Fab 
+                className={classes.button} 
+                variant="extended" 
+                type='submit' 
               >
+                <AddIcon className={classes.extendedIcon} />
                 Add
-              </Button>
+              </Fab>
+
+              <CardMedia image={img} title={model} className={classes.cardMedia} />
             </Grid>
           </Grid>
         </form>

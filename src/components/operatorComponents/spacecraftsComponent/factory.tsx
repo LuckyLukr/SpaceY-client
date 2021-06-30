@@ -1,5 +1,9 @@
 import { Spacecraft } from '../../../types';
 
+import falconImg from '../../../images/falcon.jpg'
+import dinastyImg from '../../../images/starship.jpg'
+import fastreqImg from '../../../images/fastreq.jpg'
+
     export const SCsArray: Spacecraft[] = [
         {   
             type: 'Falcon 21',
@@ -12,7 +16,8 @@ import { Spacecraft } from '../../../types';
             destroyed: false,
             id: '0',
             name: 'unnamed',
-            tankCondition: 100
+            tankCondition: 100,
+            img: falconImg
         },
         {
             type: 'Falcon 20',
@@ -25,7 +30,8 @@ import { Spacecraft } from '../../../types';
             destroyed: false,
             id: '1',
             name: 'unnamed',
-            tankCondition: 100
+            tankCondition: 100,
+            img: falconImg
         },
         {
             type: 'Dinasty 1',
@@ -38,7 +44,8 @@ import { Spacecraft } from '../../../types';
             destroyed: false,
             id: '2',
             name: 'unnamed',
-            tankCondition: 100
+            tankCondition: 100,
+            img: dinastyImg
         },
         {
             type: 'Fastreq 212',
@@ -51,6 +58,7 @@ import { Spacecraft } from '../../../types';
             destroyed: false,
             id: '3',
             name: 'unnamed',
-            tankCondition: 100
+            tankCondition: 100,
+            img: fastreqImg
         },
     ];

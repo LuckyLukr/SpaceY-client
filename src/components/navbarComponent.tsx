@@ -9,16 +9,17 @@ import { useTranslation } from 'react-i18next';
 import logo from '../images/Y_white.png';
 
 const useStyles = makeStyles({
-  palavioTxt: {
+  headerText: {
     letterSpacing: '1.5vw',
     textIndent: '0.8vw',
     color: 'white',
-    zIndex: 2,
+    zIndex: 1,
+    fontFamily: "'Zen Dots', cursive",
   },
   buttonFlex: {
     flexWrap: 'wrap',
     color: 'white',
-    zIndex: 2,
+    zIndex: 1,
   },
   button: {
     color: 'white',
@@ -41,7 +42,7 @@ function Navbar() {
     return(
         <Grid className={classes.root} container justify='space-between'>
             <Grid item style={{display: 'flex', alignItems: 'center'}} >
-                <Typography variant='h6' className={classes.palavioTxt}>SPACE</Typography>
+                <Typography variant='h6' className={classes.headerText}>SPACE</Typography>
                 <img className={classes.yImg} src={logo} alt='Y' />
             </Grid>
             <ButtonGroup className={classes.buttonFlex} variant="text" size='large' aria-label="text primary button group">

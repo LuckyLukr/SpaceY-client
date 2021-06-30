@@ -1,6 +1,7 @@
 import jwt_decode from 'jwt-decode';
 import { 
     Card,
+    CardMedia,
     Grid,
     makeStyles,
     Typography,
@@ -9,7 +10,9 @@ import {
     ClickAwayListener,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+
 import logo from '../../images/Y_black.png';
+import astronautsImg from '../../images/two_astronauts_earth.jpg';
 
 import AccountForm from './accountFormComponent';
 
@@ -25,16 +28,15 @@ const useStyles = makeStyles((theme)=>({
     },
     addFormCard: {
         [theme.breakpoints.down('xs')]: {
-            height: 650,
+            maxHeight: '91vh',
         },
         maxWidth: 600,
-        maxHeight: '80vh',
-        padding: '2%',
-        marginTop: '100px',
+        maxHeight: '87vh',
+        marginTop: '62px',
     },
     addFormRoot: {
         width: '100%',
-        height: '120%',
+        height: '100%',
         position: 'absolute',
         top: 0,
         left: 0,
@@ -48,16 +50,20 @@ const useStyles = makeStyles((theme)=>({
         borderRadius: '50%',
         minWidth: '40px',
         height: '40px',
-        marginTop: '-20px',
-        marginRight: '-20px',
-        [theme.breakpoints.down('xs')]: {
-            marginTop: '-10px',
-            marginRight: '-10px',
-        },
+    },
+    typo: {
+        color: '#666666',
     },
     typoPad: {
-        color: '#666666'
-    }
+        color: '#666666',
+        fontFamily: "'Zen Dots', cursive",
+    },
+    cardMedia: {
+        width: 'auto',
+        height: '250px',
+        backgroundPositionY: '25%',
+        marginTop: '-33px'
+      },
 }))
 
 function Account( {onClose, onUpdate, onSucces}:any ) {
@@ -74,7 +80,7 @@ function Account( {onClose, onUpdate, onSucces}:any ) {
 
                     <Grid container justify='flex-end'>
                         <Tooltip title='Close' >
-                            <Button className={classes.closeBtn} onClick={()=> onClose()} variant='text' color='primary'>
+                            <Button className={classes.closeBtn} onClick={()=> onClose()} color='inherit' >
                                 <CloseIcon />
                             </Button>
                         </Tooltip>
@@ -82,13 +88,13 @@ function Account( {onClose, onUpdate, onSucces}:any ) {
                     
                     <Grid container justify='center' alignItems='center' direction='column' >
                         <img style={{width: '80px'}} src={logo} alt='logo' />
-                        <Typography className={classes.typoPad} component="h1" variant="h5">
+                        <Typography className={classes.typoPad} variant="h5" gutterBottom >
                             {tokenData.role.toUpperCase()}
                         </Typography>
-                        <Typography className={classes.typoPad} >
+                        <Typography className={classes.typo} >
                             {user.user.firstName} {user.user.lastName}
                         </Typography>
-                        <Typography className={classes.typoPad} >
+                        <Typography className={classes.typo} gutterBottom >
                             {user.user.email}
                         </Typography>
                     </Grid>
@@ -98,6 +104,8 @@ function Account( {onClose, onUpdate, onSucces}:any ) {
                         onUpdate={onUpdate}
                         onSucces={onSucces}
                     />
+
+                    <CardMedia image={astronautsImg} title='operator' className={classes.cardMedia} />
                     
                 </Card>
             </ClickAwayListener>  

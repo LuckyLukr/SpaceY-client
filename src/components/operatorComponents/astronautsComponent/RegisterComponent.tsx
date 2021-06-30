@@ -18,24 +18,23 @@ const useStyles = makeStyles((theme)=>({
     root: {
         width: '80vw',
         minHeight: '75vh',
-        margin: '5% 0%',
         padding: '10px',
         transition: '1s',
         textAlign: 'center',
         zIndex: 1,
     },
     addFormCard: {
-        height: 430,
+        height: '83%',
         [theme.breakpoints.down('xs')]: {
-            height: 650,
+            height: '91%',
         },
-        maxWidth: 600,
-        padding: '2%',
-        marginTop: '100px',
+        maxWidth: '600px',
+        marginTop: '62px',
+        padding: '1%'
     },
     addFormRoot: {
         width: '100%',
-        height: '120%',
+        height: '100%',
         position: 'absolute',
         top: 0,
         left: 0,
@@ -49,12 +48,6 @@ const useStyles = makeStyles((theme)=>({
         borderRadius: '50%',
         minWidth: '40px',
         height: '40px',
-        marginTop: '-20px',
-        marginRight: '-20px',
-        [theme.breakpoints.down('xs')]: {
-            marginTop: '-10px',
-            marginRight: '-10px',
-        },
     }
 }))
 
@@ -70,14 +63,15 @@ function Register( { users, onDelete, onAdd, onUpdate, onSucces }:any ) {
     return(
         
             <Grid container justify='center'>
-                <Card elevation={10} className={classes.root}>
-                    <Typography align='center' variant='h4' color='textSecondary' >
-                        {t("astronauts.tableTitle")}
-                    </Typography>
-                    <Grid container >
+                <Card elevation={0} className={classes.root}>
+
+                    <Grid container alignItems='center' justify='space-between' >
                         <Button onClick={() => onAppend()} className={classes.addBtn} variant='outlined' color='primary' >
                             Add
                         </Button>
+                        <Typography align='center' variant='h5' color='textSecondary' >
+                        {t("astronauts.tableTitle")}
+                    </Typography>
                     </Grid>
 
                     { appendForm 

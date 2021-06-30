@@ -23,7 +23,6 @@ export default function LogIn( {onLogin}:any ) {
     const handleEmailChange = (e:any) => {
         e.preventDefault();
         setEmail(e.target.value);
-        console.log(e.target.value);
     }
   
     const handlePasswordChange = (e:any) => {

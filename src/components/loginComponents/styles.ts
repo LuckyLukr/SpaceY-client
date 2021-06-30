@@ -35,9 +35,10 @@ export const useStyles = makeStyles((theme) => ({
       color: "#07283f"
     },
     headerTypo: {
+        fontFamily: "'Zen Dots', cursive",
         letterSpacing: '3vw',
         textIndent: '1.5vw',
-        color: 'white',
+        color: 'rgb(230,230,230,0.8)',
         fontSize: '90px',
         [theme.breakpoints.down('sm')]: {
             fontSize: '60px',

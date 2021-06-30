@@ -1,0 +1,132 @@
+import {
+    makeStyles,
+    Grid,
+    Button,
+    Card,
+    CardMedia,
+    Fab,
+    Theme
+} from '@material-ui/core';
+
+import AddIcon from '@material-ui/icons/Add';
+import MissionInfo from './missionInfo';
+import solarSystem from '../../../images/solar_system.jpg';
+
+import { destinations } from '../../destinationsComponents/destinationsComponent';
+
+const useStyles = makeStyles((theme: Theme)=>({
+    root: {
+        minHeight: '75vh',
+        padding: '10px',
+        transition: '1s',
+        textAlign: 'center',
+        zIndex: 1,
+    },
+    addBtn: {
+        margin: '10px 0px',
+    },
+    addFormCard: {
+        [theme.breakpoints.down('xs')]: {
+            height: 650,
+        },
+        width: '88vw',
+        marginTop: '3vh',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        display: 'flex',
+        flexWrap: 'nowrap',
+    },
+    closeBtn: {
+        borderRadius: '50%',
+        minWidth: '40px',
+        height: '40px',
+        position: 'absolute',
+        top: '9vh',
+        right: '10vw',
+    },
+    media: {
+        width: '100%',
+        height: '100%',
+        backgroundPositionX: '10%',
+    },
+    btn: {
+        margin: '1%',
+    },
+    backBtn: {
+        position: 'absolute',
+        bottom: '3vh',
+        left: '18vw',
+    },
+    buttonGroup: {
+        padding: '2%',
+        height:' 300px',
+        flexWrap: 'nowrap',
+        overflowY: 'scroll',
+    },
+    picker: {
+        height: '80vh',
+        display: 'flex',
+        alignItems: 'center',
+        minWidth: '50vw',
+        flexDirection: 'column',
+        backgroundColor: '#0a0a0a',
+    },
+    cardMedia: {
+        width: '100%',
+        height: '100%',
+        backgroundPositionY: '25%',
+        marginTop: '-25px'
+    },
+    extendedIcon: {
+      marginRight: theme.spacing(1),
+    },
+    fabIcon: {
+        marginTop: '-25px'
+    }
+}))
+
+
+
+export default function DestinationPicker( {assigned, name, spacecraft, onRemove}:any ) {
+    const classes = useStyles();
+
+    return(
+        <Grid container className={classes.addFormCard}>
+
+            <MissionInfo target={spacecraft} name={name} assigned={assigned} />
+            
+                <Button
+                    className={classes.backBtn}
+                    variant='outlined' 
+                    color='primary' 
+                    onClick={() => onRemove()}
+                >
+                    Back
+                </Button>
+
+                <Card className={classes.picker} >
+                    
+                    <CardMedia image={solarSystem} title='' className={classes.cardMedia} >
+                        <Grid container direction='column' >
+
+                        </Grid>
+                        <Button variant='contained' >
+                            Mars
+                        </Button>
+                        <Button variant='contained' >
+                            Moon
+                        </Button>
+                    </CardMedia>
+
+                    <Fab
+                        variant="extended"
+                        className={classes.fabIcon}
+                    >
+                        <AddIcon className={classes.extendedIcon} />
+                        Pick
+                    </Fab>
+                    
+                </Card>
+        </Grid>
+    )
+}

@@ -35,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+  },
+  logoText: {
+    color: '#666666',
+    fontFamily: "'Zen Dots', cursive",
   }
 }));
 
@@ -107,7 +111,7 @@ export default function SignUp( {onAdd}:any ) {
       <CssBaseline />
       <div className={classes.paper}>
         <img style={{width: '80px'}} src={logo} alt='logo' />
-        <Typography style={{color: '#666666'}} component="h1" variant="h5">
+        <Typography className={classes.logoText} component="h1" variant="h5">
           OPERATOR
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>

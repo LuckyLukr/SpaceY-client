@@ -8,7 +8,7 @@ import {
     GridCellParams  
 } from '@material-ui/data-grid';
 
-import CachedIcon from '@material-ui/icons/Cached';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import WarningIcon from '@material-ui/icons/Warning';
 
 import { Spacecraft } from '../../../types';
@@ -41,8 +41,8 @@ function Table( {spacecrafts, onDelete, onDestroy}:any ) {
                                 </Tooltip>
                                 :
                                 <Tooltip title='Scrap' onClick={() => onDelete(params.row.id)} >
-                                    <IconButton color='primary' > 
-                                        <CachedIcon />
+                                    <IconButton> 
+                                        <HighlightOffIcon color='error' />
                                     </IconButton>
                                 </Tooltip>
                             }

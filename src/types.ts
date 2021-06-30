@@ -24,9 +24,32 @@ export interface Spacecraft {
   tankCondition: number,
   motorImpulse: number,
   fridge: number,
+  img: string
 }
 
 export interface UserWithToken {
   access_token: string,
   user: User
+}
+
+export interface Destination {
+  name: string,
+  coordX: number,
+  coordY: number,
+  coordZ: number,
+}
+
+export interface Mission {
+  spacecraft: Spacecraft,
+  astronauts: User[],
+  status: string,
+  fridge: number,
+  fuel: number,
+  totalWeight: number,
+  blastOff: string,
+  landing: string,
+  startLocation: string,
+  endLocation: string,
+  distance: number
+  time: string
 }

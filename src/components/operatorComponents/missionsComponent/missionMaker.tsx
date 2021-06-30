@@ -1,11 +1,19 @@
+import { useState } from 'react';
 import {
     Grid,
-    Typography,
-    Button,
-    makeStyles
+    makeStyles,
 } from '@material-ui/core';
+import { 
+    Spacecraft, 
+    User, 
+    Mission, 
+    Destination 
+} from '../../../types';
 
-import { User, Spacecraft } from '../../../types';
+import SpacecraftPicker from './spacecraftPicker';
+import AstronautsPicker from './astronautsPicker';
+import SpacecraftNamer from './spacecraftNamer';
+import DestinationPicker from './destinationPicker';
 
 import logo from '../../../images/Y_black.png';
 
@@ -17,7 +25,7 @@ const useStyles = makeStyles(() => ({
     logo: {
         position: 'absolute',
         width: '550px',
-        opacity: 0.1,
+        opacity: 0.04,
         marginTop: '10vh',
         zIndex: -1,
     },
@@ -40,44 +48,84 @@ const useStyles = makeStyles(() => ({
     buttonItem: {
         margin: '1px 0px',
         width: '100%',
+    },
+    astronautsContainer: {
+        border: '1px solid black',
+        height: '200px',
+        width: '160px',
+        overflowY: 'scroll',
+        display: 'flex',
+        flexWrap: 'nowrap',
     }
 }))
 
-export default function MissionMaker( {users, spacecrafts}:any ) {
+export default function MissionMaker( {user, users, spacecrafts}:any ) {
+    const [ name, setName ] = useState<string>(String);
+    const [ spacecraft, setSpacecraft ] = useState<Spacecraft>(Object);
+    const [ assigned, setAssigned ] = useState<User[]>(Array);
+    const [ destination, setDestination ] = useState<Destination[]>(Array)
+    
+    const astronauts = users.filter((e:any)=> e.role === 'astronaut');
     const classes = useStyles();
+
+    const handleAssign = (e:User[]) => setAssigned(e);
+
+    const handleRemoveAssigned = (e:User[]) => setAssigned([]);
+
+    const handleNameChange = (e:string) => setName(e);
+
+    const handleSpacecraftChange = (e:Spacecraft) => setSpacecraft(e);
 
     return(
         <Grid container justify='center' alignItems='center' className={classes.root}>
-            <Typography color='textSecondary' >
-                MAKE SOME MISSIONS HERE! pick ROCKET, assign ASTRONAUTS, fill FRIDGE, fill FUEL TANKS, pick DESTINATIONS and LAUNCH!
-            </Typography>
             <img src={logo} alt={logo} className={classes.logo} />
 
             <Grid container justify='space-evenly' alignItems='center' >
+                
+                {
+                    !name &&
+                    <SpacecraftNamer
+                        user={user}
+                        onNameChange={handleNameChange}
+                    />
+                }
 
-                <Grid container justify='flex-start' alignItems='center' direction='column' className={classes.grabContainer}>
-                    {
-                        users.map((e:User) => 
-                            <Grid key={e.id} item className={classes.grabItem}>
-                                <Typography >
-                                    {e.firstName} {e.lastName}
-                                </Typography>
-                            </Grid>
-                        )
-                    }
-                </Grid>
+                {
+                    (name && spacecraft.id === undefined ) &&
+                    <SpacecraftPicker
+                        name={name}
+                        spacecraft={spacecraft}
+                        spacecrafts={spacecrafts}
+                        assigned={assigned}
+                        onSpacecraftChange={handleSpacecraftChange}
+                        onNameChange={handleNameChange}
+                    />
+                }
 
-                <Grid container justify='flex-start' alignItems='center' direction='column' className={classes.grabContainer}>
-                    {
-                        spacecrafts.map((e:Spacecraft) => 
-                            <Grid key={e.id} item className={classes.buttonItem}>
-                                <Button variant='outlined' fullWidth >
-                                    {e.name}
-                                </Button>
-                            </Grid>
-                        )
-                    }
-                </Grid>
+
+                {
+                    (spacecraft.id && assigned.length === 0 ) &&
+                    <AstronautsPicker 
+                        astronauts={astronauts}
+                        onAssign={handleAssign}
+                        onRemove={handleRemoveAssigned}
+                        assigned={assigned}
+                        name={name}
+                        spacecraft={spacecraft}
+                        onSpacecraftChange={handleSpacecraftChange}
+                    />
+                }
+
+                {
+                    assigned.length > 0 &&
+                    <DestinationPicker
+                        assigned={assigned}
+                        name={name}
+                        spacecraft={spacecraft}
+                        destination={destination}
+                        onRemove={handleRemoveAssigned}
+                    />
+                }
 
             </Grid>
         </Grid>

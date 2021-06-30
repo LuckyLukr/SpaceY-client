@@ -2,17 +2,33 @@ import React, { useState } from 'react';
 import {
     makeStyles,
     TextField,
-    Button,
+    Fab,
     Grid,
+    CardMedia,
+    Theme
 } from '@material-ui/core/';
 import { useTranslation } from 'react-i18next';
 
-const useStyles = makeStyles(() => ({
+import AddIcon from '@material-ui/icons/Add';
+
+import astronautsImg from '../../../images/two_astronauts.jpg';
+
+const useStyles = makeStyles((theme: Theme) => ({
     form: {
       width: '100%',
     },
     button: {
       textAlign: 'center',
+    },
+    cardMedia: {
+      width: 'auto',
+      height: '281px',
+      backgroundPositionY: '25%',
+      marginTop: '-27px',
+      margin: '-3%'
+    },
+    extendedIcon: {
+      marginRight: theme.spacing(1),
     },
   }));
 
@@ -215,13 +231,16 @@ const AddingForm = ({ onAdd, onAppend }:any) => {
               />
             </Grid>
             <Grid className={classes.button} item xs={12}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
+            <Fab 
+                className={classes.button} 
+                variant="extended" 
+                type='submit' 
               >
-                Register
-              </Button>
+                <AddIcon className={classes.extendedIcon} />
+                Add
+              </Fab>
+
+              <CardMedia image={astronautsImg} title='' className={classes.cardMedia} />
             </Grid>
           </Grid>
         </form>

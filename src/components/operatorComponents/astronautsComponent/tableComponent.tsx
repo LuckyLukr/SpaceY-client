@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import {
     Tooltip,
-    IconButton,
     Button,
+    ButtonGroup,
     Grid,
     ClickAwayListener,
     Card,
@@ -88,23 +88,20 @@ function Table( {users, onDelete, onUpdate, onSucces}:any ) {
         {  
             field: '-', 
             headerName: " ",
+            width: 150,
             renderCell: (params:GridCellParams) => (
-                <Tooltip title='Edit' onClick={() => editAstronaut(params.row)} >
-                    <Button color='primary' > 
-                        <EditIcon />
-                    </Button>
-                </Tooltip>
-            )
-        },
-        {  
-            field: ' ', 
-            headerName: " ",
-            renderCell: (params:GridCellParams) => (
-                <Tooltip title='Delete' onClick={() => onDelete(params.row.id)} >
-                    <IconButton color='primary' > 
-                        <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
+                <ButtonGroup color='primary' size='small' variant='text' >
+                    <Tooltip title='Edit' onClick={() => editAstronaut(params.row)} >
+                        <Button> 
+                            <EditIcon />
+                        </Button>
+                    </Tooltip>
+                    <Tooltip title='Delete' onClick={() => onDelete(params.row.id)} >
+                        <Button > 
+                            <DeleteIcon />
+                        </Button>
+                    </Tooltip>
+                </ButtonGroup>
             )
         },
     ];
