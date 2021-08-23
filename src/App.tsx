@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import { useData } from './featrues/customHooks/useData';
 import axios from 'axios';
 import './App.css';
 
@@ -13,58 +14,15 @@ import SpacecraftsTable from './components/operatorComponents/spacecraftsCompone
 import Missions from './components/operatorComponents/missionsComponent/missionsComponent';
 import SuccessBar from './components/confirmationComponents/successBarComponent';
 
+const API ='http://localhost:5000/';
+const user = JSON.parse(localStorage.user);
+const token = JSON.parse(localStorage.token);
+
 function App() {
-  const [ users, setUsers ] = useState<User[]>([]);
-  const [ spacecrafts, setSpacecrafts ] = useState<Spacecraft[]>([]);
   const [ isSuccess, setIsSuccess ] = useState<boolean>(false);
-
-  const API ='http://localhost:5000/';
-  const user = JSON.parse(localStorage.user);
-
-  useEffect(()=> {
-
-      // GET USERS <---------------------------------------------------------|
-    const fetchUsers = () => {
-      const token = JSON.parse(localStorage.token);
-      return new Promise( resolve => {
-        axios.get(API + 'users',{ headers: {"Authorization" : `Bearer ${token}`}})
-          .then( res => {
-            resolve(res.data);
-          })
-          .catch( err => console.log(err));
-      })
-    };
-
-    async function loadUsers() {
-      const result = await fetchUsers() as User[];
-      setUsers(result);
-    }
-
-  // GET SPACECRAFTS <---------------------------------------------------------|
-    const fetchSpacecrafts = () => {
-      return new Promise( resolve => {
-        axios.get(API + 'spacecrafts')
-          .then( res => {
-            resolve(res.data);
-          })
-          .catch( err => console.log(err));
-      })
-    };
-
-    const loadSpacecrafts = async () => {
-      const result = await fetchSpacecrafts() as Spacecraft[];
-      setSpacecrafts(result);
-    }
-    // -------------------------------------------------------------------------|
-
-    if(!localStorage.user){
-    localStorage.setItem('user', JSON.stringify(''));
-    }
-
-    loadSpacecrafts();
-    loadUsers();
-  
-  },[]);
+  const users = useData(API + "users", token);
+  const spacecrafts = useData(API + "spacecrafts", token);
+  const missions = useData(API + "missions", token);
 
     // LOGIN <---------------------------------------------------------|
 
@@ -75,7 +33,7 @@ function App() {
             .then( res => {
             resolve(res.data);
             })
-            .catch( err =>  alert(err));
+            .catch( err =>  alert(err.message));
         })
 
       if(result){
@@ -119,7 +77,7 @@ function App() {
     if (data) {
       const operator = JSON.parse(data.config.data);
       const operatorWithID = { id: data.data.id, ...operator};
-      setUsers([ ...users, operatorWithID]);
+      users.setData([ ...users.data, operatorWithID]);
     }
   }
 
@@ -131,6 +89,7 @@ function App() {
         seats: number, 
         tankCapacity: number, 
         motorImpulse: number, 
+        fuelConsumption: number,
         fridge: number 
   ) => {
     const newSpacecraft = { 
@@ -143,13 +102,14 @@ function App() {
       tankCapacity,
       tankCondition: 100,
       motorImpulse,
+      fuelConsumption,
       fridge,
     };
     const data = await axios.post(API + 'spacecrafts', newSpacecraft).catch(err => console.log(err));
     if (data) {
       const spacecraft = JSON.parse(data.config.data);
       const spacecraftWithID = { id: data.data.id, ...spacecraft};
-      setSpacecrafts([ ...spacecrafts, spacecraftWithID]);
+      spacecrafts.setData([ ...spacecrafts.data, spacecraftWithID]);
     }
   }
 
@@ -167,19 +127,19 @@ function App() {
   function deleteUser( id:string ) {
     const token = JSON.parse(localStorage.token);
     axios.delete(`${API}users/${id}`,{ headers: {"Authorization" : `Bearer ${token}`}}).catch(err => console.log(err));
-    const copyUsers = [ ...users ];
+    const copyUsers = [ ...users.data as User[] ];
     const index = copyUsers.findIndex( e => e.id === id);
     copyUsers.splice(index,1);
-    setUsers(copyUsers);
+    user.setData(copyUsers);
   }
 
   // DELETE SPACECRAFT <--------------------------------------------------------|
   function deleteSpacecraft( id:string ) {
     axios.delete(`${API}spacecrafts/${id}`).catch(err => console.log(err));
-    const copySpacecrafts = [ ...spacecrafts ];
+    const copySpacecrafts = [ ...spacecrafts.data as Spacecraft[] ];
     const index = copySpacecrafts.findIndex( e => e.id === id);
     copySpacecrafts.splice(index,1);
-    setSpacecrafts(copySpacecrafts);
+    spacecrafts.setData(copySpacecrafts);
   }
 
   // UPDATE <--------------------------------------------------------|
@@ -187,20 +147,20 @@ function App() {
   function destroySpacecraft( id:string ) {
     axios.patch(`${API}spacecrafts/${id}`, {destroyed: true, onMission: false}).catch(err => alert(err));
 
-    const update = [...spacecrafts];
+    const update = [...spacecrafts.data as Spacecraft[]];
     update.forEach(e => {
       if(e.id === id){
         e.destroyed = true;
         e.onMission = false;
       }
     });
-    setSpacecrafts(update);
+    spacecrafts.setData(update);
   }
 
   function updateUser( id:string, update:User ) {
     const token = JSON.parse(localStorage.token);
     axios.patch(`${API}users/${id}`,update,{ headers: {"Authorization" : `Bearer ${token}`}} ).catch(err => alert(err));
-    const copyUsers = [...users];
+    const copyUsers = [...users.data as User[]];
     copyUsers.forEach(e => {
       if(e.id === id){
         e.firstName = update.firstName;
@@ -211,7 +171,7 @@ function App() {
         e.weight = update.weight;
       }
     });
-    setUsers(copyUsers);
+    user.setData(copyUsers);
   }
 
     // CONFIRMATION BARS <--------------------------------------------------------|
@@ -238,7 +198,7 @@ function App() {
             render={() => 
               <AstronautsTable 
                 onAdd={addUser} 
-                users={users}
+                users={users.data}
                 onDelete={deleteUser}
                 onUpdate={updateUser}
                 onSucces={handleSuccesBar}
@@ -250,7 +210,7 @@ function App() {
             render={() => 
               <SpacecraftsTable 
                 onAdd={addSpacecraft} 
-                spacecrafts={spacecrafts}
+                spacecrafts={spacecrafts.data}
                 onDelete={deleteSpacecraft}
                 onDestroy={destroySpacecraft}
                 onUpdate={updateUser}
@@ -263,8 +223,8 @@ function App() {
             render={() => 
               <Missions
                 user={user}
-                users={users}
-                spacecrafts={spacecrafts}
+                users={users.data}
+                spacecrafts={spacecrafts.data}
                 onUpdate={updateUser}
                 onSucces={handleSuccesBar}
                 onLogout={logoutUser} 

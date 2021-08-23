@@ -17,16 +17,6 @@ export const destinations: Destination[] = [
         image: moon
     },
     {
-        name: 'M1-Y Refuel Station',
-        distance: 18218071,
-        image: refuel
-    },
-    {
-        name: 'M2-Y Refuel Station',
-        distance: 36436142,
-        image: refuel
-    },
-    {
         name: 'Mars',
         distance: 54654214,
         image: mars

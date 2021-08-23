@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { User } from '../../../types';
 import AddIcon from '@material-ui/icons/Add';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 import MissionInfo from './missionInfo';
 
@@ -195,7 +196,7 @@ function AstronautsPicker( {astronauts, assigned, onAssign, name, spacecraft, on
             color='primary' 
             onClick={() => handleDelete()}
         >
-            Back
+            <ArrowBackIosIcon />Back
         </Button>
 
     </Grid>

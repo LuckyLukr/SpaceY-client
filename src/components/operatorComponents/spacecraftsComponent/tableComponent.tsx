@@ -22,8 +22,9 @@ function Table( {spacecrafts, onDelete, onDestroy}:any ) {
                 { field: 'seats', headerName: 'Number of seats', width: 160 },
                 { field: 'tankCapacity', headerName: 'Fuel tank capacity' , width: 160 },
                 { field: 'tankCondition', headerName: 'Fuel tank condition', width: 160 },
-                { field: 'fridge', headerName: 'Fridge capacity', width: 160 },
                 { field: 'motorImpulse', headerName: 'Specific motor impulse', width: 160 },
+                { field: 'fuelConsumption', headerName: 'l/100 km Consumption', width: 160 },
+                { field: 'fridge', headerName: 'Fridge capacity', width: 160 },
                 { field: 'status', headerName: 'Status', width: 160 },
                 {  
                     field: 'delete',
@@ -66,6 +67,7 @@ function Table( {spacecrafts, onDelete, onDestroy}:any ) {
             tankCapacity: `${e.tankCapacity} l`,
             tankCondition: `${e.tankCondition} %`,
             motorImpulse: e.motorImpulse,
+            fuelConsumption: `${e.fuelConsumption} l`,
             fridge: `${e.fridge} kg`,
             status: status
         })

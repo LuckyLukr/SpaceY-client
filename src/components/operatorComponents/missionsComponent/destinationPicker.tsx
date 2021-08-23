@@ -13,6 +13,7 @@ import DestinationContainer from './destinationComponent';
 import { destinations } from '../../destinationsComponents/destinationsComponent';
 import { Destination } from '../../../types';
 
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import LanguageIcon from '@material-ui/icons/Language';
 import MissionInfo from './missionInfo';
 import solarSystem from '../../../images/solar_system.jpg';
@@ -93,7 +94,7 @@ const useStyles = makeStyles((theme: Theme)=>({
 
 
 
-export default function DestinationPicker( {assigned, name, spacecraft, onRemove}:any ) {
+export default function DestinationPicker( {assigned, name, spacecraft, onRemove, onDestinationChange, onMissionChange, travelTime}:any ) {
     const [ appendForm, setAppendForm ] = useState<boolean>(false);
     const [ destination, setDestination ] = useState<Destination>(Object);
 
@@ -103,8 +104,9 @@ export default function DestinationPicker( {assigned, name, spacecraft, onRemove
 
     const handleClickAway = () => setAppendForm(false);
 
-    const handleDestination = (destination:Destination) => {
-        setDestination(destination);
+    const handleDestination = (dest:Destination) => {
+        setDestination(dest);
+        onDestinationChange(dest);
         handleAppend();
     }
 
@@ -119,7 +121,7 @@ export default function DestinationPicker( {assigned, name, spacecraft, onRemove
                     color='primary' 
                     onClick={() => onRemove()}
                 >
-                    Back
+                    <ArrowBackIosIcon />Back
                 </Button>
 
                 <Card className={classes.picker} >
@@ -147,6 +149,8 @@ export default function DestinationPicker( {assigned, name, spacecraft, onRemove
                                 clickAway={handleClickAway}
                                 assigned={assigned}
                                 spacecraft={spacecraft}
+                                onMissionChange={onMissionChange}
+                                travelTime={travelTime}
                             /> 
                         }
                     </CardMedia>

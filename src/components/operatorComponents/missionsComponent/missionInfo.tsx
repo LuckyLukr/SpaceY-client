@@ -40,6 +40,8 @@ const useStyles = makeStyles((theme: Theme) => ({
         display: 'flex',
         flexWrap: 'nowrap',
         overflowY: 'scroll',
+        borderLeft: 'solid 1px #80808080',
+        borderRight: 'solid 1px #80808080',
     },
     item: {
         margin: '0px 4px',
@@ -82,14 +84,17 @@ function MissionInfo( { target, name, assigned }:any ) {
                 Tank Condition: {target.tankCondition} %
             </Typography>
             <Typography>
+                Fuel Consumption: {target.fuelConsumption} l / 100 km
+            </Typography>
+            <Typography>
                 Fridge: {target.fridge} kg
             </Typography>
             <Typography gutterBottom>
                 weight: {target.weight} t
             </Typography>
 
-            <Typography variant='h6'>
-                Astronauts:
+            <Typography variant='h6' align='center'>
+                Astronauts
             </Typography>
             <Grid container justify='flex-start' className={classes.carousel}>
             {

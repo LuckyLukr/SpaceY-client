@@ -23,6 +23,7 @@ export interface Spacecraft {
   tankCapacity: number,
   tankCondition: number,
   motorImpulse: number,
+  fuelConsumption: number,
   fridge: number,
   img: string
 }
@@ -39,16 +40,14 @@ export interface Destination {
 }
 
 export interface Mission {
+  id: number,
+  name: string,
   spacecraft: Spacecraft,
   astronauts: User[],
   status: string,
-  fridge: number,
-  fuel: number,
-  totalWeight: number,
   blastOff: string,
   landing: string,
-  startLocation: string,
-  endLocation: string,
-  distance: number
+  destination: string,
+  distance: number,
   time: string
 }

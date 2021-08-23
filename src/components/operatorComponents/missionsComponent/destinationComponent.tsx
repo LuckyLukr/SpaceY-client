@@ -55,40 +55,23 @@ const useStyles = makeStyles((theme)=>({
 
 
 
-export default function DestinationContainer( { onAppend, clickAway, destination, spacecraft, assigned }:any ) {
+export default function DestinationContainer( props:any ) {
     const classes = useStyles();
 
     const calcTotalWeight = () => {
-        const astronautsWeight = assigned.map((e:User) => e.weight);
+        const astronautsWeight = props.assigned.map((e:User) => e.weight);
         const reducer = (acc:number, val:number) => acc + val;
-        const totalWeight = (spacecraft.weight * 1000) + astronautsWeight.reduce(reducer);
+        const totalWeight = (props.spacecraft.weight * 1000) + astronautsWeight.reduce(reducer);
         return totalWeight;
-    }
-
-    const calcTravelHours = () => Math.round(destination.distance / spacecraft.motorImpulse );
-
-    const calcTravelTime = () => {
-        const totalDays = Math.floor(calcTravelHours() / 24);
-        const hours = calcTravelHours() % 24;
-        const years = Math.floor(totalDays / 365);
-        const days = totalDays % 365;
-
-        if(years === 0 && days === 0){
-            return `${hours} hours`;
-        } else if(years === 0) {
-            return `${days} days ${hours} hours`;
-        } else {
-            return `${years} year ${days} days ${hours} hours`;
-        }
     }
 
     return(
         <Grid className={classes.addFormRoot} container justify='center'>   
-            <ClickAwayListener onClickAway={clickAway}>        
+            <ClickAwayListener onClickAway={props.clickAway}>        
                 <Card elevation={0} className={classes.addFormCard}>
                     <Grid container justify='flex-end'>
                         <Tooltip title='Close' >
-                            <Button className={classes.closeBtn} onClick={()=> onAppend()} variant='text' color='primary'>
+                            <Button className={classes.closeBtn} onClick={()=> props.onAppend()} variant='text' color='primary'>
                                 <CloseIcon />
                             </Button>
                         </Tooltip>
@@ -96,22 +79,22 @@ export default function DestinationContainer( { onAppend, clickAway, destination
                     
                     <Grid container direction='column' className={classes.root} alignItems='center' >
                         <Typography variant='h4' color='primary' gutterBottom>
-                            Road to {destination.name}
+                            Road to {props.destination.name}
                         </Typography>
                         <Typography>
-                            Distance: {destination.distance.toLocaleString()} km
+                            Distance: {props.destination.distance.toLocaleString()} km
                         </Typography>
                         <Typography>
-                            Fuel filling: {spacecraft.tankCapacity} l
+                            Fuel filling: {props.spacecraft.tankCapacity} l
                         </Typography>
                         <Typography>
-                            Fridge filling: {spacecraft.fridge} %
+                            Fridge filling: {props.spacecraft.fridge} %
                         </Typography>
                         <Typography>
                             Total weight: {calcTotalWeight()} kg
                         </Typography>
                         <Typography>
-                            Time: {calcTravelTime()}
+                            Time: {props.travelTime()}
                         </Typography>
                     </Grid>
 
@@ -120,12 +103,13 @@ export default function DestinationContainer( { onAppend, clickAway, destination
                                 variant="extended"
                                 color='primary'
                                 style={{marginBottom: '-4%'}}
+                                onClick={() => props.onMissionChange()}
                             >
                                 <NavigateNextIcon className={classes.extendedIcon} />
                                 Ready to start
                         </Fab>
 
-                        <CardMedia image={destination.image} className={classes.image} />
+                        <CardMedia image={props.destination.image} className={classes.image} />
                     </Grid>
 
                 </Card>

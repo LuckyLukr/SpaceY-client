@@ -9,6 +9,7 @@ import {
     Theme
 } from '@material-ui/core';
 
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import AddIcon from '@material-ui/icons/Add';
 import MissionInfo from './missionInfo';
 import astronautsImg from '../../../images/two_astronauts.jpg';
@@ -100,7 +101,7 @@ function SpacecraftPicker( {spacecrafts, onSpacecraftChange, name, onNameChange,
                     color='primary' 
                     onClick={() => onNameChange('')}
                 >
-                    Back
+                    <ArrowBackIosIcon />Back
                 </Button>
 
                 <Card className={classes.picker} >
