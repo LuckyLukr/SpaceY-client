@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import {
     Grid,
     Typography,
@@ -68,6 +68,9 @@ function AstronautsPicker( {astronauts, assigned, onAssign, name, spacecraft, on
 
     const handleSelect = (astronaut:User) => {
         let exist = false;
+        if (selected.length === spacecraft.seats) {
+            return alert(`max number of astronauts (${spacecraft.seats}) reached`);
+        }
         selected.forEach((e:User)=> {
             if (e.id === astronaut.id){
                 exist = true;
@@ -103,26 +106,21 @@ function AstronautsPicker( {astronauts, assigned, onAssign, name, spacecraft, on
                                 Age: {e.age}<br />
                                 Weight: {e.weight}<br />
                                 Consumption: {e.consum} per hour<br />
-                                Availability: {e.onMission ? 'on mission' : 'avalible'}<br />
+                                {e.status !== 'on Earth' ?
+                                    <Typography color='error' >Status: {e.status}</Typography>
+                                :
+                                    <Typography variant='body2' color='inherit'>Status: {e.status}</Typography>
+                                }
+                                <br />
                                 </>
                             }
                         >
-                            {
-                                selected.length === spacecraft.seats ?
-                                    <Button
-                                        color={e.onMission ? 'secondary' : 'default'}
-                                        onClick={()=> alert(`max number of astronauts (${spacecraft.seats}) reached`)}
-                                    >
-                                        {e.firstName} {e.lastName}
-                                    </Button>
-                                :
-                                    <Button 
-                                        color={e.onMission ? 'secondary' : 'default'}
-                                        onClick={()=> handleSelect(e)}
-                                    >
-                                        {e.firstName} {e.lastName}
-                                    </Button>
-                            }
+                            <Button 
+                                color={e.status !== 'on Earth' ? 'secondary' : 'default'}
+                                onClick={()=> handleSelect(e)}
+                            >
+                                {e.firstName} {e.lastName} {selected.map((j:any) => j.id === e.id && <Fragment key={j.id}>✔</Fragment>)}
+                            </Button>
 
                         </HtmlTooltip>
                     ))
@@ -150,12 +148,12 @@ function AstronautsPicker( {astronauts, assigned, onAssign, name, spacecraft, on
                                 Age: {e.age}<br />
                                 Weight: {e.weight}<br />
                                 Consumption: {e.consum} per hour<br />
-                                Availability: {e.onMission ? 'on mission' : 'avalible'}<br />
+                                Status: {e.status}<br />
                                 </>
                             }
                         >
                             <Button 
-                                color={e.onMission ? 'secondary' : 'default'}
+                                color='default'
                                 onClick={()=> handleRemoveSelect(e)}
                             >
                                 {e.firstName} {e.lastName}

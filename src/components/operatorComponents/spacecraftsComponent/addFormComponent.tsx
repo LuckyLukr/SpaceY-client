@@ -44,6 +44,9 @@ function AddingForm( {onAdd, onAppend }:any ) {
     const [ motorImpulse, setMotorImpulse ] = useState<number>(0);
     const [ fridge, setFridge ] = useState<number>(0);
     const [ fuelConsumption, setFuelConsumption ] = useState<number>(0);
+    const [ startCombustion, setStartCombustion ] = useState<number>(0);
+    const [ landingCombustion, setLandingCombustion ] = useState<number>(0);
+    const [ status, setStatus ] = useState<string>('');
 
     const classes = useStyles();
 
@@ -51,9 +54,12 @@ function AddingForm( {onAdd, onAppend }:any ) {
       setModel(e.type);
       setWeight(e.weight);
       setSeats(e.seats);
+      setStatus(e.status);
       setTankCapacity(e.tankCapacity);
       setMotorImpulse(e.motorImpulse);
       setFuelConsumption(e.fuelConsumption);
+      setStartCombustion(e.startCombustion);
+      setLandingCombustion(e.landingCombustion);
       setFridge(e.fridge);
       setImg(e.img);
     };
@@ -67,7 +73,7 @@ function AddingForm( {onAdd, onAppend }:any ) {
     const handleSubmit = async (e:any) => {
         e.preventDefault();
 
-        onAdd(name, model, weight, seats, tankCapacity, motorImpulse, fuelConsumption, fridge);
+        onAdd(name, model, weight, status, seats, tankCapacity, motorImpulse, fuelConsumption, startCombustion, landingCombustion, fridge);
         onAppend();
         
         setName('');

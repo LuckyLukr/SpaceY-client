@@ -94,7 +94,16 @@ const useStyles = makeStyles((theme: Theme)=>({
 
 
 
-export default function DestinationPicker( {assigned, name, spacecraft, onRemove, onDestinationChange, onMissionChange, travelTime}:any ) {
+export default function DestinationPicker( {
+    assigned, 
+    name, 
+    spacecraft, 
+    onRemove, 
+    onDestinationChange, 
+    onMissionChange, 
+    travelTime,
+    travelHours
+}:any ) {
     const [ appendForm, setAppendForm ] = useState<boolean>(false);
     const [ destination, setDestination ] = useState<Destination>(Object);
 
@@ -151,6 +160,7 @@ export default function DestinationPicker( {assigned, name, spacecraft, onRemove
                                 spacecraft={spacecraft}
                                 onMissionChange={onMissionChange}
                                 travelTime={travelTime}
+                                travelHours={travelHours}
                             /> 
                         }
                     </CardMedia>

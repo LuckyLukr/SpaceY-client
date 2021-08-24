@@ -55,23 +55,57 @@ const useStyles = makeStyles((theme)=>({
 
 
 
-export default function DestinationContainer( props:any ) {
+export default function DestinationContainer( {
+    destination,
+    onAppend,
+    clickAway,
+    assigned,
+    spacecraft,
+    onMissionChange,
+    travelTime,
+    travelHours
+}:any ) {
     const classes = useStyles();
 
     const calcTotalWeight = () => {
-        const astronautsWeight = props.assigned.map((e:User) => e.weight);
+        const astronautsWeight = assigned.map((e:User) => e.weight);
         const reducer = (acc:number, val:number) => acc + val;
-        const totalWeight = (props.spacecraft.weight * 1000) + astronautsWeight.reduce(reducer);
+        const totalWeight = (spacecraft.weight * 1000) + astronautsWeight.reduce(reducer);
         return totalWeight;
+    }
+
+    const calcFuelNeeded = () => {
+        const consumption = spacecraft.fuelConsumption / 100;
+        const start = spacecraft.startCombustion * 60;
+        const landing = spacecraft.landingCombustion * 60;
+        return (consumption * destination.distance) + (start + landing);
+    }
+
+    const caclApetit = () => {
+        const astronautsApetit = assigned.map((e:User) => e.consum);
+        const reducer = (acc:number, val:number) => acc + val;
+        const totalApetit = astronautsApetit.reduce(reducer) * travelHours();
+        return totalApetit
+    }
+
+    const calcCrewApetit = () => {
+        const kilos = Math.floor(caclApetit() / 1000);
+        const grams = caclApetit() % 1000;
+
+        if (kilos === 0) {
+            return `${grams} g`
+        } else {
+            return `${kilos} kg ${grams} g`;
+        }
     }
 
     return(
         <Grid className={classes.addFormRoot} container justify='center'>   
-            <ClickAwayListener onClickAway={props.clickAway}>        
+            <ClickAwayListener onClickAway={clickAway}>        
                 <Card elevation={0} className={classes.addFormCard}>
                     <Grid container justify='flex-end'>
                         <Tooltip title='Close' >
-                            <Button className={classes.closeBtn} onClick={()=> props.onAppend()} variant='text' color='primary'>
+                            <Button className={classes.closeBtn} onClick={()=> onAppend()} variant='text' color='primary'>
                                 <CloseIcon />
                             </Button>
                         </Tooltip>
@@ -79,37 +113,71 @@ export default function DestinationContainer( props:any ) {
                     
                     <Grid container direction='column' className={classes.root} alignItems='center' >
                         <Typography variant='h4' color='primary' gutterBottom>
-                            Road to {props.destination.name}
+                            Road to {destination.name}
                         </Typography>
                         <Typography>
-                            Distance: {props.destination.distance.toLocaleString()} km
+                            Distance: {destination.distance.toLocaleString()} km
                         </Typography>
                         <Typography>
-                            Fuel filling: {props.spacecraft.tankCapacity} l
+                            Fuel tank capacity: {spacecraft.tankCapacity.toLocaleString()} l
+                        </Typography>
+                        {
+                            calcFuelNeeded() > spacecraft.tankCapacity ? 
+                            <Typography color='error' variant='h6' >
+                                Fuel needed: {calcFuelNeeded().toLocaleString()} l
+                            </Typography>
+                            :
+                            <Typography>
+                                Fuel needed: {calcFuelNeeded().toLocaleString()} l
+                            </Typography>
+                            
+                        }
+                        <Typography>
+                            Fridge capacity: {spacecraft.fridge} kg
+                        </Typography>
+                        {
+                            (caclApetit() / 1000) > spacecraft.fridge ? 
+                            <Typography color='error' variant='h6'>
+                                Food eaten: {calcCrewApetit()}
+                            </Typography>
+                            :
+                            <Typography>
+                                Food eaten: {calcCrewApetit()}
+                            </Typography>
+                        }
+                        <Typography>
+                            Total weight: {calcTotalWeight().toLocaleString()} kg
                         </Typography>
                         <Typography>
-                            Fridge filling: {props.spacecraft.fridge} %
-                        </Typography>
-                        <Typography>
-                            Total weight: {calcTotalWeight()} kg
-                        </Typography>
-                        <Typography>
-                            Time: {props.travelTime()}
+                            Time: {travelTime()}
                         </Typography>
                     </Grid>
 
                     <Grid container justify='center'>
-                        <Fab
+                        {
+                            calcFuelNeeded() > spacecraft.tankCapacity || (caclApetit() / 1000) > spacecraft.fridge ? 
+                            <Fab
                                 variant="extended"
-                                color='primary'
+                                color='default'
                                 style={{marginBottom: '-4%'}}
-                                onClick={() => props.onMissionChange()}
+                                onClick={() => alert('Error')}
                             >
                                 <NavigateNextIcon className={classes.extendedIcon} />
                                 Ready to start
-                        </Fab>
+                            </Fab>
+                            :
+                            <Fab
+                                variant="extended"
+                                color='primary'
+                                style={{marginBottom: '-4%'}}
+                                onClick={() => onMissionChange()}
+                            >
+                                <NavigateNextIcon className={classes.extendedIcon} />
+                                Ready to start
+                            </Fab>
+                        }
 
-                        <CardMedia image={props.destination.image} className={classes.image} />
+                        <CardMedia image={destination.image} className={classes.image} />
                     </Grid>
 
                 </Card>

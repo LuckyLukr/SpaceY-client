@@ -9,7 +9,7 @@ export interface User {
   role: string,
   consum: number,
   weight: number,
-  onMission: boolean
+  status: string
 }
 
 export interface Spacecraft {
@@ -17,13 +17,15 @@ export interface Spacecraft {
   name: string,
   type: string,
   weight: number,
-  onMission: boolean,
+  status: string,
   destroyed: boolean,
   seats: number,
   tankCapacity: number,
   tankCondition: number,
   motorImpulse: number,
   fuelConsumption: number,
+  startCombustion: number,
+  landingCombustion: number,
   fridge: number,
   img: string
 }

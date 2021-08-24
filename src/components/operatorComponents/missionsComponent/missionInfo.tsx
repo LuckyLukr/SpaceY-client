@@ -25,7 +25,8 @@ const HtmlTooltip = withStyles((theme: Theme) => ({
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
-        maxWidth: '300px'
+        maxWidth: '300px',
+        alignSelf: 'flex-start'
     },
     cardMedia: {
         width: '200px',
@@ -53,12 +54,12 @@ function MissionInfo( { target, name, assigned }:any ) {
     const classes = useStyles();
 
     return (
-        <Grid container direction='column' className={classes.root} >
-            <Typography gutterBottom >
-                Mission Name: {name}
+        <Grid container direction='column' className={classes.root} alignItems='center' >
+            <Typography gutterBottom variant='h5' >
+                Mission: {name}
             </Typography>
-            <Typography variant='h6' >
-               Spacecraft:
+            <Typography variant='h6' align='center' >
+               Spacecraft
             </Typography>
             
             { target.type === 'Fastreq 212' && <CardMedia image={fastreqImg} title={target.type} className={classes.cardMedia} /> }
@@ -84,7 +85,13 @@ function MissionInfo( { target, name, assigned }:any ) {
                 Tank Condition: {target.tankCondition} %
             </Typography>
             <Typography>
-                Fuel Consumption: {target.fuelConsumption} l / 100 km
+                Inspace fuel consumption: {target.fuelConsumption} l / 100 km
+            </Typography>
+            <Typography>
+                BlastOff fuel combustion: {target.startCombustion} l / s
+            </Typography>
+            <Typography>
+                Landing fuel combustion: {target.landingCombustion} l / s
             </Typography>
             <Typography>
                 Fridge: {target.fridge} kg

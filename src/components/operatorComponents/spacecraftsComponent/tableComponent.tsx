@@ -33,7 +33,7 @@ function Table( {spacecrafts, onDelete, onDestroy}:any ) {
                         return (
                             <>
                             {
-                                params.row.status === 'on mission' 
+                                params.row.status.includes('on mission') 
                                 ?
                                 <Tooltip title='DESTROY' onClick={() => onDestroy(params.row.id)} >
                                     <IconButton > 
@@ -54,9 +54,6 @@ function Table( {spacecrafts, onDelete, onDestroy}:any ) {
     ];
 
     const SCsArray = spacecrafts.map( (e:Spacecraft) => { 
-
-        const status = e.destroyed ? 'destroyed' : e.onMission ? 'on mission' : 'ready to depart';
-
         return({
             id: e.id,
             key: e.id,
@@ -69,7 +66,7 @@ function Table( {spacecrafts, onDelete, onDestroy}:any ) {
             motorImpulse: e.motorImpulse,
             fuelConsumption: `${e.fuelConsumption} l`,
             fridge: `${e.fridge} kg`,
-            status: status
+            status: e.status
         })
      });
 

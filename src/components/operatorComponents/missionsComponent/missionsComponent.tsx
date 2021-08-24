@@ -5,7 +5,16 @@ import OperatorNavbar from '../../navbarComponents/operatorNavbar';
 import MissionMaker from './missionMaker';
 import AccessDenied from '../../accessDeniedComponent';
 
-export default function Missions( {user, users, spacecrafts, onUpdate, onSucces, onLogout}:any ) {
+export default function Missions( {
+    user, 
+    users, 
+    spacecrafts, 
+    onUserUpdate,
+    onSpacecraftUpdate, 
+    onSucces, 
+    onLogout, 
+    addMission
+}:any ) {
     const token = JSON.parse(localStorage.token);
     let tokenData = {role: ''};
     if(token){
@@ -21,7 +30,7 @@ export default function Missions( {user, users, spacecrafts, onUpdate, onSucces,
             ?
         <>
             <OperatorNavbar 
-                onUpdate={onUpdate} 
+                onUserUpdate={onUserUpdate} 
                 onSucces={onSucces} 
                 onLogout={onLogout} 
             />
@@ -29,6 +38,9 @@ export default function Missions( {user, users, spacecrafts, onUpdate, onSucces,
                 user={user}
                 users={users} 
                 spacecrafts={spacecrafts} 
+                addMission={addMission}
+                onUserUpdate={onUserUpdate}
+                onSpacecraftUpdate={onSpacecraftUpdate}
             />
         </>
             :

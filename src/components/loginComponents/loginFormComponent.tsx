@@ -54,7 +54,6 @@ export default function LogIn( {onLogin}:any ) {
                         required
                         id="email"
                         label={t('emailAdress')}
-                        name="email"
                         autoComplete="email"
                         autoFocus
                     />

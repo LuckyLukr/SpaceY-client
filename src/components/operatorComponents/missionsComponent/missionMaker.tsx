@@ -60,7 +60,14 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-export default function MissionMaker( {user, users, spacecrafts}:any ) {
+export default function MissionMaker( {
+    user, 
+    users, 
+    spacecrafts, 
+    addMission,
+    onUserUpdate,
+    onSpacecraftUpdate
+}:any ) {
     const [ name, setName ] = useState<string>(String);
     const [ spacecraft, setSpacecraft ] = useState<Spacecraft>(Object);
     const [ assigned, setAssigned ] = useState<User[]>(Array);
@@ -183,6 +190,7 @@ export default function MissionMaker( {user, users, spacecrafts}:any ) {
                         onDestinationChange={handleDestinationChange}
                         onMissionChange={handleMissionChange}
                         travelTime={calcTravelTime}
+                        travelHours={calcTravelHours}
                     />
                 }
 
@@ -195,6 +203,9 @@ export default function MissionMaker( {user, users, spacecrafts}:any ) {
                             name={name}
                             spacecraft={spacecraft}
                             travelTime={calcTravelTime}
+                            addMission={addMission}
+                            onUserUpdate={onUserUpdate}
+                            onSpacecraftUpdate={onSpacecraftUpdate}
                         />
                 }
 

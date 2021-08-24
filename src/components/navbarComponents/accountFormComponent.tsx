@@ -7,6 +7,7 @@ import {
     Theme
 } from '@material-ui/core/';
 import { useTranslation } from 'react-i18next';
+import jwt_decode from 'jwt-decode';
 
 import SaveIcon from '@material-ui/icons/Save';
 
@@ -25,6 +26,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const AccountForm = ({ onSucces, onUpdate }:any) => {
     const user = JSON.parse(localStorage.user)
+    const token = JSON.parse(localStorage.token);
+    const tokenData = jwt_decode(token);
+
+    console.log(tokenData);
 
   const [firstName, setFirstName] = useState(user.user.firstName);
   const [lastName, setLastName] = useState(user.user.lastName);
@@ -74,8 +79,6 @@ const AccountForm = ({ onSucces, onUpdate }:any) => {
 
   const handleSubmit = async (e:any) => {
       e.preventDefault();
-      const token = JSON.parse(localStorage.token);
-
       getAge(birth);
 
       const updatedUser = {
@@ -131,26 +134,31 @@ const AccountForm = ({ onSucces, onUpdate }:any) => {
                 name="lastName"
               />
             </Grid>
-            <Grid item >
-              <TextField
-                type="number"
-                id="weight"
-                name="weight"
-                value={weight}
-                onChange={handleWeightChange}
-                label="Weight (Kg)"
-              />
-            </Grid>
-            <Grid item >
-              <TextField
-                type="number"
-                id="consum"
-                name="consum"
-                value={consum}
-                onChange={handleConsumChange}
-                label="Consumption per hour (g)"
-              />
-            </Grid>
+            {
+              tokenData.role === 'astronaut' &&
+              <>
+              <Grid item >
+                <TextField
+                  type="number"
+                  id="weight"
+                  name="weight"
+                  value={weight}
+                  onChange={handleWeightChange}
+                  label="Weight (Kg)"
+                />
+              </Grid>
+              <Grid item >
+                <TextField
+                  type="number"
+                  id="consum"
+                  name="consum"
+                  value={consum}
+                  onChange={handleConsumChange}
+                  label="Consumption per hour (g)"
+                />
+              </Grid>
+              </>
+            }
             <Grid item>
               <TextField
                 type="text"

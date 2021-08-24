@@ -83,8 +83,9 @@ function Table( {users, onDelete, onUpdate, onSucces}:any ) {
         { field: 'name', headerName: 'Name', width: 160 },
         { field: 'email', headerName: 'Email', width: 180 },
         { field: 'age', headerName: 'Age', width: 90 },
-        { field: 'consum', headerName: 'Food consumption / hour (g)' , width: 140 },
-        { field: 'weight', headerName: 'Weight (kg)', width: 90 },
+        { field: 'consum', headerName: 'Food consumption / hour' , width: 90 },
+        { field: 'weight', headerName: 'Weight', width: 90 },
+        { field: 'status', headerName: 'Status', width: 190 },
         {  
             field: '-', 
             headerName: " ",
@@ -117,8 +118,9 @@ function Table( {users, onDelete, onUpdate, onSucces}:any ) {
             role: e.role,
             age: e.age,
             birth: e.birth,
-            consum: e.consum,
-            weight: e.weight
+            consum: e.consum + ' g',
+            weight: e.weight + ' kg',
+            status: e.status
         })
      });
 

@@ -4,7 +4,7 @@ import { useData } from './featrues/customHooks/useData';
 import axios from 'axios';
 import './App.css';
 
-import { User, UserWithToken, Spacecraft } from './types';
+import { User, UserWithToken, Spacecraft, Mission } from './types';
 
 import LoginPage from './components/loginComponents/loginPageComponent';
 import OperatorDashboard from './components/operatorComponents/dashboardComponents/dashboardComponent';
@@ -70,7 +70,7 @@ function App() {
       birth,
       consum, 
       weight, 
-      onMission: false 
+      status: 'on Earth'
     };
     const token = JSON.parse(localStorage.token);
     const data = await axios.post(API + 'users', newOperator,{ headers: {"Authorization" : `Bearer ${token}`}}).catch(err => console.log(err));
@@ -85,24 +85,29 @@ function App() {
   const addSpacecraft = async ( 
         name: string, 
         type: string, 
-        weight: number, 
+        weight: number,
+        status: string,
         seats: number, 
         tankCapacity: number, 
         motorImpulse: number, 
         fuelConsumption: number,
+        startCombustion: number,
+        landingCombustion: number,
         fridge: number 
   ) => {
     const newSpacecraft = { 
       name,     
       type,
       weight,
-      onMission: false,
+      status,
       destroyed: false,
       seats,
       tankCapacity,
       tankCondition: 100,
       motorImpulse,
       fuelConsumption,
+      startCombustion,
+      landingCombustion,
       fridge,
     };
     const data = await axios.post(API + 'spacecrafts', newSpacecraft).catch(err => console.log(err));
@@ -110,6 +115,28 @@ function App() {
       const spacecraft = JSON.parse(data.config.data);
       const spacecraftWithID = { id: data.data.id, ...spacecraft};
       spacecrafts.setData([ ...spacecrafts.data, spacecraftWithID]);
+    }
+  }
+
+  // REGISTER MISSION <-----------------------------------------------------|
+
+  const addMission = async ( e:Mission ) => {
+    const newMission = { 
+      name: e.name,     
+      spacecraft: e.spacecraft,
+      astronauts: e.astronauts,
+      status: `Flying to ${e.destination}`,
+      blastOff: e.blastOff,
+      landing: e.landing,
+      destination: e.destination,
+      distance: e.distance,
+      time: e.time
+    };
+    const data = await axios.post(API + 'missions', newMission).catch(err => console.log(err));
+    if (data) {
+      const mission = JSON.parse(data.config.data);
+      const missionWithID = { id: data.data.id, ...mission};
+      missions.setData([ ...missions.data, missionWithID]);
     }
   }
 
@@ -130,7 +157,7 @@ function App() {
     const copyUsers = [ ...users.data as User[] ];
     const index = copyUsers.findIndex( e => e.id === id);
     copyUsers.splice(index,1);
-    user.setData(copyUsers);
+    users.setData(copyUsers);
   }
 
   // DELETE SPACECRAFT <--------------------------------------------------------|
@@ -145,16 +172,31 @@ function App() {
   // UPDATE <--------------------------------------------------------|
 
   function destroySpacecraft( id:string ) {
-    axios.patch(`${API}spacecrafts/${id}`, {destroyed: true, onMission: false}).catch(err => alert(err));
+    axios.patch(`${API}spacecrafts/${id}`, {destroyed: true, status: 'Destroyed'}).catch(err => alert(err));
 
     const update = [...spacecrafts.data as Spacecraft[]];
     update.forEach(e => {
       if(e.id === id){
         e.destroyed = true;
-        e.onMission = false;
+        e.status = 'Destroyed';
       }
     });
     spacecrafts.setData(update);
+  }
+
+  function updateSpacecraft( id:string, update:Spacecraft ) {
+    const token = JSON.parse(localStorage.token);
+    axios.patch(`${API}spacecrafts/${id}`,update,{ headers: {"Authorization" : `Bearer ${token}`}} ).catch(err => alert(err));
+    const copySpacecrafts = [...spacecrafts.data as Spacecraft[]];
+    copySpacecrafts.forEach(e => {
+      if(e.id === id){
+        e.name = update.name;
+        e.status = update.status;
+        e.destroyed = update.destroyed;
+        e.tankCondition = update.tankCondition;
+      }
+    });
+    spacecrafts.setData(copySpacecrafts);
   }
 
   function updateUser( id:string, update:User ) {
@@ -164,14 +206,15 @@ function App() {
     copyUsers.forEach(e => {
       if(e.id === id){
         e.firstName = update.firstName;
-        e.lastName = update.lastName;
+        e.lastName = update.lastName; 
         e.age = update.age;
         e.birth = update.birth;
         e.consum = update.consum;
         e.weight = update.weight;
+        e.status = update.status
       }
     });
-    user.setData(copyUsers);
+    users.setData(copyUsers);
   }
 
     // CONFIRMATION BARS <--------------------------------------------------------|
@@ -225,9 +268,11 @@ function App() {
                 user={user}
                 users={users.data}
                 spacecrafts={spacecrafts.data}
-                onUpdate={updateUser}
+                onUserUpdate={updateUser}
+                onSpacecraftUpdate={updateSpacecraft}
                 onSucces={handleSuccesBar}
                 onLogout={logoutUser} 
+                addMission={addMission}
               /> 
             } 
           />
