@@ -14,7 +14,7 @@ import SpacecraftsTable from './components/operatorComponents/spacecraftsCompone
 import Missions from './components/operatorComponents/missionsComponent/missionsComponent';
 import SuccessBar from './components/confirmationComponents/successBarComponent';
 
-const API ='http://localhost:5000/';
+const API ='https://spaceyserver.herokuapp.com/';
 const user = JSON.parse(localStorage.user);
 const token = JSON.parse(localStorage.token);
 
@@ -25,11 +25,11 @@ function App() {
   const missions = useData<Mission>(API + "missions", token);
 
   useEffect(() => {
-    //const timer = window.setInterval(() => {
+    const timer = window.setInterval(() => {
       updateMissionStatus();
-    //}, 10000);
-    //return () => window.clearInterval(timer)
-  },[/*updateMissionStatus*/]);
+    }, 40000);
+    return () => window.clearInterval(timer)
+  },[updateMissionStatus]);
 
 
   /**
