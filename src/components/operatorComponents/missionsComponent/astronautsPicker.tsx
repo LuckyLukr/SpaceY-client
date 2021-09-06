@@ -115,12 +115,25 @@ function AstronautsPicker( {astronauts, assigned, onAssign, name, spacecraft, on
                                 </>
                             }
                         >
-                            <Button 
-                                color={e.status !== 'on Earth' ? 'secondary' : 'default'}
-                                onClick={()=> handleSelect(e)}
-                            >
-                                {e.firstName} {e.lastName} {selected.map((j:any) => j.id === e.id && <Fragment key={j.id}>✔</Fragment>)}
-                            </Button>
+                            {
+                                e.status === 'Dead' ?
+                                    <Button 
+                                        disableRipple
+                                        disableElevation
+                                        disableFocusRipple
+                                        style={{color: '#c1abab'}}
+                                    >
+                                        {e.firstName} {e.lastName} {selected.map((j:any) => j.id === e.id && <Fragment key={j.id}>✔</Fragment>)}
+                                    </Button>
+                                :
+                                    <Button 
+                                        color={e.status !== 'on Earth' ? 'secondary' : 'default'}
+                                        onClick={()=> handleSelect(e)}
+                                    >
+                                        {e.firstName} {e.lastName} {selected.map((j:any) => j.id === e.id && <Fragment key={j.id}>✔</Fragment>)}
+                                    </Button>
+                            }
+                            
 
                         </HtmlTooltip>
                     ))

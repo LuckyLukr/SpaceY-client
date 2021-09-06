@@ -25,7 +25,7 @@ function Table( {spacecrafts, onDelete, onDestroy}:any ) {
                 { field: 'motorImpulse', headerName: 'Specific motor impulse', width: 160 },
                 { field: 'fuelConsumption', headerName: 'l/100 km Consumption', width: 160 },
                 { field: 'fridge', headerName: 'Fridge capacity', width: 160 },
-                { field: 'status', headerName: 'Status', width: 160 },
+                { field: 'status', headerName: 'Status', width: 200 },
                 {  
                     field: 'delete',
                     headerName: " ",

@@ -90,7 +90,7 @@ function Register( {onAdd, spacecrafts, onDelete, onDestroy }:any ) {
                                     </Tooltip>
                                 </Grid>
 
-                                <AddingForm onAdd={onAdd} onAppend={onAppend} /> 
+                                <AddingForm onAdd={onAdd} onAppend={onAppend} spacecrafts={spacecrafts} /> 
 
                             </Card>
                         </ClickAwayListener>  

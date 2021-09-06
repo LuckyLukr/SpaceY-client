@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   }));
 
 
-function AddingForm( {onAdd, onAppend }:any ) {
+function AddingForm( {onAdd, onAppend, spacecrafts }:any ) {
     const [ name, setName ] = useState<string>('');
     const [ model, setModel ] = useState<string>('');
     const [ img, setImg ] = useState<string>(astronautsImg);
@@ -78,6 +78,9 @@ function AddingForm( {onAdd, onAppend }:any ) {
         
         setName('');
     }
+
+    const existingNames = spacecrafts.map( (e:Spacecraft) => e.name);
+
     return (
         <form onSubmit={handleSubmit} className={classes.form}>
 
@@ -103,16 +106,34 @@ function AddingForm( {onAdd, onAppend }:any ) {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                onChange={handleNameChange}
-                value={name}
-                name="name"
-                variant="outlined"
-                required
-                id="name"
-                label="Spacecraft's Name"
-                autoFocus
-              />
+
+              {
+                existingNames.find((e:string) => e === name) ?
+                  <TextField
+                    onChange={handleNameChange}
+                    value={name}
+                    name="name"
+                    variant="outlined"
+                    required
+                    id="name"
+                    label="NAME ALREADY EXISTS"
+                    autoFocus
+                    error
+                    onError={()=> alert('Name already exists')}
+                  />
+                :
+                  <TextField
+                    onChange={handleNameChange}
+                    value={name}
+                    name="name"
+                    variant="outlined"
+                    required
+                    id="name"
+                    label="Spacecraft's Name"
+                    autoFocus
+                  />
+              }
+              
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -159,14 +180,28 @@ function AddingForm( {onAdd, onAppend }:any ) {
               />
             </Grid>
             <Grid item xs={12}>
-              <Fab 
-                className={classes.button} 
-                variant="extended" 
-                type='submit' 
-              >
-                <AddIcon className={classes.extendedIcon} />
-                Add
-              </Fab>
+              {
+                existingNames.find((e:string) => e === name) ?
+                  <Fab 
+                    className={classes.button} 
+                    variant="extended" 
+                    disabled
+                  >
+                    <AddIcon className={classes.extendedIcon} />
+                    Add
+                  </Fab>
+                :
+                  <Fab 
+                    className={classes.button} 
+                    variant="extended" 
+                    type='submit'
+                    color='primary'
+                  >
+                    <AddIcon className={classes.extendedIcon} />
+                    Add
+                  </Fab>
+              }
+              
 
               <CardMedia image={img} title={model} className={classes.cardMedia} />
             </Grid>

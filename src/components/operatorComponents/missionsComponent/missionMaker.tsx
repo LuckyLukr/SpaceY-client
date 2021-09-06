@@ -12,7 +12,7 @@ import {
 
 import SpacecraftPicker from './spacecraftPicker';
 import AstronautsPicker from './astronautsPicker';
-import SpacecraftNamer from './spacecraftNamer';
+import MissionNamer from './missionNamer';
 import DestinationPicker from './destinationPicker';
 import MissionLauncher from "./missionLauncher";
 
@@ -66,7 +66,8 @@ export default function MissionMaker( {
     spacecrafts, 
     addMission,
     onUserUpdate,
-    onSpacecraftUpdate
+    onSpacecraftUpdate,
+    missions
 }:any ) {
     const [ name, setName ] = useState<string>(String);
     const [ spacecraft, setSpacecraft ] = useState<Spacecraft>(Object);
@@ -108,25 +109,13 @@ export default function MissionMaker( {
     
     const handleMissionChange = (e?:any) => {
         const newMission = {
-            id: 1,
+            id: 'generatedID',
             name: name,
             spacecraft: spacecraft,
             astronauts: assigned,
             status: 'launching',
-            blastOff: new Intl.DateTimeFormat('en-GB', {
-                year: "numeric",
-                month: "numeric",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit"
-            }).format(new Date()),
-            landing: new Intl.DateTimeFormat('en-GB', {
-                year: "numeric",
-                month: "numeric",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit"
-            }).format(landingDate),
+            blastOff: new Date(),
+            landing: landingDate,
             destination: destination.name,
             distance: destination.distance,
             time: calcTravelTime()
@@ -147,9 +136,10 @@ export default function MissionMaker( {
                 
                 {
                     !name &&
-                    <SpacecraftNamer
+                    <MissionNamer
                         user={user}
                         onNameChange={handleNameChange}
+                        missions={missions}
                     />
                 }
 

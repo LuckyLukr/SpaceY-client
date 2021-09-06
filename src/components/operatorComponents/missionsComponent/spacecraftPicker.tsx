@@ -107,15 +107,26 @@ function SpacecraftPicker( {spacecrafts, onSpacecraftChange, name, onNameChange,
                 <Card className={classes.picker} >
                     <Grid container direction='column' className={classes.buttonGroup}>
                         {
-                            spacecrafts.map((e:any) => (
-                                <Button 
-                                    key={e.id} 
-                                    className={classes.btn} 
-                                    color='primary'
-                                    onClick={()=> handleTargetChange(e)}
-                                >
-                                    {e.name} - {e.type}
-                                </Button>
+                            spacecrafts.map((e:Spacecraft) => (
+                                <Grid key={e.id} >
+                                    {
+                                        (e.status === 'Destroyed' || e.status.includes('on mission')) ?
+                                            <Button 
+                                                className={classes.btn} 
+                                                disabled
+                                            >
+                                                {e.name} - {e.type}
+                                            </Button>
+                                        :
+                                            <Button 
+                                                className={classes.btn} 
+                                                color='primary'
+                                                onClick={()=> handleTargetChange(e)}
+                                            >
+                                                {e.name} - {e.type}
+                                            </Button>
+                                    }
+                                </Grid>
                             ))
                         }
                     </Grid>

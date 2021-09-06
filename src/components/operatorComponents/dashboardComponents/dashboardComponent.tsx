@@ -1,17 +1,16 @@
-import React from 'react';
+import jwt_decode from 'jwt-decode';
 import {
     Typography,
     Grid,
-    Card,
-    makeStyles,
-    Divider
+    makeStyles
 } from '@material-ui/core';
-//import jwt_decode from 'jwt-decode';
 
 import Navbar from '../../navbarComponent';
 import OperatorNavbar from '../../navbarComponents/operatorNavbar';
-import VerticalTabs from './verticalTabsComponent';
 import AccessDenied from '../../accessDeniedComponent';
+import OperatorDashboard from './operatorDashboard';
+import AstronautDashboard from './astronautDashboard';
+import UnderConstruction from '../../underConstructionComponent';
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -20,23 +19,24 @@ const useStyles = makeStyles(() => ({
         padding: 20,
     },
     textarea: {
-        width: 'fit-content',
+        width: '100%',
         padding: 40,
+        backgroundColor: '#262626',
+        color: 'white',
+        marginTop: '43px',
     }
 }))
 
-export default function OperatorDashboard( {onLogout, onUpdate, onSucces}:any ) {
+export default function Dashboard( {onLogout, onUpdate, onSucces, missions}:any ) {
     const classes = useStyles();
 
     const user = JSON.parse(localStorage.user);
     const token = JSON.parse(localStorage.token);
-    /* let tokenData = {role: ''};
-    if(token){
-        tokenData = jwt_decode(token);
-    }
-    */
+    const tokenData = jwt_decode(token);
+
     return(
         <div>
+            <UnderConstruction />
             <Navbar />
             { 
                 user.access_token === token ?
@@ -46,31 +46,27 @@ export default function OperatorDashboard( {onLogout, onUpdate, onSucces}:any ) 
                 onUpdate={onUpdate} 
                 onSucces={onSucces} 
             />
-            <Grid container direction='column' justify='space-evenly' alignItems='center'>
-                <Typography>
-                    WELCOME {user.user.firstName}!
-                </Typography>
-                <Card className={classes.card}>
-                    <Grid container justify='space-between'>
-                    <VerticalTabs />
+            <Grid container direction='column' justify='space-evenly' alignItems='center'>  
+                
+                <Grid container justify='space-between' alignItems='center' >
+                    {
+                        tokenData.role === 'operator' ? 
+                            <OperatorDashboard missions={missions} />
+                        :
+                            <AstronautDashboard />
+                    }
                     <Grid container justify='space-evenly' direction='column' alignItems='center' className={classes.textarea}>
                         <Typography variant='h5'>
-                            Lorem Ipsum
+                            About
                         </Typography>
-                        <Divider variant='middle'/>
                         <Typography style={{maxWidth: '350px'}}>
-                            Lorem ipsum dolor sit amet, 
-                            consectetuer adipiscing elit. 
-                            Phasellus et lorem id felis nonummy placerat. 
-                            Sed elit dui, pellentesque a, faucibus vel, interdum nec, diam. Mauris suscipit, 
-                            ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. 
-                            Nam libero tempore, cum soluta nobis est eligendi optio 
-                            cumque nihil impedit quo minus id quod maxime placeat facere possimus.
+                        Web application simulating space program including CRUD operations with astronauts and 
+                        spaceships through REST API and creating complex space missions based on different spaceships, 
+                        astronauts and destinations like moon or Mars.
                         </Typography>
+                        
                     </Grid>
-                    </Grid>
-                    
-                </Card>
+                </Grid>
             </Grid>
             </>
             :

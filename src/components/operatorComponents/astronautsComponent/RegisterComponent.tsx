@@ -88,7 +88,7 @@ function Register( { users, onDelete, onAdd, onUpdate, onSucces }:any ) {
                                     </Tooltip>
                                 </Grid>
 
-                                <AddingForm onAdd={onAdd} onAppend={onAppend} /> 
+                                <AddingForm onAdd={onAdd} onAppend={onAppend} users={users} /> 
 
                             </Card>
                         </ClickAwayListener>  

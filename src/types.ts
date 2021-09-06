@@ -18,7 +18,6 @@ export interface Spacecraft {
   type: string,
   weight: number,
   status: string,
-  destroyed: boolean,
   seats: number,
   tankCapacity: number,
   tankCondition: number,
@@ -42,13 +41,13 @@ export interface Destination {
 }
 
 export interface Mission {
-  id: number,
+  id: string,
   name: string,
   spacecraft: Spacecraft,
   astronauts: User[],
   status: string,
-  blastOff: string,
-  landing: string,
+  blastOff: Date,
+  landing: number,
   destination: string,
   distance: number,
   time: string

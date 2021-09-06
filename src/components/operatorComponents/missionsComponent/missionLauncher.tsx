@@ -39,8 +39,25 @@ export default function MissionLauncher({
         setLaunching(true);
         setTimeout(()=>{
             setLaunching(false);
+            window.open('/makeMission', '_self');
         }, 3000)
     }
+
+    const blastOffDate = new Intl.DateTimeFormat('en-GB', {
+        year: "numeric",
+        month: "numeric",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+    }).format(mission.blastOff)
+
+    const landingDate = new Intl.DateTimeFormat('en-GB', {
+        year: "numeric",
+        month: "numeric",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+    }).format(mission.landing)
 
     return (
         <Grid container justify='space-evenly'>
@@ -55,8 +72,8 @@ export default function MissionLauncher({
                     <p>Spacecraft: {spacecraft.type}</p>
                     <p>Astronauts on board: {mission.astronauts.length}</p>
                     <p>Status: {mission.status}</p>
-                    <p>Blast off: {mission.blastOff}</p>
-                    <p>Landing time: {mission.landing}</p>
+                    <p>Blast off: {blastOffDate}</p>
+                    <p>Landing time: {landingDate}</p>
                     <p>Distance: {mission.distance.toLocaleString()} km</p>
                     <p>Mission time: {mission.time}</p>
                     <br />

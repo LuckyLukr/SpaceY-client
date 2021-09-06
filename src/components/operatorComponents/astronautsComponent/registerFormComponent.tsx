@@ -9,6 +9,8 @@ import {
 } from '@material-ui/core/';
 import { useTranslation } from 'react-i18next';
 
+import { User } from '../../../types';
+
 import AddIcon from '@material-ui/icons/Add';
 
 import astronautsImg from '../../../images/two_astronauts.jpg';
@@ -32,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   }));
 
-const AddingForm = ({ onAdd, onAppend }:any) => {
+const AddingForm = ({ onAdd, onAppend, users }:any) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [birth, setBirth] = useState('');
@@ -114,6 +116,8 @@ const AddingForm = ({ onAdd, onAppend }:any) => {
       setWeight('');
     }
 
+    const existingEmail = users.map( (e:User) => e.email);
+
     return (
         <form onSubmit={handleSubmit} className={classes.form}>
           <Grid container spacing={2}>
@@ -190,7 +194,22 @@ const AddingForm = ({ onAdd, onAppend }:any) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
+              {
+                existingEmail.find((e:string) => e === email) ?
+                <TextField
+                onChange={handleEmailChange}
+                value={email}
+                variant="outlined"
+                required
+                fullWidth
+                id="email"
+                label='EMAIL ALREADY EXISTS'
+                name="email"
+                autoComplete="email"
+                error
+              />
+                :
+                <TextField
                 onChange={handleEmailChange}
                 value={email}
                 variant="outlined"
@@ -201,6 +220,7 @@ const AddingForm = ({ onAdd, onAppend }:any) => {
                 name="email"
                 autoComplete="email"
               />
+              }
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -231,14 +251,28 @@ const AddingForm = ({ onAdd, onAppend }:any) => {
               />
             </Grid>
             <Grid className={classes.button} item xs={12}>
-            <Fab 
-                className={classes.button} 
-                variant="extended" 
-                type='submit' 
-              >
-                <AddIcon className={classes.extendedIcon} />
-                Add
-              </Fab>
+              {
+                existingEmail.find((e:string) => e === email) ?
+                <Fab 
+                  className={classes.button} 
+                  variant="extended" 
+                  disabled 
+                >
+                  <AddIcon className={classes.extendedIcon} />
+                  Add
+                </Fab>
+                :
+                <Fab 
+                  className={classes.button} 
+                  variant="extended" 
+                  type='submit'
+                  color='primary'
+                >
+                  <AddIcon className={classes.extendedIcon} />
+                  Add
+                </Fab>
+              }
+
 
               <CardMedia image={astronautsImg} title='' className={classes.cardMedia} />
             </Grid>

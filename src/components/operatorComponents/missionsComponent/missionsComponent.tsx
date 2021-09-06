@@ -4,6 +4,7 @@ import Navbar from '../../navbarComponent';
 import OperatorNavbar from '../../navbarComponents/operatorNavbar';
 import MissionMaker from './missionMaker';
 import AccessDenied from '../../accessDeniedComponent';
+import UnderConstruction from '../../underConstructionComponent';
 
 export default function Missions( {
     user, 
@@ -13,7 +14,8 @@ export default function Missions( {
     onSpacecraftUpdate, 
     onSucces, 
     onLogout, 
-    addMission
+    addMission,
+    missions
 }:any ) {
     const token = JSON.parse(localStorage.token);
     let tokenData = {role: ''};
@@ -24,6 +26,7 @@ export default function Missions( {
 
     return(
         <div>
+        <UnderConstruction />
         <Navbar />
         { 
             tokenData.role === 'operator'
@@ -41,6 +44,7 @@ export default function Missions( {
                 addMission={addMission}
                 onUserUpdate={onUserUpdate}
                 onSpacecraftUpdate={onSpacecraftUpdate}
+                missions={missions}
             />
         </>
             :
