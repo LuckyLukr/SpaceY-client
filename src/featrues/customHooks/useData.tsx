@@ -19,7 +19,7 @@ export function useData<T>(url:string, token:string) {
         try {
             const result = await fetchData();
             setData(result);
-        }catch(err){
+        }catch(err:any){
             setError(`Oops, something went wrong. ${err.message}`)
         }
         setLoading(false);
