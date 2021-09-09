@@ -15,22 +15,23 @@ import Missions from './components/operatorComponents/missionsComponent/missions
 import SuccessBar from './components/confirmationComponents/successBarComponent';
 
 const API ='https://spaceyserver.herokuapp.com/';
-const user = JSON.parse(localStorage.user);
-const token = JSON.parse(localStorage.token);
 
 function App() {
   const [ isSuccess, setIsSuccess ] = useState<boolean>(false);
+  const [ loggedUser, setLoggedUser ] = useState<UserWithToken>({} as UserWithToken);
+  const [ error, setError ] = useState<boolean>(false);
+  const token = JSON.parse(localStorage.user).access_token;
   const users = useData<User>(API + "users", token);
   const spacecrafts = useData<Spacecraft>(API + "spacecrafts", token);
   const missions = useData<Mission>(API + "missions", token);
 
   useEffect(() => {
-    const timer = window.setInterval(() => {
-      updateMissionStatus();
-    }, 40000);
-    return () => window.clearInterval(timer)
-  },[updateMissionStatus]);
+    setLoggedUser(JSON.parse(localStorage.user));
+  }, []);
 
+  useEffect(() => {
+    localStorage.setItem('user', JSON.stringify(loggedUser));
+  }, [loggedUser]);
 
   /**
   * Takes the given data (email and password) and returns the user from the database based on that data. 
@@ -39,20 +40,24 @@ function App() {
   */
   const loginUser = async ( email: string, password: string) => {
     const login = { username: email, password: password };
-    const result = await new Promise<UserWithToken>( resolve => {
-    axios.post(`${API}auth/login`,login)
-        .then( res => {
-        resolve(res.data);
-        })
-        .catch( err =>  alert(err.message));
-    })
 
-    if(result){
-      const token = result.access_token;
-      localStorage.clear();
-      localStorage.setItem('user', JSON.stringify(result));
-      localStorage.setItem('token', JSON.stringify(token));
+    const fetchUser = async () => {
+      const response = await axios.post(`${API}auth/login`, login);
+      return response.data;
     }
+
+    const getUser = async () => {
+      try{
+        const result = await fetchUser();
+        localStorage.setItem('user', JSON.stringify(result));
+        setLoggedUser(result);
+
+      }catch( err:any ){
+        setError(true);
+      }
+    }
+
+    getUser();
   };
 
   /**
@@ -93,8 +98,7 @@ function App() {
       weight, 
       status: 'on Earth'
     };
-    const token = JSON.parse(localStorage.token);
-    const data = await axios.post(API + 'users', newOperator,{ headers: {"Authorization" : `Bearer ${token}`}}).catch(err => console.log(err));
+    const data = await axios.post(API + 'users', newOperator,{ headers: {"Authorization" : `Bearer ${loggedUser.access_token}`}}).catch(err => console.log(err));
     if (data) {
       const operator = JSON.parse(data.config.data);
       const operatorWithID = { id: data.data.id, ...operator};
@@ -106,7 +110,7 @@ function App() {
   * Updates users data in the database
   */
   function updateUser( id:string, update:User ) {
-    axios.patch(`${API}users/${id}`,update,{ headers: {"Authorization" : `Bearer ${token}`}} ).catch(err => alert(err));
+    axios.patch(`${API}users/${id}`,update,{ headers: {"Authorization" : `Bearer ${loggedUser.access_token}`}} ).catch(err => alert(err));
     const copyUsers = [...users.data as User[]];
     copyUsers.forEach((e:User) => {
       if(e.id === id){
@@ -126,8 +130,7 @@ function App() {
   * Remove the user from database
   */
   function deleteUser( id:string ) {
-    const token = JSON.parse(localStorage.token);
-    axios.delete(`${API}users/${id}`,{ headers: {"Authorization" : `Bearer ${token}`}}).catch(err => console.log(err));
+    axios.delete(`${API}users/${id}`,{ headers: {"Authorization" : `Bearer ${loggedUser.access_token}`}}).catch(err => console.log(err));
     const copyUsers = [ ...users.data as User[] ];
     const index = copyUsers.findIndex( e => e.id === id);
     copyUsers.splice(index,1);
@@ -176,7 +179,7 @@ function App() {
   * Updates spacecrafts data in the database
   */
   function updateSpacecraft( id:string, update:Spacecraft ) {
-    axios.patch(`${API}spacecrafts/${id}`,update,{ headers: {"Authorization" : `Bearer ${token}`}} ).catch(err => alert(err));
+    axios.patch(`${API}spacecrafts/${id}`,update,{ headers: {"Authorization" : `Bearer ${loggedUser.access_token}`}} ).catch(err => alert(err));
     const copySpacecrafts = [...spacecrafts.data as Spacecraft[]];
     copySpacecrafts.forEach(e => {
       if(e.id === id){
@@ -242,7 +245,7 @@ function App() {
   * Updates missions data in the database
   */
   function updateMission( id:string, update:Mission ){
-    axios.patch(`${API}missions/${id}`,update,{ headers: {"Authorization" : `Bearer ${token}`}} ).catch(err => alert(err));
+    axios.patch(`${API}missions/${id}`,update,{ headers: {"Authorization" : `Bearer ${loggedUser.access_token}`}} ).catch(err => alert(err));
 
     const copyMissions = [...missions.data as Mission[]];
     copyMissions.forEach( (e:Mission) => {
@@ -297,14 +300,15 @@ function App() {
     <Router>
           { isSuccess && <SuccessBar />}
           <Route path='/' exact render={() => 
-            !user ?
-            <LoginPage user={user} onLogin={loginUser} />
+            !loggedUser.access_token ?
+            <LoginPage user={loggedUser} onLogin={loginUser} />
             :
             <Dashboard 
               onLogout={logoutUser} 
               onUpdate={updateUser}
               onSucces={handleSuccesBar}
               missions={missions}
+              user={loggedUser}
             />
             } />
           <Route path='/signup' render={() => <SignupPage onAdd={addUser} />} />
@@ -313,6 +317,7 @@ function App() {
               <AstronautsTable 
                 onAdd={addUser} 
                 users={users.data}
+                user={loggedUser}
                 onDelete={deleteUser}
                 onUpdate={updateUser}
                 onSucces={handleSuccesBar}
@@ -325,6 +330,7 @@ function App() {
               <SpacecraftsTable 
                 onAdd={addSpacecraft} 
                 spacecrafts={spacecrafts.data}
+                user={loggedUser}
                 onDelete={deleteSpacecraft}
                 onDestroy={destroySpacecraft}
                 onUpdate={updateUser}
@@ -336,7 +342,7 @@ function App() {
           <Route path='/makeMission' 
             render={() => 
               <Missions
-                user={user}
+                user={loggedUser}
                 users={users.data}
                 spacecrafts={spacecrafts.data}
                 onUserUpdate={updateUser}

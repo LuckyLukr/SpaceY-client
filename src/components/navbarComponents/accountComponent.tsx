@@ -66,10 +66,8 @@ const useStyles = makeStyles((theme)=>({
       },
 }))
 
-function Account( {onClose, onUpdate, onSucces}:any ) {
-    const user = JSON.parse(localStorage.user)
-    const token = JSON.parse(localStorage.token);
-    const tokenData = jwt_decode(token);
+function Account( {onClose, onUpdate, onSucces, user}:any ) {
+    const tokenData = jwt_decode(user.access_token);
 
     const classes = useStyles();
 
@@ -103,6 +101,7 @@ function Account( {onClose, onUpdate, onSucces}:any ) {
                         onClose={onClose} 
                         onUpdate={onUpdate}
                         onSucces={onSucces}
+                        user={user}
                     />
 
                     <CardMedia image={astronautsImg} title='operator' className={classes.cardMedia} />

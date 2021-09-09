@@ -51,12 +51,10 @@ const useStyles = makeStyles((theme)=>({
     
 }))
 
-function Register( {onAdd, spacecrafts, onDelete, onDestroy }:any ) {
+function Register( {onAdd, spacecrafts, onDelete, onDestroy, user }:any ) {
     const [ appendForm, setAppendForm ] = useState<boolean>(false);
 
     const classes = useStyles();
-
-    const token = JSON.parse(localStorage.token);
 
     const onAppend = () => setAppendForm(!appendForm);
     const handleClickAway = () => setAppendForm(false);
@@ -64,7 +62,7 @@ function Register( {onAdd, spacecrafts, onDelete, onDestroy }:any ) {
     return(
         <div>
         { 
-        token ?
+        user.access_token ?
             <Grid container justify='center'>
                 <Card elevation={0} className={classes.root}>
                     

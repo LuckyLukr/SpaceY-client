@@ -20,7 +20,7 @@ const useStyles = makeStyles(()=>({
     }
 }))
 
-export default function OperatorNavbar( {onLogout, onUpdate, onSucces}:any ) {
+export default function OperatorNavbar( {onLogout, onUpdate, onSucces, user}:any ) {
     const [ appendForm, setAppendForm ] = useState(false);
 
     const classes = useStyles();
@@ -28,13 +28,11 @@ export default function OperatorNavbar( {onLogout, onUpdate, onSucces}:any ) {
     const onAppend = () => setAppendForm(!appendForm);
     const handleClickAway = () => setAppendForm(false);
 
-    const user = JSON.parse(localStorage.user)
-    const token = JSON.parse(localStorage.token);
-    const tokenData = jwt_decode(token);
+    const tokenData = jwt_decode(user.access_token);
 
     return(
         <div>
-            { user.access_token === token &&
+            { user.access_token &&
             <Grid container>
                 <Grid container justify={tokenData.role === 'operator' ? 'space-between' : 'flex-end'} className={classes.appbar}>
 
@@ -78,6 +76,7 @@ export default function OperatorNavbar( {onLogout, onUpdate, onSucces}:any ) {
                                     onClose={handleClickAway} 
                                     onUpdate={onUpdate}
                                     onSucces={onSucces}
+                                    user={user}
                                 />}
 
             </Grid>

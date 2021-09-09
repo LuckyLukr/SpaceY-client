@@ -24,12 +24,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 
-const AccountForm = ({ onSucces, onUpdate }:any) => {
-    const user = JSON.parse(localStorage.user)
-    const token = JSON.parse(localStorage.token);
-    const tokenData = jwt_decode(token);
-
-    console.log(tokenData);
+const AccountForm = ({ onSucces, onUpdate, user }:any) => {
+    const tokenData = jwt_decode(user.access_token);
 
   const [firstName, setFirstName] = useState(user.user.firstName);
   const [lastName, setLastName] = useState(user.user.lastName);
@@ -91,7 +87,7 @@ const AccountForm = ({ onSucces, onUpdate }:any) => {
       };
 
       const updateStorage = {
-        access_token: token,
+        access_token: user.access_token,
         user: {
         _id: user.user._id,
         age: updatedUser.age,

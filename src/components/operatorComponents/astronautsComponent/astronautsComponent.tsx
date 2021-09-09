@@ -6,13 +6,12 @@ import OperatorNavbar from '../../navbarComponents/operatorNavbar';
 import Register from './RegisterComponent';
 import AccessDenied from '../../accessDeniedComponent';
 
-export default function AstronautsTable( { onAdd, users, onDelete, onLogout, onUpdate, onSucces}:any ) {
-    const token = JSON.parse(localStorage.token);
+export default function AstronautsTable( { onAdd, users, onDelete, onLogout, onUpdate, onSucces, user}:any ) {
+    const token = user.access_token;
     let tokenData = {role: ''};
     if(token){
         tokenData = jwt_decode(token);
     }
-
 
     return(
         <div>
@@ -24,7 +23,8 @@ export default function AstronautsTable( { onAdd, users, onDelete, onLogout, onU
                 <OperatorNavbar 
                     onLogout={onLogout} 
                     onUpdate={onUpdate} 
-                    onSucces={onSucces} 
+                    onSucces={onSucces}
+                    user={user}
                 />
                 <Register 
                     onUpdate={onUpdate}

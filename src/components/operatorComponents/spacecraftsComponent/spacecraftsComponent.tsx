@@ -5,8 +5,8 @@ import OperatorNavbar from '../../navbarComponents/operatorNavbar';
 import Register from './RegisterComponent';
 import AccessDenied from '../../accessDeniedComponent';
 
-export default function SpacecraftTable( {onAdd, spacecrafts, onLogout, onDelete, onDestroy, onUpdate, onSucces}:any ) {
-    const token = JSON.parse(localStorage.token);
+export default function SpacecraftTable( {onAdd, spacecrafts, onLogout, onDelete, onDestroy, onUpdate, onSucces, user}:any ) {
+    const token = user.access_token;
     let tokenData = {role: ''};
     if(token){
         tokenData = jwt_decode(token);
@@ -22,9 +22,11 @@ export default function SpacecraftTable( {onAdd, spacecrafts, onLogout, onDelete
             <OperatorNavbar 
                 onLogout={onLogout} 
                 onUpdate={onUpdate}
-                onSucces={onSucces} 
+                onSucces={onSucces}
+                user={user}
             />
-            <Register 
+            <Register
+                user={user}
                 onAdd={onAdd} 
                 spacecrafts={spacecrafts} 
                 onDelete={onDelete} 

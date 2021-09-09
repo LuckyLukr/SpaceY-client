@@ -36,11 +36,6 @@ const useStyles = makeStyles((theme)=>({
 
 function LoginPage( { user, onLogin }:any ) {
 
-    useEffect(() => {
-        localStorage.setItem('user', JSON.stringify(''));
-        localStorage.setItem('token', JSON.stringify(''));
-    },[]);
-
     const classes = useStyles();
     const { i18n } = useTranslation();
     const changeLanguage = (language:string) => i18n.changeLanguage(language);

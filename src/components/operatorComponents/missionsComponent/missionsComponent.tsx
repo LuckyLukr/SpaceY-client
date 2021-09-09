@@ -17,12 +17,11 @@ export default function Missions( {
     addMission,
     missions
 }:any ) {
-    const token = JSON.parse(localStorage.token);
+    const token = user.access_token;
     let tokenData = {role: ''};
     if(token){
         tokenData = jwt_decode(token);
     }
-
 
     return(
         <div>
@@ -35,7 +34,8 @@ export default function Missions( {
             <OperatorNavbar 
                 onUserUpdate={onUserUpdate} 
                 onSucces={onSucces} 
-                onLogout={onLogout} 
+                onLogout={onLogout}
+                user={user}
             />
             <MissionMaker
                 user={user}

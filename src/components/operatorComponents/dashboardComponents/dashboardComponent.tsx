@@ -27,24 +27,22 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-export default function Dashboard( {onLogout, onUpdate, onSucces, missions}:any ) {
+export default function Dashboard( {onLogout, onUpdate, onSucces, missions, user}:any ) {
     const classes = useStyles();
-
-    const user = JSON.parse(localStorage.user);
-    const token = JSON.parse(localStorage.token);
-    const tokenData = jwt_decode(token);
+    const tokenData = jwt_decode(user.access_token);
 
     return(
         <div>
             <UnderConstruction />
             <Navbar />
             { 
-                user.access_token === token ?
+                user.access_token ?
             <>
             <OperatorNavbar 
                 onLogout={onLogout} 
                 onUpdate={onUpdate} 
-                onSucces={onSucces} 
+                onSucces={onSucces}
+                user={user}
             />
             <Grid container direction='column' justify='space-evenly' alignItems='center'>  
                 
