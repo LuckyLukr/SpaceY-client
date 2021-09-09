@@ -20,13 +20,18 @@ function App() {
   const [ isSuccess, setIsSuccess ] = useState<boolean>(false);
   const [ loggedUser, setLoggedUser ] = useState<UserWithToken>({} as UserWithToken);
   const [ error, setError ] = useState<boolean>(false);
-  const token = JSON.parse(localStorage.user).access_token;
+
+  let token = null;
+  if(localStorage.user){
+    token = JSON.parse(localStorage.user).access_token;
+  }
+ 
   const users = useData<User>(API + "users", token);
   const spacecrafts = useData<Spacecraft>(API + "spacecrafts", token);
   const missions = useData<Mission>(API + "missions", token);
 
   useEffect(() => {
-    setLoggedUser(JSON.parse(localStorage.user));
+      setLoggedUser(JSON.parse(localStorage.user));
   }, []);
 
   useEffect(() => {
@@ -49,6 +54,7 @@ function App() {
     const getUser = async () => {
       try{
         const result = await fetchUser();
+        console.log(result);
         localStorage.setItem('user', JSON.stringify(result));
         setLoggedUser(result);
 
@@ -65,8 +71,7 @@ function App() {
   */
   const logoutUser = () => {
     localStorage.clear();
-    localStorage.setItem('user', JSON.stringify(''));
-    localStorage.setItem('token', JSON.stringify(''));
+    localStorage.setItem('user', JSON.stringify({}));
     window.open('/', '_self');
   };
   
