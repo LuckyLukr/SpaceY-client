@@ -27,7 +27,14 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-export default function Dashboard( {onLogout, onUpdate, onSucces, missions, user}:any ) {
+export default function Dashboard( {
+    onLogout, 
+    onUpdate, 
+    onSucces, 
+    missions, 
+    user,
+    onMissionUpdate
+}:any ) {
     const classes = useStyles();
     const tokenData = jwt_decode(user.access_token);
 
@@ -49,7 +56,7 @@ export default function Dashboard( {onLogout, onUpdate, onSucces, missions, user
                 <Grid container justify='space-between' alignItems='center' >
                     {
                         tokenData.role === 'operator' ? 
-                            <OperatorDashboard missions={missions} />
+                            <OperatorDashboard missions={missions} onMissionUpdate={onMissionUpdate} />
                         :
                             <AstronautDashboard />
                     }

@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-function MissionNamer( {onNameChange, user, missions}:any ) {
+function MissionNamer( {onNameChange, user, missions, onMissionUpdate}:any ) {
     const [ name, setName ] = useState<string>(String);
 
     const classes = useStyles();
@@ -78,7 +78,7 @@ function MissionNamer( {onNameChange, user, missions}:any ) {
                             Start planning
                         </Button>
                 }
-            <OperatorDashboard missions={missions}/>
+            <OperatorDashboard missions={missions} onMissionUpdate={onMissionUpdate}/>
         </Grid>
     )
 }

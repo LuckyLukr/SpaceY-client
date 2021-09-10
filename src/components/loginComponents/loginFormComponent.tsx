@@ -9,12 +9,11 @@ import {
 import sha1 from 'js-sha1';
 
 import { useStyles } from './styles';
-import logo from '../../images/Y_white.png';
 import { useTranslation } from 'react-i18next';
 
 
 
-export default function LogIn( {onLogin}:any ) {
+export default function LogIn( {onLogin, error, clearError}:any ) {
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
     const classes = useStyles();
@@ -22,29 +21,24 @@ export default function LogIn( {onLogin}:any ) {
 
     const handleEmailChange = (e:any) => {
         e.preventDefault();
+        clearError()
         setEmail(e.target.value);
     }
   
     const handlePasswordChange = (e:any) => {
         e.preventDefault();
+        clearError()
         setPassword(e.target.value);
     }
     
-    const handleSubmit = () => {
+    const handleSubmit = (e:any) => {
+        e.preventDefault();
         const hasshedPass = sha1(password);
         onLogin(email, hasshedPass);
     }
 
     return (
-        <div className={classes.root}>
-            <Grid container justify='center' alignItems='center' >
-                <Typography variant='h1' className={classes.headerTypo}>SPACE</Typography>
-                <img className={classes.yImg} src={logo} alt='Ylogo' />
-            </Grid>
-            <Typography variant='caption' className={classes.subTypo} >{t('subtitle')}</Typography>
-
-            <div className={classes.paper}>
-                <form className={classes.form} onSubmit={handleSubmit} >
+                <form className={classes.form} onSubmit={handleSubmit} >   
                     <TextField
                         value={email}
                         onChange={handleEmailChange}
@@ -56,6 +50,7 @@ export default function LogIn( {onLogin}:any ) {
                         label={t('emailAdress')}
                         autoComplete="email"
                         autoFocus
+                        error={error}
                     />
                     <TextField
                         onChange={handlePasswordChange}
@@ -65,7 +60,11 @@ export default function LogIn( {onLogin}:any ) {
                         label={t('password')}
                         type="password"
                         id="password"
+                        error={error}
                     />
+
+                    {error && <Typography align='center' color='error'>Wrong email or password</Typography>}
+
                     <Button
                         type="submit"
                         variant="contained"
@@ -91,7 +90,5 @@ export default function LogIn( {onLogin}:any ) {
 
                     </Grid>
                 </form>
-            </div>
-        </div>
     );
 }

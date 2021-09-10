@@ -1,10 +1,16 @@
+import { useState } from "react";
 import { 
     Grid,
     Paper,
     Typography,
     makeStyles,
+    Fab,
+    TextField,
+    InputAdornment,
+    Tooltip
 } from "@material-ui/core";
-import { useState } from "react";
+import RefreshIcon from '@material-ui/icons/Refresh';
+import SearchIcon from '@material-ui/icons/Search';
 
 import { Mission } from "../../../types";
 import FormControlGroup from "./formControlGroup";
@@ -20,11 +26,34 @@ const useStyles = makeStyles(() => ({
     },
     missionContainer: {
         padding: '5px',
+    },
+    fabButton: {
+        backgroundColor: '#fbfbfb',
+        '&:hover': {
+            '& $fabIcon': {
+                animation: '$rotation 1s cubic-bezier(0.13, 0.41, 0.54, 1.31)',
+            },
+        }
+    },
+    fabIcon: {
+
+    },
+    "@keyframes rotation": {
+        '0%': {
+          transform:'rotate(0deg)',
+        },
+        '100%': {
+          transform:'rotate(360deg)',
+        },
+    },
+    filterGroup: {
+        width: '70vw'
     }
 }))
 
-export default function OperatorDashboard({missions}:any) {
+export default function OperatorDashboard({missions, onMissionUpdate}:any) {
     const [ filter, setFilter ] = useState<'all' | 'failed' | 'success' | 'progress'>('all');
+    const [ name, setName ] = useState<string>('');
 
     const classes = useStyles();
 
@@ -41,26 +70,51 @@ export default function OperatorDashboard({missions}:any) {
         }
     }
 
-    function handleAll() {
-        setFilter('all');
+    function filterMissionName():Mission[] {
+        return filterMissions().filter( (e:Mission) => e.name.toLocaleLowerCase().includes(name.toLocaleLowerCase()));
     }
 
-    function handleSuccess() {
-        setFilter('success');
-    }
+    const handleAll = () => setFilter('all');
 
-    function handleFailed() {
-        setFilter('failed');
-    }
+    const handleSuccess = () => setFilter('success');
 
-    function handleInProgress() {
-        setFilter('progress');
-    }
+    const handleFailed = () => setFilter('failed');
+
+    const handleInProgress = () => setFilter('progress');
+
+    const handleNameChange = (e:string) => setName(e);
 
     return(
         <Grid container justify='center' className={classes.root}>
-            <Grid container direction='column' alignItems='center' alignContent='center'>
+            <Grid container direction='column' alignItems='center' alignContent='center' className={classes.filterGroup}>
                 <Typography gutterBottom variant='h6' color='textSecondary'>Missions overview</Typography>
+
+                <Grid container justify='space-between' alignItems='center'>
+                    <TextField 
+                        id='name'
+                        type='text'
+                        value={name}
+                        placeholder='Search by name'
+                        onChange={(e)=> handleNameChange(e.target.value)}
+                        InputProps={{
+                            startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon color='action' />
+                            </InputAdornment>
+                            ),
+                        }}
+                    />
+                    <Tooltip title='Refresh' aria-label='refresh'>
+                        <Fab 
+                            className={classes.fabButton}
+                            size='small' 
+                            color='default' 
+                            onClick={()=> onMissionUpdate()}
+                        >
+                            <RefreshIcon className={classes.fabIcon}/>
+                        </Fab>
+                    </Tooltip>
+                </Grid>
 
                 <FormControlGroup 
                     filter={filter}
@@ -73,7 +127,7 @@ export default function OperatorDashboard({missions}:any) {
 
             <Grid container justify='center' className={classes.missionsDashboard}>
                 {
-                    filterMissions().map((e:Mission) => 
+                    filterMissionName().map((e:Mission) => 
                             <Paper elevation={4} key={e.id} className={classes.missionContainer}>
                                 <Typography>Mission: {e.name}</Typography>
                                 {

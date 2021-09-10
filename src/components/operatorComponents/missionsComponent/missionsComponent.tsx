@@ -15,7 +15,8 @@ export default function Missions( {
     onSucces, 
     onLogout, 
     addMission,
-    missions
+    missions,
+    onMissionUpdate
 }:any ) {
     const token = user.access_token;
     let tokenData = {role: ''};
@@ -43,6 +44,7 @@ export default function Missions( {
                 spacecrafts={spacecrafts} 
                 addMission={addMission}
                 onUserUpdate={onUserUpdate}
+                onMissionUpdate={onMissionUpdate}
                 onSpacecraftUpdate={onSpacecraftUpdate}
                 missions={missions}
             />

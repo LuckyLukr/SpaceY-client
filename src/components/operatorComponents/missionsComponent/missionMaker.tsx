@@ -67,7 +67,8 @@ export default function MissionMaker( {
     addMission,
     onUserUpdate,
     onSpacecraftUpdate,
-    missions
+    missions,
+    onMissionUpdate
 }:any ) {
     const [ name, setName ] = useState<string>(String);
     const [ spacecraft, setSpacecraft ] = useState<Spacecraft>(Object);
@@ -140,6 +141,7 @@ export default function MissionMaker( {
                         user={user}
                         onNameChange={handleNameChange}
                         missions={missions}
+                        onMissionUpdate={onMissionUpdate}
                     />
                 }
 

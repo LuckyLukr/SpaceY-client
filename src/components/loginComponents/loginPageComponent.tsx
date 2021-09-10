@@ -1,43 +1,21 @@
-import React, { useEffect } from 'react';
 import { Grid,
-         makeStyles,
          Card,
          CardMedia,
          ButtonGroup,
-         Button    
+         Button,
+         Typography
 } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
+import { useStyles } from './styles';
 
 import LogIn from './loginFormComponent';
 import SpaceOrbitImg from '../../images/SpaceOrbit.jpeg';
+import logo from '../../images/Y_white.png';
 
-const useStyles = makeStyles((theme)=>({
-    headerImg: {
-        width: '100vw',
-        height: '100vh',
-    },
-    headerFilter: {
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#0000001a',
-    },
-    buttonFlex: {
-      flexWrap: 'wrap',
-      color: 'white',
-      zIndex: 2,
-      position: 'absolute',
-      top: 0,
-      right: 0
-    },
-    button: {
-      color: 'white',
-    },
-}))
-
-function LoginPage( { user, onLogin }:any ) {
+function LoginPage( { user, error, onLogin, clearError }:any ) {
 
     const classes = useStyles();
-    const { i18n } = useTranslation();
+    const { i18n, t } = useTranslation();
     const changeLanguage = (language:string) => i18n.changeLanguage(language);
 
     return(
@@ -53,7 +31,22 @@ function LoginPage( { user, onLogin }:any ) {
                     </ButtonGroup>
                     <Grid className={classes.headerFilter} container direction='column' justify='center' alignItems='center' >
                         
-                        <LogIn user={user} onLogin={onLogin} />
+                    <div className={classes.root}>
+                        <Grid container justify='center' alignItems='center' >
+                            <Typography variant='h1' className={classes.headerTypo}>SPACE</Typography>
+                            <img className={classes.yImg} src={logo} alt='Ylogo' />
+                        </Grid>
+                        <Typography variant='caption' className={classes.subTypo} >{t('subtitle')}</Typography>
+
+                        <div className={classes.paper}>
+                            <LogIn 
+                                user={user} 
+                                error={error} 
+                                clearError={clearError}
+                                onLogin={onLogin}
+                            />
+                        </div>
+                    </div>
 
                     </Grid>
                 </CardMedia>

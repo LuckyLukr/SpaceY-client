@@ -65,7 +65,7 @@ export default function MissionLauncher({
 
             {
                 launching ?
-                <Typography variant='h3' color='error' > LAUNCHING </Typography>
+                <Typography variant='h3' color='error' > LAUNCHING  </Typography>
                 :
                 <Grid>
                     <p>Destination: {mission.destination}</p>

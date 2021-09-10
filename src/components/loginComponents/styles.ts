@@ -89,5 +89,25 @@ export const useStyles = makeStyles((theme) => ({
         transform:'rotate3d(0, 1, 0, 359deg)',
         opacity: 1,
       },
-    }
+    },
+    headerImg: {
+      width: '100vw',
+      height: '100vh',
+    },
+    headerFilter: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#0000001a',
+    },
+    buttonFlex: {
+      flexWrap: 'wrap',
+      color: 'white',
+      zIndex: 2,
+      position: 'absolute',
+      top: 0,
+      right: 0
+    },
+    button: {
+      color: 'white',
+    },
   }));

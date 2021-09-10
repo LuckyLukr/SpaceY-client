@@ -1,8 +1,16 @@
 import {
     FormGroup,
     FormControlLabel,
-    Checkbox
+    Checkbox,
+    makeStyles
 } from "@material-ui/core";
+
+const useStyles = makeStyles(() => ({
+    formGroup: {
+        width: '100%',
+        justifyContent: 'space-between'
+    }
+}))
 
 export default function FormControlGroup( {
     filter,
@@ -12,8 +20,10 @@ export default function FormControlGroup( {
     onInProgress
 }:any) {
 
+    const classes = useStyles();
+
     return(
-            <FormGroup row>
+            <FormGroup row className={classes.formGroup}>
                 <FormControlLabel
                     control={
                     <Checkbox

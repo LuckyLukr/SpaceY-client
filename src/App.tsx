@@ -25,18 +25,28 @@ function App() {
   if(localStorage.user){
     token = JSON.parse(localStorage.user).access_token;
   }
- 
+
   const users = useData<User>(API + "users", token);
   const spacecrafts = useData<Spacecraft>(API + "spacecrafts", token);
   const missions = useData<Mission>(API + "missions", token);
 
   useEffect(() => {
+      loadUserStorage();
       setLoggedUser(JSON.parse(localStorage.user));
   }, []);
 
   useEffect(() => {
     localStorage.setItem('user', JSON.stringify(loggedUser));
   }, [loggedUser]);
+
+  const loadUserStorage = () => {
+    if(!localStorage.user){
+      return localStorage.setItem('user', JSON.stringify({}));
+    }
+    return
+  }
+
+  const clearError = () => setError(false);
 
   /**
   * Takes the given data (email and password) and returns the user from the database based on that data. 
@@ -54,7 +64,6 @@ function App() {
     const getUser = async () => {
       try{
         const result = await fetchUser();
-        console.log(result);
         localStorage.setItem('user', JSON.stringify(result));
         setLoggedUser(result);
 
@@ -172,7 +181,7 @@ function App() {
       landingCombustion,
       fridge,
     };
-    const data = await axios.post(API + 'spacecrafts', newSpacecraft).catch(err => console.log(err));
+    const data = await axios.post(API + 'spacecrafts', newSpacecraft,{ headers: {"Authorization" : `Bearer ${loggedUser.access_token}`}}).catch(err => console.log(err));
     if (data) {
       const spacecraft = JSON.parse(data.config.data);
       const spacecraftWithID = { id: data.data.id, ...spacecraft};
@@ -212,7 +221,7 @@ function App() {
   * Updates spacecrafts data (status: Destroyed) in the database
   */
   function destroySpacecraft( id:string ) {
-    axios.patch(`${API}spacecrafts/${id}`, {destroyed: true, status: 'Destroyed'}).catch(err => alert(err));
+    axios.patch(`${API}spacecrafts/${id}`, {destroyed: true, status: 'Destroyed'},{ headers: {"Authorization" : `Bearer ${loggedUser.access_token}`}}).catch(err => alert(err));
 
     const update = [...spacecrafts.data as Spacecraft[]];
     update.forEach(e => {
@@ -238,7 +247,7 @@ function App() {
       distance: e.distance,
       time: e.time
     };
-    const data = await axios.post(API + 'missions', newMission).catch(err => console.log(err));
+    const data = await axios.post(API + 'missions', newMission,{ headers: {"Authorization" : `Bearer ${loggedUser.access_token}`}}).catch(err => console.log(err));
     if (data) {
       const mission = JSON.parse(data.config.data);
       const missionWithID = { id: data.data.id, ...mission};
@@ -269,8 +278,6 @@ function App() {
     setIsSuccess(true);
     setTimeout(()=> { setIsSuccess(false); }, 5000);
   }
-
-
 
   function updateMissionStatus(){
     const newDate = new Date().setTime(new Date().getTime());
@@ -306,12 +313,13 @@ function App() {
           { isSuccess && <SuccessBar />}
           <Route path='/' exact render={() => 
             !loggedUser.access_token ?
-            <LoginPage user={loggedUser} onLogin={loginUser} />
+            <LoginPage user={loggedUser} error={error} clearError={clearError} onLogin={loginUser} />
             :
             <Dashboard 
               onLogout={logoutUser} 
               onUpdate={updateUser}
               onSucces={handleSuccesBar}
+              onMissionUpdate={updateMissionStatus}
               missions={missions}
               user={loggedUser}
             />
@@ -352,6 +360,7 @@ function App() {
                 spacecrafts={spacecrafts.data}
                 onUserUpdate={updateUser}
                 onSpacecraftUpdate={updateSpacecraft}
+                onMissionUpdate={updateMissionStatus}
                 onSucces={handleSuccesBar}
                 onLogout={logoutUser} 
                 addMission={addMission}
