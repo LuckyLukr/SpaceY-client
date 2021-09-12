@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme)=>({
         transition: '1s',
         textAlign: 'center',
         zIndex: 1,
+        animation: '$showUp 2.5s',
     },
     addFormCard: {
         height: '83%',
@@ -48,7 +49,15 @@ const useStyles = makeStyles((theme)=>({
         borderRadius: '50%',
         minWidth: '40px',
         height: '40px',
-    }
+    },
+    "@keyframes showUp": {
+        '0%': {
+          marginRight: '-300%',
+        },
+        '100%': {
+          marginRight: '0%',
+        },
+    },
 }))
 
 

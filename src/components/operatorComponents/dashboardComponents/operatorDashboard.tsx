@@ -23,9 +23,12 @@ const useStyles = makeStyles(() => ({
     missionsDashboard: {
         gap: '4px',
         width: '95vw',
+        height: '300px',
+        overflow: 'scroll'
     },
     missionContainer: {
         padding: '5px',
+        margin: '5px'
     },
     fabButton: {
         backgroundColor: '#fbfbfb',

@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme)=>({
         transition: '1s',
         textAlign: 'center',
         zIndex: 1,
+        animation: '$showUp 2.5s',
     },
     addBtn: {
         margin: '10px 0px',
@@ -47,8 +48,18 @@ const useStyles = makeStyles((theme)=>({
         borderRadius: '50%',
         minWidth: '40px',
         height: '40px',
-    }
-    
+    },
+    titleContainer: {
+        overflow: 'hidden',
+    },
+    "@keyframes showUp": {
+        '0%': {
+          marginRight: '-300%',
+        },
+        '100%': {
+          marginRight: '0%',
+        },
+    },
 }))
 
 function Register( {onAdd, spacecrafts, onDelete, onDestroy, user }:any ) {
@@ -63,10 +74,10 @@ function Register( {onAdd, spacecrafts, onDelete, onDestroy, user }:any ) {
         <div>
         { 
         user.access_token ?
-            <Grid container justify='center'>
+            <Grid container justify='center' style={{overflow: 'hidden'}} >
                 <Card elevation={0} className={classes.root}>
                     
-                    <Grid container alignItems='center' justify='space-between' >
+                    <Grid container alignItems='center' justify='space-between' className={classes.titleContainer} >
                         <Button onClick={() => onAppend()} className={classes.addBtn} variant='outlined' color='primary' >
                             Add
                         </Button>

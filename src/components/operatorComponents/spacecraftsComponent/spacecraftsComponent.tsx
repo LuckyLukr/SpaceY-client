@@ -3,6 +3,7 @@ import jwt_decode from 'jwt-decode';
 import Navbar from '../../navbarComponent';
 import OperatorNavbar from '../../navbarComponents/operatorNavbar';
 import Register from './RegisterComponent';
+import SpacecraftOverview from './spacecraftsOverviewComponent';
 import AccessDenied from '../../accessDeniedComponent';
 
 export default function SpacecraftTable( {onAdd, spacecrafts, onLogout, onDelete, onDestroy, onUpdate, onSucces, user}:any ) {
@@ -32,6 +33,7 @@ export default function SpacecraftTable( {onAdd, spacecrafts, onLogout, onDelete
                 onDelete={onDelete} 
                 onDestroy={onDestroy} 
             />
+            <SpacecraftOverview />
         </>
             :
             <AccessDenied />

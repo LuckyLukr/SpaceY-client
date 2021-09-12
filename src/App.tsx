@@ -66,6 +66,7 @@ function App() {
         const result = await fetchUser();
         localStorage.setItem('user', JSON.stringify(result));
         setLoggedUser(result);
+        window.open('/', '_self');
 
       }catch( err:any ){
         setError(true);
