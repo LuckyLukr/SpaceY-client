@@ -24,10 +24,10 @@ const useStyles = makeStyles(() => ({
         height: '60vh',
     },
     logo: {
-        position: 'absolute',
-        width: '550px',
-        opacity: 0.04,
-        marginTop: '10vh',
+        position: 'fixed',
+        width: '60vw',
+        opacity: 0.03,
+        marginTop: '15vh',
         zIndex: -1,
     },
     grabContainer: {

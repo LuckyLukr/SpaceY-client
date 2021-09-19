@@ -20,7 +20,8 @@ const useStyles = makeStyles(() => ({
     },
     spacecraftInfo: {
         width: 'max-content',
-        opacity: 0.6
+        opacity: 0.6,
+        textAlign: 'center',
     },
     media: {
         width: '300px',
@@ -33,7 +34,7 @@ const useStyles = makeStyles(() => ({
     title: {
         textAlign: 'center',
         fontSize: '50px',
-        opacity: 0.3,
+        opacity: 0.7,
         fontFamily: 'Zen Dots, cursive',
         marginTop: '30px'
     }

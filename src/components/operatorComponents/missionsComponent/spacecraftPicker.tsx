@@ -6,24 +6,24 @@ import {
     Card,
     CardMedia,
     Fab,
-    Theme
+    Theme,
+    Typography,
+    TextField,
+    InputAdornment
 } from '@material-ui/core';
-
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import AddIcon from '@material-ui/icons/Add';
-import MissionInfo from './missionInfo';
-import astronautsImg from '../../../images/two_astronauts.jpg';
+import SearchIcon from '@material-ui/icons/Search';
 
+import MissionInfo from './missionInfo';
 import { Spacecraft } from '../../../types';
 
+import astronautsImg from '../../../images/two_astronauts_earth.jpg';
+import fastreqImg from '../../../images/fastreq.jpg';
+import falconImg from '../../../images/falcon.jpg';
+import dinastyImg from '../../../images/spacecraft.jpg';
+
 const useStyles = makeStyles((theme: Theme)=>({
-    root: {
-        minHeight: '75vh',
-        padding: '10px',
-        transition: '1s',
-        textAlign: 'center',
-        zIndex: 1,
-    },
     addBtn: {
         margin: '10px 0px',
     },
@@ -31,12 +31,12 @@ const useStyles = makeStyles((theme: Theme)=>({
         [theme.breakpoints.down('xs')]: {
             height: 650,
         },
-        width: '88vw',
+        width: '96vw',
         marginTop: '3vh',
         alignItems: 'center',
         justifyContent: 'space-evenly',
         display: 'flex',
-        flexWrap: 'nowrap',
+        flexWrap: 'wrap',
     },
     closeBtn: {
         borderRadius: '50%',
@@ -55,9 +55,7 @@ const useStyles = makeStyles((theme: Theme)=>({
         margin: '1%',
     },
     backBtn: {
-        position: 'absolute',
-        bottom: '3vh',
-        left: '18vw',
+        margin: '30px',
     },
     buttonGroup: {
         padding: '2%',
@@ -69,8 +67,10 @@ const useStyles = makeStyles((theme: Theme)=>({
         height: '80vh',
         display: 'flex',
         alignItems: 'center',
-        minWidth: '50vw',
+        width: '800px',
+        minWidth: '200px',
         flexDirection: 'column',
+        margin: '30px 0px'
     },
     cardMedia: {
         width: '100%',
@@ -85,48 +85,58 @@ const useStyles = makeStyles((theme: Theme)=>({
 
 function SpacecraftPicker( {spacecrafts, onSpacecraftChange, name, onNameChange, assigned}:any ) {
     const [ target, setTarget ] = useState<Spacecraft>(Object);
+    const [ filterName, setFilterName ] = useState<string>('');
 
     const classes = useStyles();
 
     const handleTargetChange = (e:Spacecraft) => setTarget(e);
+    const handleNameChange = (e:string) => setFilterName(e);
+
+    const filterSpacecraftName = () => spacecrafts.filter( (e:Spacecraft) => e.name.toLowerCase().includes(filterName.toLowerCase()));
+    
 
     return(
+        <Grid container direction='column' alignItems='center'>
+                <Typography style={{marginTop: '15px'}} variant='h5' color='textSecondary' gutterBottom >Pick your spacecraft</Typography>
+                <TextField 
+                    id='name'
+                    type='text'
+                    value={filterName}
+                    placeholder='Search by name'
+                    onChange={(e)=> handleNameChange(e.target.value)}
+                    InputProps={{
+                        startAdornment: (
+                        <InputAdornment position="start">
+                            <SearchIcon color='action' />
+                        </InputAdornment>
+                        ),
+                    }}
+                />
+ 
             <Grid container className={classes.addFormCard}>
-
-                <MissionInfo assigned={assigned} target={target} name={name} />
-
-                <Button
-                    className={classes.backBtn}
-                    variant='outlined' 
-                    color='primary' 
-                    onClick={() => onNameChange('')}
-                >
-                    <ArrowBackIosIcon />Back
-                </Button>
-
                 <Card className={classes.picker} >
-                    <Grid container direction='column' className={classes.buttonGroup}>
+                    <Grid container direction='column' justify='center' className={classes.buttonGroup}>
                         {
-                            spacecrafts.map((e:Spacecraft) => (
-                                <Grid key={e.id} >
-                                    {
+                            filterSpacecraftName().map((e:Spacecraft) => (
                                         (e.status === 'Destroyed' || e.status.includes('on mission')) ?
-                                            <Button 
+                                            <Button
+                                                key={e.id}
                                                 className={classes.btn} 
                                                 disabled
+                                                variant='outlined'
                                             >
                                                 {e.name} - {e.type}
                                             </Button>
                                         :
-                                            <Button 
+                                            <Button
+                                                key={e.id}
                                                 className={classes.btn} 
                                                 color='primary'
+                                                variant='outlined'
                                                 onClick={()=> handleTargetChange(e)}
                                             >
                                                 {e.name} - {e.type}
                                             </Button>
-                                    }
-                                </Grid>
                             ))
                         }
                     </Grid>
@@ -150,9 +160,29 @@ function SpacecraftPicker( {spacecrafts, onSpacecraftChange, name, onNameChange,
                             Pick
                         </Fab>
                     }
-                    <CardMedia image={astronautsImg} title='' className={classes.cardMedia} />
+                    {
+                        target.type === 'Fastreq 212' ?
+                            <CardMedia image={fastreqImg} title={target.type} className={classes.cardMedia} />
+                        : (target.type === 'Falcon 20' || target.type === 'Falcon 21') ?
+                            <CardMedia image={falconImg} title={target.type} className={classes.cardMedia} />
+                        : target.type === 'Dinasty 1' ?
+                            <CardMedia image={dinastyImg} title={target.type} className={classes.cardMedia} /> 
+                        :
+                            <CardMedia image={astronautsImg} title={target.type} className={classes.cardMedia} />
+                    }
                 </Card>
+                <MissionInfo assigned={assigned} target={target} name={name} />
+
+                <Button
+                    className={classes.backBtn}
+                    variant='outlined' 
+                    color='primary' 
+                    onClick={() => onNameChange('')}
+                >
+                    <ArrowBackIosIcon />Back
+                </Button>
             </Grid>
+        </Grid>  
     )
 }
 

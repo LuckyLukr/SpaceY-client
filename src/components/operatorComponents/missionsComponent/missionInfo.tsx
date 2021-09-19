@@ -7,10 +7,6 @@ import {
     Grid,
     Tooltip,
 } from '@material-ui/core';
-
-import fastreqImg from '../../../images/fastreq.jpg';
-import falconImg from '../../../images/falcon.jpg';
-import dinastyImg from '../../../images/spacecraft.jpg';
 import astronautLogo from '../../../images/astronaut_logo.jpg'
 
 const HtmlTooltip = withStyles((theme: Theme) => ({
@@ -26,7 +22,8 @@ const HtmlTooltip = withStyles((theme: Theme) => ({
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
         maxWidth: '300px',
-        alignSelf: 'flex-start'
+        alignSelf: 'flex-start',
+        opacity: 0.8
     },
     cardMedia: {
         width: '200px',
@@ -55,17 +52,12 @@ function MissionInfo( { target, name, assigned }:any ) {
 
     return (
         <Grid container direction='column' className={classes.root} alignItems='center' >
-            <Typography gutterBottom variant='h5' >
-                Mission: {name}
+            <Typography gutterBottom variant='h4' align='center' style={{fontFamily: 'Zen Dots, cursive'}} >
+                Mission: {name.toUpperCase()}
             </Typography>
-            <Typography variant='h6' align='center' >
+            <Typography variant='h5' align='center' >
                Spacecraft
             </Typography>
-            
-            { target.type === 'Fastreq 212' && <CardMedia image={fastreqImg} title={target.type} className={classes.cardMedia} /> }
-            { (target.type === 'Falcon 20' || target.type === 'Falcon 21') && <CardMedia image={falconImg} title={target.type} className={classes.cardMedia} /> }
-            { target.type === 'Dinasty 1' && <CardMedia image={dinastyImg} title={target.type} className={classes.cardMedia} /> }
-
             <Typography>
                 Name: {target.name}
             </Typography>

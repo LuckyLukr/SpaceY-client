@@ -1,7 +1,7 @@
 import React from 'react';
 import jwt_decode from 'jwt-decode';
 
-import Navbar from '../../navbarComponent';
+import Navbar from '../../navbarComponents/navbarComponent';
 import OperatorNavbar from '../../navbarComponents/operatorNavbar';
 import Register from './RegisterComponent';
 import AccessDenied from '../../accessDeniedComponent';
@@ -15,17 +15,15 @@ export default function AstronautsTable( { onAdd, users, onDelete, onLogout, onU
 
     return(
         <div>
-            <Navbar />
+            <Navbar 
+                onLogout={onLogout} 
+                onUpdate={onUpdate} 
+                onSucces={onSucces}
+                user={user}
+            />
             { 
                 tokenData.role === 'operator'
                 ?
-            <>
-                <OperatorNavbar 
-                    onLogout={onLogout} 
-                    onUpdate={onUpdate} 
-                    onSucces={onSucces}
-                    user={user}
-                />
                 <Register 
                     onUpdate={onUpdate}
                     onAdd={onAdd} 
@@ -33,7 +31,6 @@ export default function AstronautsTable( { onAdd, users, onDelete, onLogout, onU
                     onDelete={onDelete} 
                     onSucces={onSucces} 
                 />
-            </>
                 :
                 <AccessDenied />
             }

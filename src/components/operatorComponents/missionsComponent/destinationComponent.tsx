@@ -138,11 +138,11 @@ export default function DestinationContainer( {
                         {
                             (caclApetit() / 1000) > spacecraft.fridge ? 
                             <Typography color='error' variant='h6'>
-                                Food eaten: {calcCrewApetit()}
+                                Food needed: {calcCrewApetit()}
                             </Typography>
                             :
                             <Typography>
-                                Food eaten: {calcCrewApetit()}
+                                Food needed: {calcCrewApetit()}
                             </Typography>
                         }
                         <Typography>

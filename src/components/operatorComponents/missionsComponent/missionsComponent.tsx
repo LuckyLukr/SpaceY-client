@@ -1,6 +1,6 @@
 import jwt_decode from 'jwt-decode';
 
-import Navbar from '../../navbarComponent';
+import Navbar from '../../navbarComponents/navbarComponent';
 import OperatorNavbar from '../../navbarComponents/operatorNavbar';
 import MissionMaker from './missionMaker';
 import AccessDenied from '../../accessDeniedComponent';
@@ -27,17 +27,15 @@ export default function Missions( {
     return(
         <div>
         <UnderConstruction />
-        <Navbar />
+        <Navbar 
+                onLogout={onLogout} 
+                onUpdate={onUserUpdate} 
+                onSucces={onSucces}
+                user={user}
+            />
         { 
             tokenData.role === 'operator'
             ?
-        <>
-            <OperatorNavbar 
-                onUserUpdate={onUserUpdate} 
-                onSucces={onSucces} 
-                onLogout={onLogout}
-                user={user}
-            />
             <MissionMaker
                 user={user}
                 users={users} 
@@ -48,7 +46,6 @@ export default function Missions( {
                 onSpacecraftUpdate={onSpacecraftUpdate}
                 missions={missions}
             />
-        </>
             :
             <AccessDenied />
         }

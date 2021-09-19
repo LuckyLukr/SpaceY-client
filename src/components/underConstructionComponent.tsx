@@ -28,10 +28,10 @@ const useStyles = makeStyles(() => ({
     },
     "@keyframes move": {
         '0%': {
-            marginLeft: '-150%',
+            marginLeft: '0%',
         },
         '100%': {
-            marginLeft: '0%',
+            marginLeft: '-150%',
         },
     },
 }))
@@ -43,7 +43,7 @@ export default function UnderConstruction() {
         <Grid className={classes.stripes}>
             <div className={classes.stripeTextContainer}>
                 <Typography className={classes.stripeText} >
-                    ! UNDER CONSTRUCTION !
+                    UNDER CONSTRUCTION
                 </Typography>
             </div>
         </Grid>

@@ -4,7 +4,8 @@ import {
     Button,
     TextField,
     Typography,
-    makeStyles
+    makeStyles,
+    Divider
 } from '@material-ui/core';
 
 import OperatorDashboard from '../dashboardComponents/operatorDashboard';
@@ -13,7 +14,12 @@ import { Mission } from '../../../types';
 const useStyles = makeStyles(() => ({
     missionMakerContainer: {
         marginTop: '40px',
-    }
+        gap: '20px',
+    },
+    divider: {
+        width: '80vw',
+        marginTop: '60px',
+    },
 }))
 
 function MissionNamer( {onNameChange, user, missions, onMissionUpdate}:any ) {
@@ -26,11 +32,9 @@ function MissionNamer( {onNameChange, user, missions, onMissionUpdate}:any ) {
     const existingNames = missions.data.map((e:Mission) => e.name);
 
     return(
-        <Grid container direction='column' alignItems='center' spacing={4} className={classes.missionMakerContainer} >
-            <Typography>
-                Welcome to misson maker {user.user.firstName}
-            </Typography>
-            <Typography>
+        <Grid container direction='column' alignItems='center' className={classes.missionMakerContainer} >
+            <Typography align='center' variant='h6' color='textSecondary' >
+                Welcome to misson maker {user.user.firstName} <br />
                 Enter a name for your mission and start planning
             </Typography>
                 <Grid item xs={12} sm={6}>
@@ -78,6 +82,7 @@ function MissionNamer( {onNameChange, user, missions, onMissionUpdate}:any ) {
                             Start planning
                         </Button>
                 }
+            <Divider variant='middle' className={classes.divider} />
             <OperatorDashboard missions={missions} onMissionUpdate={onMissionUpdate}/>
         </Grid>
     )

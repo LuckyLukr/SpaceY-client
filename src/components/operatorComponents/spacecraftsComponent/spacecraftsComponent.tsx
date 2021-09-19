@@ -1,6 +1,6 @@
 import jwt_decode from 'jwt-decode';
 
-import Navbar from '../../navbarComponent';
+import Navbar from '../../navbarComponents/navbarComponent';
 import OperatorNavbar from '../../navbarComponents/operatorNavbar';
 import Register from './RegisterComponent';
 import SpacecraftOverview from './spacecraftsOverviewComponent';
@@ -15,26 +15,25 @@ export default function SpacecraftTable( {onAdd, spacecrafts, onLogout, onDelete
 
     return(
         <div>
-        <Navbar />
-        { 
-            tokenData.role === 'operator'
-            ?
-        <>
-            <OperatorNavbar 
+        <Navbar 
                 onLogout={onLogout} 
-                onUpdate={onUpdate}
+                onUpdate={onUpdate} 
                 onSucces={onSucces}
                 user={user}
             />
-            <Register
-                user={user}
-                onAdd={onAdd} 
-                spacecrafts={spacecrafts} 
-                onDelete={onDelete} 
-                onDestroy={onDestroy} 
-            />
-            <SpacecraftOverview />
-        </>
+        { 
+            tokenData.role === 'operator'
+            ?
+            <>
+                <Register
+                    user={user}
+                    onAdd={onAdd} 
+                    spacecrafts={spacecrafts} 
+                    onDelete={onDelete} 
+                    onDestroy={onDestroy} 
+                />
+                <SpacecraftOverview />
+            </>
             :
             <AccessDenied />
         }

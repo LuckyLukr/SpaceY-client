@@ -23,15 +23,18 @@ const useStyles = makeStyles(() => ({
     missionsDashboard: {
         gap: '4px',
         width: '95vw',
-        height: '300px',
-        overflow: 'scroll'
+        height: '175px',
+        overflowX: 'scroll',
+        flexDirection: 'column',
+        textAlign: 'center',
     },
     missionContainer: {
         padding: '5px',
         margin: '5px'
     },
     fabButton: {
-        backgroundColor: '#fbfbfb',
+        boxShadow: '0px 0px 0px rgb(0 0 0 / 0%)',
+        backgroundColor: 'transparent',
         '&:hover': {
             '& $fabIcon': {
                 animation: '$rotation 1s cubic-bezier(0.13, 0.41, 0.54, 1.31)',
@@ -39,7 +42,7 @@ const useStyles = makeStyles(() => ({
         }
     },
     fabIcon: {
-
+    
     },
     "@keyframes rotation": {
         '0%': {
@@ -74,7 +77,7 @@ export default function OperatorDashboard({missions, onMissionUpdate}:any) {
     }
 
     function filterMissionName():Mission[] {
-        return filterMissions().filter( (e:Mission) => e.name.toLocaleLowerCase().includes(name.toLocaleLowerCase()));
+        return filterMissions().filter( (e:Mission) => e.name.toLowerCase().includes(name.toLowerCase()));
     }
 
     const handleAll = () => setFilter('all');
@@ -128,7 +131,7 @@ export default function OperatorDashboard({missions, onMissionUpdate}:any) {
                 />
             </Grid>
 
-            <Grid container justify='center' className={classes.missionsDashboard}>
+            <Grid container justify='center' className={classes.missionsDashboard} id='missionsContainer'>
                 {
                     filterMissionName().map((e:Mission) => 
                             <Paper elevation={4} key={e.id} className={classes.missionContainer}>

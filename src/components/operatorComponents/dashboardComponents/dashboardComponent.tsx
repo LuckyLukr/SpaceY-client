@@ -5,8 +5,7 @@ import {
     makeStyles
 } from '@material-ui/core';
 
-import Navbar from '../../navbarComponent';
-import OperatorNavbar from '../../navbarComponents/operatorNavbar';
+import Navbar from '../../navbarComponents/navbarComponent';
 import AccessDenied from '../../accessDeniedComponent';
 import OperatorDashboard from './operatorDashboard';
 import AstronautDashboard from './astronautDashboard';
@@ -41,16 +40,14 @@ export default function Dashboard( {
     return(
         <div>
             <UnderConstruction />
-            <Navbar />
-            { 
-                user.access_token ?
-            <>
-            <OperatorNavbar 
+            <Navbar 
                 onLogout={onLogout} 
                 onUpdate={onUpdate} 
                 onSucces={onSucces}
                 user={user}
             />
+            { 
+                user.access_token ?
             <Grid container direction='column' justify='space-evenly' alignItems='center'>  
                 
                 <Grid container justify='space-between' alignItems='center' >
@@ -73,7 +70,6 @@ export default function Dashboard( {
                     </Grid>
                 </Grid>
             </Grid>
-            </>
             :
             <AccessDenied />
             }
