@@ -124,7 +124,6 @@ function App() {
           loginUser(operatorWithID.email, sha1(operatorWithID.password));
         }, 1000);
       } else {
-        console.log(operatorWithID.role + ' registered!');
         users.setData([ ...users.data, operatorWithID]);
       }
     }catch( err:any ){
