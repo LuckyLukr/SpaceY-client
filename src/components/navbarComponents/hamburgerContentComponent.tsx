@@ -22,6 +22,7 @@ const useStyles = makeStyles(() => ({
         left: 0,
         top: 0,
         width: '100%',
+        height: '100%',
         color: 'white'
     },
     headerText: {
@@ -38,7 +39,6 @@ const useStyles = makeStyles(() => ({
         display: 'flex', 
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: '-43px',
         marginBottom: '20px'
     },
     button: {
@@ -46,9 +46,6 @@ const useStyles = makeStyles(() => ({
     },
     closeButton: {
         color: 'white',
-        marginRight: '25px',
-        marginTop: '25px',
-        alignSelf: 'flex-end'
     },
     menuButton: {
         color: 'white',
@@ -63,7 +60,10 @@ const useStyles = makeStyles(() => ({
     cardMedia: {
         width: '100%',
         height: '300px',
-        marginTop: '-150px'
+        marginTop: '-150px',
+        position: 'absolute',
+        bottom: 0,
+        zIndex: -1
     }
 }))
 
@@ -87,12 +87,15 @@ export default function HamburgerContent( {onAppend, onLogout, onUpdate, onSucce
                                 user={user}
                              />
             }
-            <Button className={classes.closeButton} onClick={() => onAppend()}>
-                <CloseIcon fontSize='large' />
-            </Button>
-            <Grid item className={classes.header} >
-                <Typography variant='h4' className={classes.headerText}>SPACE</Typography>
-                <img className={classes.yImg} src={logo} alt='Y' />
+            <Grid container justify='space-between' alignItems='center'>
+
+                <Grid item className={classes.header} >
+                    <Typography variant='h4' className={classes.headerText}>SPACE</Typography>
+                    <img className={classes.yImg} src={logo} alt='Y' />
+                </Grid>
+                <Button className={classes.closeButton} onClick={() => onAppend()}>
+                    <CloseIcon fontSize='large' />
+                </Button>
             </Grid>
             <Grid container direction='column' justify='center' alignItems='center'>
 

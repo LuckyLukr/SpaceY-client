@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useData } from './featrues/customHooks/useData';
 import axios from 'axios';
 import './App.css';
+import sha1 from 'js-sha1';
 
 import { User, UserWithToken, Spacecraft, Mission } from './types';
 
@@ -113,11 +114,21 @@ function App() {
       weight, 
       status: 'on Earth'
     };
-    const data = await axios.post(API + 'users', newOperator,{ headers: {"Authorization" : `Bearer ${loggedUser.access_token}`}}).catch(err => console.log(err));
-    if (data) {
+
+    try{
+      const data = await axios.post(API + 'users', newOperator,{ headers: {"Authorization" : `Bearer ${loggedUser.access_token}`}});
       const operator = JSON.parse(data.config.data);
       const operatorWithID = { id: data.data.id, ...operator};
-      users.setData([ ...users.data, operatorWithID]);
+      if(operatorWithID.role === 'operator') {
+        setTimeout(() => {
+          loginUser(operatorWithID.email, sha1(operatorWithID.password));
+        }, 1000);
+      } else {
+        console.log(operatorWithID.role + ' registered!');
+        users.setData([ ...users.data, operatorWithID]);
+      }
+    }catch( err:any ){
+      setError(true);
     }
   }
   
@@ -325,7 +336,7 @@ function App() {
               user={loggedUser}
             />
             } />
-          <Route path='/signup' render={() => <SignupPage onAdd={addUser} />} />
+          <Route path='/signup' render={() => <SignupPage error={error} clearError={clearError} onAdd={addUser} />} />
           <Route path='/astronauts' 
             render={() => 
               <AstronautsTable 

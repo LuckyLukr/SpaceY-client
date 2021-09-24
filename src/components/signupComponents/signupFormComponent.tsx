@@ -42,44 +42,64 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function SignUp( {onAdd}:any ) {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [birth, setBirth] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [repeatPassword, setRepeatPassword] = useState('');
+export default function SignUp( {onAdd, error, clearError}:any ) {
+  const [ passError, setPassError ] = useState<boolean>(false);
+  const [ passValidation, setPassValidation ] = useState<boolean>(false);
+  const [ ageError, setAgeError ] = useState<boolean>(false);
+  const [ nameError, setNameError ] = useState<boolean>(false);
+  const [ success, setSuccess ] = useState<boolean>(false);
+  const [ firstName, setFirstName ] = useState<string>('');
+  const [ lastName, setLastName ] = useState<string>('');
+  const [ birth, setBirth ] = useState<string>('');
+  const [ email, setEmail ] = useState<string>('');
+  const [ password, setPassword ] = useState<string>('');
+  const [ repeatPassword, setRepeatPassword ] = useState<string>('');
+
   const classes = useStyles();
   const { t } = useTranslation();
+  const validPassword = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
+
+  const clearPassError = () => {
+    setPassError(false);
+    setPassValidation(false);
+    setAgeError(false);
+    setNameError(false);
+  }
 
   const handleFirstNameChange = (e:any) => {
     e.preventDefault();
     setFirstName(e.target.value);
+    clearPassError();
   }
 
   const handleLastNameChange = (e:any) => {
     e.preventDefault();
     setLastName(e.target.value);
+    clearPassError();
   }
 
   const handleBirthChange = (e:any) => {
     e.preventDefault();
     setBirth(e.target.value);
+    clearPassError(); 
   }
 
   const handleEmailChange = (e:any) => {
     e.preventDefault();
     setEmail(e.target.value);
+    clearError();
   }
 
   const handlePasswordChange = (e:any) => {
     e.preventDefault();
     setPassword(e.target.value);
+    clearPassError();
   }
 
   const handleRepeatPasswordChange = (e:any) => {
     e.preventDefault();
     setRepeatPassword(e.target.value);
+    clearPassError();
   }
 
   const getAge = (dateString:string) => {
@@ -97,13 +117,23 @@ export default function SignUp( {onAdd}:any ) {
       e.preventDefault();
       const age = getAge(birth);
 
+      if(firstName.length < 2 || firstName.length > 40 || lastName.length < 2 || lastName.length > 40) {
+        return setNameError(true);
+      }
+      if(age < 18 || age > 65) {
+        return setAgeError(true);
+      }
+      if(password !== repeatPassword){
+        return setPassError(true);
+      }
+      if(!validPassword.test(password)) {
+        return setPassValidation(true);
+      }
+
       onAdd(firstName, lastName, email, password, repeatPassword, 'operator', age, birth, 40, 75);
-      setFirstName('');
-      setLastName('');
-      setEmail('');
       setPassword('');
       setRepeatPassword('');
-      window.open('/','_self');
+      setSuccess(true);
     }
 
   return (
@@ -128,6 +158,7 @@ export default function SignUp( {onAdd}:any ) {
                 id="firstName"
                 label={t('fName')}
                 autoFocus
+                error={nameError}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -141,6 +172,7 @@ export default function SignUp( {onAdd}:any ) {
                 label={t('lName')}
                 name="lastName"
                 autoComplete="lname"
+                error={nameError}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -154,6 +186,7 @@ export default function SignUp( {onAdd}:any ) {
                 label={t('emailAdress')}
                 name="email"
                 autoComplete="email"
+                error={error}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -171,6 +204,7 @@ export default function SignUp( {onAdd}:any ) {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                error={ageError}
               />
             </Grid>
             <Grid item xs={12}>
@@ -185,6 +219,7 @@ export default function SignUp( {onAdd}:any ) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                error={passError || passValidation}
               />
             </Grid>
             <Grid item xs={12}>
@@ -199,9 +234,20 @@ export default function SignUp( {onAdd}:any ) {
                 type="password"
                 id="repeatPassword"
                 autoComplete="repeat-password"
+                error={passError || passValidation}
               />
             </Grid>
           </Grid>
+          { passError && <Typography color='error' align='center' >{t('passError')}</Typography>}
+          { error && <Typography color='error' align='center' >{t('emailExists')}</Typography>}
+          { passValidation && 
+            <Typography color='error' align='center' >
+              The password must contain at least: eight characters, one uppercase letter, one lowercase letter and one number
+            </Typography>
+          }
+          { ageError && <Typography color='error' align='center' >Operator must be 18 - 65 years old</Typography>}
+          { nameError && <Typography color='error' align='center' >First and last name must have min 2 and max 40 characters</Typography>}
+          { success && <Typography style={{color: 'green'}} align='center' >SUCCESSFULLY REGISTERED</Typography> }
           <Button
             type="submit"
             fullWidth

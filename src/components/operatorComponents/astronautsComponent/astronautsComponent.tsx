@@ -1,8 +1,6 @@
-import React from 'react';
 import jwt_decode from 'jwt-decode';
 
 import Navbar from '../../navbarComponents/navbarComponent';
-import OperatorNavbar from '../../navbarComponents/operatorNavbar';
 import Register from './RegisterComponent';
 import AccessDenied from '../../accessDeniedComponent';
 

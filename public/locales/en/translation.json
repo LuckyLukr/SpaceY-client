@@ -1,7 +1,9 @@
 {
     "subtitle": "International space program",
     "emailAdress": "Email Address",
+    "emailExists": "Email is already in use",
     "password": "Password",
+    "passError": "Passwords do not match",
     "repeatPass": "Repeat password",
     "logInBtn": "Log in",
     "forgotPass": "Forgot password?",
