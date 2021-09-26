@@ -67,7 +67,7 @@ function AddingForm( {onAdd, onAppend, spacecrafts }:any ) {
     const handleNameChange = (e:any) => {
         e.preventDefault();
 
-        setName(e.target.value);
+        setName(e.target.value.trim());
     }
 
     const handleSubmit = async (e:any) => {

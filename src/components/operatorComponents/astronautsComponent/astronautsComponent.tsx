@@ -4,7 +4,7 @@ import Navbar from '../../navbarComponents/navbarComponent';
 import Register from './RegisterComponent';
 import AccessDenied from '../../accessDeniedComponent';
 
-export default function AstronautsTable( { onAdd, users, onDelete, onLogout, onUpdate, onSucces, user}:any ) {
+export default function AstronautsTable( { onAdd, users, onDelete, onLogout, onUpdate, onSuccess, isSuccess, user, error, clearError}:any ) {
     const token = user.access_token;
     let tokenData = {role: ''};
     if(token){
@@ -16,7 +16,7 @@ export default function AstronautsTable( { onAdd, users, onDelete, onLogout, onU
             <Navbar 
                 onLogout={onLogout} 
                 onUpdate={onUpdate} 
-                onSucces={onSucces}
+                onSucces={onSuccess}
                 user={user}
             />
             { 
@@ -26,8 +26,11 @@ export default function AstronautsTable( { onAdd, users, onDelete, onLogout, onU
                     onUpdate={onUpdate}
                     onAdd={onAdd} 
                     users={users} 
-                    onDelete={onDelete} 
-                    onSucces={onSucces} 
+                    onDelete={onDelete}
+                    isSuccess={isSuccess}
+                    onSuccess={onSuccess}
+                    error={error} 
+                    clearError={clearError} 
                 />
                 :
                 <AccessDenied />

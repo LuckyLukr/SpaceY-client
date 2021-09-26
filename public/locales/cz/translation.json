@@ -12,8 +12,24 @@
     "lName": "Příjmení",
     "haveAccount": "Už máte účet? Přihlašte se.",
     "birth": "Datum narození",
+    "successRegistration": "Úspěšně zaregistrován",
+
+    "validation": {
+        "password": "Heslo musí obsahovat alespoň osm znaků, jedno velké písmeno, jedno malé písmeno a jedno číslo",
+        "age": "Věk operátora musí být 18 - 65 let",
+        "name": "Jméno a příjmení musí obsahovat minimálně dva a maximálně 40 znaků",
+        "email": "Zadejte validní email"
+    },
 
     "astronauts": {
-        "tableTitle": "REGISTR ASTRONAUTŮ"
+        "tableTitle": "REGISTR ASTRONAUTŮ",
+        "add": "Registrovat astronauta",
+        "table": {
+            "name": "Jméno",
+            "email": "Email",
+            "age": "Věk",
+            "consum": "Konzumace jídla za hodinu",
+            "weight": "Váha"
+        }
     }
 }

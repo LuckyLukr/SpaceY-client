@@ -13,7 +13,6 @@ import SignupPage from './components/signupComponents/signupPageComponent';
 import AstronautsTable from './components/operatorComponents/astronautsComponent/astronautsComponent';
 import SpacecraftsTable from './components/operatorComponents/spacecraftsComponent/spacecraftsComponent';
 import Missions from './components/operatorComponents/missionsComponent/missionsComponent';
-import SuccessBar from './components/confirmationComponents/successBarComponent';
 
 const API ='https://spaceyserver.herokuapp.com/';
 
@@ -120,9 +119,7 @@ function App() {
       const operator = JSON.parse(data.config.data);
       const operatorWithID = { id: data.data.id, ...operator};
       if(operatorWithID.role === 'operator') {
-        setTimeout(() => {
-          loginUser(operatorWithID.email, sha1(operatorWithID.password));
-        }, 1000);
+        loginUser(operatorWithID.email, sha1(operatorWithID.password));
       } else {
         users.setData([ ...users.data, operatorWithID]);
       }
@@ -241,6 +238,7 @@ function App() {
       }
     });
     spacecrafts.setData(update);
+    updateMissionStatus();
   }
 
   /**
@@ -309,7 +307,7 @@ function App() {
           e.status = 'Mission failed';
           e.spacecraft.status = 'Destroyed';
           e.astronauts.forEach( (user:User) => {
-            user.status = 'Dead';
+            user.status = 'KIA';
             updateUser(user.id, user);
           });
           updateMission(e.id, e);
@@ -321,7 +319,6 @@ function App() {
 
   return ( 
     <Router>
-          { isSuccess && <SuccessBar />}
           <Route path='/' exact render={() => 
             !loggedUser.access_token ?
             <LoginPage user={loggedUser} error={error} clearError={clearError} onLogin={loginUser} />
@@ -335,7 +332,17 @@ function App() {
               user={loggedUser}
             />
             } />
-          <Route path='/signup' render={() => <SignupPage error={error} clearError={clearError} onAdd={addUser} />} />
+          <Route path='/signup' 
+            render={() => 
+              <SignupPage 
+                error={error} 
+                clearError={clearError} 
+                onAdd={addUser}
+                isSuccess={isSuccess} 
+                onSucces={handleSuccesBar}
+              />
+            } 
+          />
           <Route path='/astronauts' 
             render={() => 
               <AstronautsTable 
@@ -344,8 +351,11 @@ function App() {
                 user={loggedUser}
                 onDelete={deleteUser}
                 onUpdate={updateUser}
-                onSucces={handleSuccesBar}
+                isSuccess={isSuccess} 
+                onSuccess={handleSuccesBar}
                 onLogout={logoutUser} 
+                error={error} 
+                clearError={clearError} 
               />
             } 
           />

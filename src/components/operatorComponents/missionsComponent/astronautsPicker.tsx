@@ -116,7 +116,7 @@ function AstronautsPicker( {astronauts, assigned, onAssign, name, spacecraft, on
                             }
                         >
                             {
-                                e.status === 'Dead' ?
+                                e.status === 'KIA' ?
                                     <Button 
                                         disableRipple
                                         disableElevation

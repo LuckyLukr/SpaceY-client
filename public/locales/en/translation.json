@@ -12,8 +12,24 @@
     "lName": "Last Name",
     "haveAccount": "Already have an account? Log in.",
     "birth": "Birth Date",
+    "successRegistration": "Successfully registered",
+
+    "validation": {
+        "password": "The password must contain at least eight characters, one uppercase letter, one lowercase letter and one number",
+        "age": "Operator must be 18 - 65 years old",
+        "name": "First and last name must have min 2 and max 40 characters",
+        "email": "Not a valid email address"
+    },
 
     "astronauts": {
-        "tableTitle": "REGISTER OF ASTRONAUTS"
+        "tableTitle": "REGISTER OF ASTRONAUTS",
+        "add": "Register astronaut",
+        "table": {
+            "name": "Name",
+            "email": "Email",
+            "age": "Age",
+            "consum": "Food consumption per hour",
+            "weight": "Weight"
+        }
     }
 }

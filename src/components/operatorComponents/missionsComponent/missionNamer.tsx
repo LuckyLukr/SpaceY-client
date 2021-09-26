@@ -27,7 +27,7 @@ function MissionNamer( {onNameChange, user, missions, onMissionUpdate}:any ) {
 
     const classes = useStyles();
 
-    const handleNameChange = (e:any) => setName(e.target.value);
+    const handleNameChange = (e:any) => setName(e.target.value.trim());
 
     const existingNames = missions.data.map((e:Mission) => e.name);
 

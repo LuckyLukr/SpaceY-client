@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 import CloseIcon from '@material-ui/icons/Close';
 import AddingForm from './registerFormComponent';
+import SuccessBar from '../../confirmationComponents/successBarComponent';
 
 const useStyles = makeStyles((theme)=>({
     root: {
@@ -61,7 +62,7 @@ const useStyles = makeStyles((theme)=>({
 }))
 
 
-function Register( { users, onDelete, onAdd, onUpdate, onSucces }:any ) {
+function Register( { users, onDelete, onAdd, onUpdate, onSuccess, isSuccess, error, clearError }:any ) {
     const [ appendForm, setAppendForm ] = useState(false);
     const classes = useStyles();
     const { t } = useTranslation();
@@ -72,11 +73,12 @@ function Register( { users, onDelete, onAdd, onUpdate, onSucces }:any ) {
     return(
         
             <Grid container justify='center'>
+                { isSuccess && <SuccessBar text={t('successRegistration')} /> }
                 <Card elevation={0} className={classes.root}>
 
                     <Grid container alignItems='center' justify='space-between' >
                         <Button onClick={() => onAppend()} className={classes.addBtn} variant='outlined' color='primary' >
-                            Add
+                            {t('astronauts.add')}
                         </Button>
                         <Typography align='center' variant='h5' color='textSecondary' >
                         {t("astronauts.tableTitle")}
@@ -97,14 +99,21 @@ function Register( { users, onDelete, onAdd, onUpdate, onSucces }:any ) {
                                     </Tooltip>
                                 </Grid>
 
-                                <AddingForm onAdd={onAdd} onAppend={onAppend} users={users} /> 
+                                <AddingForm 
+                                    onAdd={onAdd} 
+                                    onAppend={onAppend}
+                                    users={users}                
+                                    error={error} 
+                                    clearError={clearError}
+                                    onSuccess={onSuccess}
+                                /> 
 
                             </Card>
                         </ClickAwayListener>  
                     </Grid>  
                     }
 
-                    <Table onUpdate={onUpdate} onSucces={onSucces} users={users} onDelete={onDelete} />
+                    <Table onUpdate={onUpdate} onSucces={onSuccess} users={users} onDelete={onDelete} />
 
                 </Card>
             </Grid>

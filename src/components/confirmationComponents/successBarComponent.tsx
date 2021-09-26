@@ -29,12 +29,12 @@ const useStyles = makeStyles(()=>({
       }
 }))
 
-function SuccessBar() {
+function SuccessBar( {text}:any ) {
     const classes = useStyles();
 
     return (
         <Grid container justify='center' alignItems='center' className={classes.root}>
-           <Typography>✔ SAVED</Typography>
+           <Typography>{text}</Typography>
         </Grid>
     )
 }

@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     makeStyles,
     TextField,
     Fab,
     Grid,
     CardMedia,
-    Theme
+    Theme,
+    Typography
 } from '@material-ui/core/';
 import { useTranslation } from 'react-i18next';
+import * as EmailValidator from 'email-validator';
 
 import { User } from '../../../types';
 
@@ -34,7 +36,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   }));
 
-const AddingForm = ({ onAdd, onAppend, users }:any) => {
+const AddingForm = ({ onAdd, onAppend, users, error, clearError, onSuccess }:any) => {
+  const [ passError, setPassError ] = useState<boolean>(false);
+  const [ passValidation, setPassValidation ] = useState<boolean>(false);
+  const [ ageError, setAgeError ] = useState<boolean>(false);
+  const [ nameError, setNameError ] = useState<boolean>(false);
+  const [ emailError, setEmailError ] = useState<boolean>(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [birth, setBirth] = useState('');
@@ -46,10 +53,20 @@ const AddingForm = ({ onAdd, onAppend, users }:any) => {
 
   const { t } = useTranslation();
   const classes = useStyles();
+  const validPassword = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
+
+  const clearAllErrors = () => {
+    setPassError(false);
+    setPassValidation(false);
+    setAgeError(false);
+    setNameError(false);
+    setEmailError(false);
+  }
 
   const handleFirstNameChange = (e:any) => {
     e.preventDefault();
     setFirstName(e.target.value);
+    clearAllErrors();
   }
 
   const handleLastNameChange = (e:any) => {
@@ -60,31 +77,38 @@ const AddingForm = ({ onAdd, onAppend, users }:any) => {
   const handleBirthChange = (e:any) => {
     e.preventDefault();
     setBirth(e.target.value);
+    clearAllErrors();
   }
 
   const handleEmailChange = (e:any) => {
     e.preventDefault();
     setEmail(e.target.value);
+    clearAllErrors();
+    clearError();
   }
 
   const handleConsumChange = (e:any) => {
     e.preventDefault();
     setConsum(e.target.value);
+    clearAllErrors();
   }
 
   const handleWeightChange = (e:any) => {
     e.preventDefault();
     setWeight(e.target.value);
+    clearAllErrors();
   }
 
   const handlePasswordChange = (e:any) => {
     e.preventDefault();
     setPassword(e.target.value);
+    clearAllErrors();
   }
 
   const handleRepeatPasswordChange = (e:any) => {
     e.preventDefault();
     setRepeatPassword(e.target.value);
+    clearAllErrors();
   }
 
   const getAge = (dateString:string) => {
@@ -98,10 +122,25 @@ const AddingForm = ({ onAdd, onAppend, users }:any) => {
     return age;
   }
 
-  const handleSubmit = async (e:any) => {
-      e.preventDefault();
+  const handleSubmit = (e:any) => {
+    e.preventDefault();
+    const age = getAge(birth);
 
-      const age = await getAge(birth)
+    if(firstName.length < 2 || firstName.length > 40 || lastName.length < 2 || lastName.length > 40) {
+      return setNameError(true);
+    }
+    if(!EmailValidator.validate(email)){
+      return setEmailError(true);
+    }
+    if(age < 18 || age > 65) {
+      return setAgeError(true);
+    }
+    if(password !== repeatPassword){
+      return setPassError(true);
+    }
+    if(!validPassword.test(password)) {
+      return setPassValidation(true);
+    }
 
       onAdd(firstName, lastName, email, password, repeatPassword, 'astronaut', age, birth, consum, weight);
       onAppend();
@@ -114,6 +153,7 @@ const AddingForm = ({ onAdd, onAppend, users }:any) => {
       setRepeatPassword('');
       setConsum('');
       setWeight('');
+      onSuccess();
     }
 
     const existingEmail = users.map( (e:User) => e.email);
@@ -249,6 +289,16 @@ const AddingForm = ({ onAdd, onAppend, users }:any) => {
                 id="repeatPassword"
                 autoComplete="repeat-password"
               />
+            </Grid>
+            <Grid container justify='center' alignItems='center'>
+              { passError && <Typography color='error' align='center' >{t('passError')}</Typography>}
+              { error && <Typography color='error' align='center' >{t('emailExists')}</Typography>}
+              { passValidation && 
+                <Typography color='error' align='center' >{t('validation.password')}</Typography>
+              }
+              { ageError && <Typography color='error' align='center' >Operator must be 18 - 65 years old</Typography>}
+              { nameError && <Typography color='error' align='center' >First and last name must have min 2 and max 40 characters</Typography>}
+              { emailError && <Typography color='error' align='center' >Not a valid email address</Typography>}
             </Grid>
             <Grid className={classes.button} item xs={12}>
               {

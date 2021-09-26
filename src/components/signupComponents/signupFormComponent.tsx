@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useTranslation } from 'react-i18next';
+import * as EmailValidator from 'email-validator';
 
 import logo from '../../images/Y_black.png';
 
@@ -42,12 +43,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function SignUp( {onAdd, error, clearError}:any ) {
+export default function SignUp( {onAdd, error, clearError, onSucces}:any ) {
   const [ passError, setPassError ] = useState<boolean>(false);
   const [ passValidation, setPassValidation ] = useState<boolean>(false);
   const [ ageError, setAgeError ] = useState<boolean>(false);
   const [ nameError, setNameError ] = useState<boolean>(false);
-  const [ success, setSuccess ] = useState<boolean>(false);
+  const [ emailError, setEmailError ] = useState<boolean>(false);
   const [ firstName, setFirstName ] = useState<string>('');
   const [ lastName, setLastName ] = useState<string>('');
   const [ birth, setBirth ] = useState<string>('');
@@ -59,47 +60,49 @@ export default function SignUp( {onAdd, error, clearError}:any ) {
   const { t } = useTranslation();
   const validPassword = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
 
-  const clearPassError = () => {
+  const clearAllErrors = () => {
     setPassError(false);
     setPassValidation(false);
     setAgeError(false);
     setNameError(false);
+    setEmailError(false);
   }
 
   const handleFirstNameChange = (e:any) => {
     e.preventDefault();
-    setFirstName(e.target.value);
-    clearPassError();
+    setFirstName(e.target.value.trim());
+    clearAllErrors();
   }
 
   const handleLastNameChange = (e:any) => {
     e.preventDefault();
-    setLastName(e.target.value);
-    clearPassError();
+    setLastName(e.target.value.trim());
+    clearAllErrors();
   }
 
   const handleBirthChange = (e:any) => {
     e.preventDefault();
     setBirth(e.target.value);
-    clearPassError(); 
+    clearAllErrors(); 
   }
 
   const handleEmailChange = (e:any) => {
     e.preventDefault();
     setEmail(e.target.value);
     clearError();
+    clearAllErrors();
   }
 
   const handlePasswordChange = (e:any) => {
     e.preventDefault();
     setPassword(e.target.value);
-    clearPassError();
+    clearAllErrors();
   }
 
   const handleRepeatPasswordChange = (e:any) => {
     e.preventDefault();
     setRepeatPassword(e.target.value);
-    clearPassError();
+    clearAllErrors();
   }
 
   const getAge = (dateString:string) => {
@@ -120,6 +123,9 @@ export default function SignUp( {onAdd, error, clearError}:any ) {
       if(firstName.length < 2 || firstName.length > 40 || lastName.length < 2 || lastName.length > 40) {
         return setNameError(true);
       }
+      if(!EmailValidator.validate(email)){
+        return setEmailError(true);
+      }
       if(age < 18 || age > 65) {
         return setAgeError(true);
       }
@@ -133,7 +139,7 @@ export default function SignUp( {onAdd, error, clearError}:any ) {
       onAdd(firstName, lastName, email, password, repeatPassword, 'operator', age, birth, 40, 75);
       setPassword('');
       setRepeatPassword('');
-      setSuccess(true);
+      onSucces();
     }
 
   return (
@@ -186,7 +192,7 @@ export default function SignUp( {onAdd, error, clearError}:any ) {
                 label={t('emailAdress')}
                 name="email"
                 autoComplete="email"
-                error={error}
+                error={error || emailError}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -241,13 +247,11 @@ export default function SignUp( {onAdd, error, clearError}:any ) {
           { passError && <Typography color='error' align='center' >{t('passError')}</Typography>}
           { error && <Typography color='error' align='center' >{t('emailExists')}</Typography>}
           { passValidation && 
-            <Typography color='error' align='center' >
-              The password must contain at least: eight characters, one uppercase letter, one lowercase letter and one number
-            </Typography>
+            <Typography color='error' align='center' >{t('validation.password')}</Typography>
           }
           { ageError && <Typography color='error' align='center' >Operator must be 18 - 65 years old</Typography>}
           { nameError && <Typography color='error' align='center' >First and last name must have min 2 and max 40 characters</Typography>}
-          { success && <Typography style={{color: 'green'}} align='center' >SUCCESSFULLY REGISTERED</Typography> }
+          { emailError && <Typography color='error' align='center' >Not a valid email address</Typography>}
           <Button
             type="submit"
             fullWidth

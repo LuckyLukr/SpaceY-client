@@ -13,6 +13,7 @@ import {
     GridToolbar,
     GridCellParams
 } from '@material-ui/data-grid';
+import { useTranslation } from 'react-i18next';
 
 import UpdateAstronaut from './updateAstronaut';
 import { User } from '../../../types';
@@ -61,6 +62,7 @@ function Table( {users, onDelete, onUpdate, onSucces}:any ) {
     const [ append, setAppend ] = useState(false);
 
     const classes = useStyles();
+    const { t } = useTranslation();
 
     const handleAppend = () => setAppend(!append);
     const handleClickAway = () => setAppend(false);
@@ -80,11 +82,11 @@ function Table( {users, onDelete, onUpdate, onSucces}:any ) {
     }
 
     const columns = [
-        { field: 'name', headerName: 'Name', width: 160 },
-        { field: 'email', headerName: 'Email', width: 180 },
-        { field: 'age', headerName: 'Age', width: 90 },
-        { field: 'consum', headerName: 'Food consumption / hour' , width: 90 },
-        { field: 'weight', headerName: 'Weight', width: 90 },
+        { field: 'name', headerName: t('astronauts.table.name'), width: 160 },
+        { field: 'email', headerName: t('astronauts.table.email'), width: 180 },
+        { field: 'age', headerName: t('astronauts.table.age'), width: 90 },
+        { field: 'consum', headerName: t('astronauts.table.consum') , width: 90 },
+        { field: 'weight', headerName: t('astronauts.table.weight'), width: 90 },
         { field: 'status', headerName: 'Status', width: 190 },
         {  
             field: '-', 

@@ -9,6 +9,7 @@ import { Grid,
 import { useTranslation } from 'react-i18next';
 
 import SignUp from './signupFormComponent';
+import SuccessBar from '../confirmationComponents/successBarComponent';
 
 import SpaceOrbitImg from '../../images/SpaceOrbit.jpeg';
 
@@ -35,13 +36,14 @@ const useStyles = makeStyles((theme)=>({
     },
 }))
 
-function SignupPage( {onAdd, error, clearError}:any ) {
+function SignupPage( {onAdd, error, clearError, isSuccess, onSucces}:any ) {
     const classes = useStyles();
-    const { i18n } = useTranslation();
+    const { t, i18n } = useTranslation();
     const changeLanguage = (language:string) => i18n.changeLanguage(language);
 
     return(
             <Card square >
+                { isSuccess && <SuccessBar text={t('successRegistration')} /> }
                 <CardMedia className={classes.headerImg} image={SpaceOrbitImg}>
                     <ButtonGroup className={classes.buttonFlex} variant="text" aria-label="text primary button group">
                         <Button className={classes.button} onClick={()=> changeLanguage("cz")} >
@@ -56,7 +58,8 @@ function SignupPage( {onAdd, error, clearError}:any ) {
                         <SignUp 
                             onAdd={onAdd}
                             error={error}
-                            clearError={clearError} 
+                            clearError={clearError}
+                            onSucces={onSucces}
                         />
 
                     </Grid>
